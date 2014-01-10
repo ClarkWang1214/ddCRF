@@ -1,0 +1,3 @@
+Total number of observations are 242939
+Total number of tables are 242939
+Total number of topics 100
