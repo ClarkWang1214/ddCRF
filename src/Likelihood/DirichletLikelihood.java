@@ -100,4 +100,16 @@ public class DirichletLikelihood extends Likelihood {
 		return ll;
 	}
 
+	 /**
+   * Computes the sum of the dirichlet conditional likelihood, p(x_t | x_{-t}^l), where x_t is the set of 
+   * customer observations from table t, and x_{-t}^l is the set of customer observations assigned to topic l
+   * aside from those at table t. 
+   * @author jcransh
+   * @param table_members
+   * @param cond_table_members
+   */
+  public double computeConditionalLogLikelihood(HashSet<Integer> table_members, ArrayList<HashSet<Integer>> cond_table_members) {
+
+  }
+
 }
