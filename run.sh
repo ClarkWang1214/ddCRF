@@ -1,6 +1,6 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 [-n  <num_iter> -vocab_size <vocab_size> -d <dirichlet_concentration_param> -s <self_linkage_prob>  ]" 1>&2;
+usage() { echo "Usage: $0 [-n  <num_iter> -v <vocab_size> -d <dirichlet_concentration_param> -s <self_linkage_prob>  ]" 1>&2;
           echo -e  "\nnum_iter and vocab_size are required parameters. dirichlet_parameter is defaulted to 0.3 and self_linkage_prob is defaulted to 0.1"       
 
 	exit 1; }
