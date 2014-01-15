@@ -116,11 +116,11 @@ public class SamplerStateTracker {
 			// state0.setCustomers_in_table(list_customers_in_table);
 			state0.setCustomersAtTableList(customersAtTableList);
 
-			state0.setK_c(topic_assignments_customer);
+			/*state0.setK_c(topic_assignments_customer);
 			state0.setK_t(topic_assignments_table);
 			state0.setT(num_data); //number of tables equal to num_data
 			state0.setK(new Long(num_topics));
-			state0.setM(count_each_topic);
+			state0.setM(count_each_topic);*/
 			
 			//Now putting into the arraylist of sampler states
 			current_iter = 0;

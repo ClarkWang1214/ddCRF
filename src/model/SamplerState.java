@@ -2,10 +2,14 @@ package model;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import org.la4j.matrix.sparse.CRSMatrix;
+
+import data.Data;
 
 
 /**
@@ -42,17 +46,17 @@ public class SamplerState {
 	/**
 	 * This stores the topic assignments for each data point (which is basically the topic assignment at the given table they are sitting at)
 	 */
-	private ArrayList<ArrayList<Long>> k_c = new ArrayList<ArrayList<Long>>();
+	private ArrayList<ArrayList<Integer>> k_c = new ArrayList<ArrayList<Integer>>();
 	
 	/**
 	 * This stores the topic assignments for each table;
 	 */
-	private ArrayList<ArrayList<Long>> k_t;
+	//private ArrayList<ArrayList<Long>> k_t;
 	
 	/**
 	 * This stores the number of tables(clusters) assigned to each topic.
 	 */
-	private HashMap<Long,Long> m;
+	private HashMap<Integer,Integer> m;
 	
 	/**
 	 * Map of table and the customer_ids.
@@ -63,9 +67,14 @@ public class SamplerState {
   /** 
    * The multinomial parameter seen for each city, for each table in the city.  each theta is a CRSMatrix
    */
-  private ArrayList<ArrayList<CRSMatrix>> thetas = new ArrayList<ArrayList<CRSMatrix>>();
+   private ArrayList<ArrayList<CRSMatrix>> thetas = new ArrayList<ArrayList<CRSMatrix>>();
 
-
+  /**
+   * This is a map of topics to lists, where each list represents a city and within each list, we have a map of table_id to the set of customer indexes sitting at the table   
+   */
+   public static HashMap<Integer,ArrayList<HashMap<Integer,HashSet<Integer>>>> topic_members_by_city_by_table = new HashMap<Integer,ArrayList<HashMap<Integer,HashSet<Integer>>>>();
+  
+  
 
 	/**
 	 * 
@@ -98,11 +107,11 @@ public class SamplerState {
 		K = k;
 	}
 
-	public HashMap<Long,Long> getM() {
+	public HashMap<Integer,Integer> getM() {
 		return m;
 	}
 	
-	public void setM(HashMap<Long,Long> m) {
+	public void setM(HashMap<Integer,Integer> m) {
 		this.m = m;
 	}
 
@@ -136,21 +145,21 @@ public class SamplerState {
 		c.get(city_index).set(customer_index, cust_assignment);
 	}
 
-	public ArrayList<ArrayList<Long>> getK_c() {
+	public ArrayList<ArrayList<Integer>> getK_c() {
 		return k_c;
 	}
 
-	public void setK_c(ArrayList<ArrayList<Long>> k_c) {
+	public void setK_c(ArrayList<ArrayList<Integer>> k_c) {
 		this.k_c = k_c;
 	}
 
-	public ArrayList<ArrayList<Long>> getK_t() {
+	/**public ArrayList<ArrayList<Long>> getK_t() {
 		return k_t;
 	}
 
 	public void setK_t(ArrayList<ArrayList<Long>> k_t) {
 		this.k_t = k_t;
-	}
+	}**/
 
 	public ArrayList<ArrayList<Integer>> get_t()
 	{
@@ -369,5 +378,39 @@ public class SamplerState {
 		// String s = String.valueOf(this.c.hashCode()) + ":" + String.valueOf(this.k_c.hashCode());
 		// return c.hashCode();  // need to take into account k_c too.  for now its buggy because of null.
 		return getTableSeatingsSet().hashCode();
+	}
+	
+	/**
+	 * Returns all the observations (NOT the indexes) of the customers of various cities having the topic t.
+	 * Quite expensive operation, Is there a way to hash it?
+	 * @param topic
+	 * @return
+	 */
+	public static ArrayList<Double> getAllObservationsForTopic(int topic)
+	{
+		ArrayList<HashMap<Integer,HashSet<Integer>>> table_members_all_cities_for_topic = topic_members_by_city_by_table.get(topic);
+		ArrayList<Double> observations_to_be_returned = new ArrayList<Double>();
+		int counter = 0;
+		ArrayList<ArrayList<Double>> list_observations = Data.getObservations(); // all observations
+		for(HashMap<Integer,HashSet<Integer>> map_tables_per_city:table_members_all_cities_for_topic)
+		{
+			ArrayList<Double> observations_per_city = list_observations.get(counter);
+			Collection<HashSet<Integer>> all_tables_per_city = map_tables_per_city.values();
+			Iterator<HashSet<Integer>> iter = all_tables_per_city.iterator();
+			while(iter.hasNext())
+			{
+				HashSet<Integer> table_members = iter.next();
+				Iterator<Integer> set_iter = table_members.iterator();
+				while(set_iter.hasNext())
+				{
+					Integer table_member_index = set_iter.next(); //this is the index of the observation
+					//now get the corresponding observation
+					Double observation = observations_per_city.get(table_member_index);
+					observations_to_be_returned.add(observation);
+				}
+			}
+			counter++;
+		}
+		return observations_to_be_returned;
 	}
 }
