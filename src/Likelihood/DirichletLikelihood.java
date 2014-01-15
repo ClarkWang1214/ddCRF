@@ -3,6 +3,7 @@
  */
 package Likelihood;
 
+import java.lang.Math;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,7 +28,7 @@ public class DirichletLikelihood extends Likelihood {
 	}
 
 	@Override
-	public double computeTableLogLikelihood(ArrayList<Integer> table_members,
+	public double computeTableLogLikelihoodOld(ArrayList<Integer> table_members,
 			int list_index) {
 		
 		//get the observations
@@ -68,6 +69,47 @@ public class DirichletLikelihood extends Likelihood {
 		return log_likelihood;
 	}
 	
+
+	/**
+	 * Method for computing log-likelihood of the data at a table.
+	 * @param table_members list of indexes of the observation.
+	 * @param list_index index of the list, the observation at the tables belong to.
+	 * @return
+	 */
+	@Override
+	abstract public double computeTableLogLikelihood(ArrayList<Double> observations) {
+		// Counts for each observation
+		HashMap<Double,Integer> observationCounts = new HashMap<Double,Integer>(); 
+		for (Double obs : observations) {
+			if(observationCounts.get(obs) == null) //new category			
+				observationCounts.put(obs, 1);
+			else
+				observationCounts.put(obs, observationCounts.get(obs) + 1 );	
+		}
+
+		//get the dirichlet hyper-parameter
+		ArrayList<Double> dirichletParams = hyperParameters.getDirichletParam();
+		double sumObsAlpha=0, sumLogGammaSumObsAlpha=0, sumAlpha=0, sumLogGammaAlpha=0 ;
+		
+		for(int i=0;i<dirichletParams.size();i++) //loop for each possible venue category
+		{
+			Integer obsCount = observationCounts.get(new Double(i));
+			if(obsCount == null) 
+				obsCount = 0; //in case no venue of a certain category isnt present, the count is 0
+			sumAlpha = sumAlpha + dirichletParams.get(i); 			
+			sumObsAlpha = sumObsAlpha + dirichletParams.get(i) + obsCount;
+			sumLogGammaSumObsAlpha = sumLogGammaSumObsAlpha + logGamma(dirichletParams.get(i)+obsCount);
+			sumLogGammaAlpha = sumLogGammaAlpha + logGamma(dirichletParams.get(i));
+		}
+		
+		double logNumerator = sumLogGammaSumObsAlpha - logGamma(sumObsAlpha);
+		double logDenominator = sumLogGammaAlpha - Gamma.logGamma(sumAlpha); //NO need to compute the denominator as it is same for all tables, given an alpha
+		double logLikelihood = logNumerator - logDenominator;
+		
+		return logLikelihood;
+	}
+
+
 	/**
 	 * Checks if the value of the gamma is cached, if so returns it, else caches it
 	 * @param arg
@@ -106,10 +148,33 @@ public class DirichletLikelihood extends Likelihood {
    * aside from those at table t. 
    * @author jcransh
    * @param table_members
+   * @param listIndex
    * @param cond_table_members
    */
-  public double computeConditionalLogLikelihood(HashSet<Integer> table_members, ArrayList<HashSet<Integer>> cond_table_members) {
+  public double computeConditionalLogLikelihood(ArrayList<Double> observations, ArrayList<Double> condObservations) {
+  	Double logLik = 0
+		ArrayList<Double> dirichletParam =  hyperParameters.getDirichletParam();
 
+		// Count observations for condTableMembers 
+  	HashMap<Double, Integer> condObservationCounts = new HashMap<Double, Integer>();
+  	for (Double obs : condObservations) {
+			if(condObservationCounts.get(obs) == null) //new category			
+				condObservationCounts.put(obs, 1);
+			else
+				condObservationCounts.put(obs, observationCounts.get(obs) + 1 );  		
+  	}
+
+  	// for each observation obs sum log(p(observation_i | condObservations))
+  	for (Double obs : observations) {
+  		Integer condObsCount = 0;
+  		if(condObservationCounts.get(obs) != null) 
+  			condObsCount = condObservationCounts.get(obs);
+  		Integer obsInt = obs.intValue();
+  		logLik += log( condObsCount + dirichletParam.get(obsInt) );   // log(counts + pseudocounts)
+  	}
+
+  	return logLik;
   }
+
 
 }
