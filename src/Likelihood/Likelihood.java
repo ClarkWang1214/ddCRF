@@ -25,7 +25,7 @@ abstract public class Likelihood {
 	 * @param list_index index of the list, the observation at the tables belong to.
 	 * @return
 	 */
-	abstract public double computeTableLogLikelihoodOld(ArrayList<Integer> table_members,int list_index);
+	abstract public double computeTableLogLikelihoodFromCustomers(ArrayList<Integer> table_members,int list_index);
 
 
   /**

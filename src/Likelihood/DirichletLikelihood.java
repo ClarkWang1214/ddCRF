@@ -28,7 +28,7 @@ public class DirichletLikelihood extends Likelihood {
 	}
 
 	@Override
-	public double computeTableLogLikelihoodOld(ArrayList<Integer> table_members,
+	public double computeTableLogLikelihoodFromCustomers(ArrayList<Integer> table_members,
 			int list_index) {
 		
 		//get the observations
@@ -77,7 +77,7 @@ public class DirichletLikelihood extends Likelihood {
 	 * @return
 	 */
 	@Override
-	abstract public double computeTableLogLikelihood(ArrayList<Double> observations) {
+	public double computeTableLogLikelihood(ArrayList<Double> observations) {
 		// Counts for each observation
 		HashMap<Double,Integer> observationCounts = new HashMap<Double,Integer>(); 
 		for (Double obs : observations) {
@@ -135,7 +135,7 @@ public class DirichletLikelihood extends Likelihood {
 				if (customersAtTable.get(tableId) != null) {
 					HashSet<Integer> hs = customersAtTable.get(tableId);
 					ArrayList<Integer> tableMembers = new ArrayList<Integer>(hs);
-					ll += computeTableLogLikelihood(tableMembers, listIndex);
+					ll += computeTableLogLikelihoodFromCustomers(tableMembers, listIndex);
 				}
 			}
 		}
@@ -152,7 +152,7 @@ public class DirichletLikelihood extends Likelihood {
    * @param cond_table_members
    */
   public double computeConditionalLogLikelihood(ArrayList<Double> observations, ArrayList<Double> condObservations) {
-  	Double logLik = 0
+  	Double logLik = 0.0;
 		ArrayList<Double> dirichletParam =  hyperParameters.getDirichletParam();
 
 		// Count observations for condTableMembers 
@@ -161,7 +161,7 @@ public class DirichletLikelihood extends Likelihood {
 			if(condObservationCounts.get(obs) == null) //new category			
 				condObservationCounts.put(obs, 1);
 			else
-				condObservationCounts.put(obs, observationCounts.get(obs) + 1 );  		
+				condObservationCounts.put(obs, condObservationCounts.get(obs) + 1 );  		
   	}
 
   	// for each observation obs sum log(p(observation_i | condObservations))
@@ -170,7 +170,7 @@ public class DirichletLikelihood extends Likelihood {
   		if(condObservationCounts.get(obs) != null) 
   			condObsCount = condObservationCounts.get(obs);
   		Integer obsInt = obs.intValue();
-  		logLik += log( condObsCount + dirichletParam.get(obsInt) );   // log(counts + pseudocounts)
+  		logLik += Math.log( condObsCount + dirichletParam.get(obsInt) );   // log(counts + pseudocounts)
   	}
 
   	return logLik;
