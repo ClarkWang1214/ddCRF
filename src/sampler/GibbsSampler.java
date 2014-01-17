@@ -295,16 +295,43 @@ public class GibbsSampler {
 	 */
 	private static double compute_change_in_likelihood(Likelihood l,ArrayList<Integer> orig_table_members,ArrayList<Integer> proposed_table_members,int list_index )
 	{
-		double orig_table_loglikelihood = l.computeTableLogLikelihood(orig_table_members, list_index);
-		double proposed_table_loglikelihood = l.computeTableLogLikelihood(proposed_table_members, list_index);
+		//get all data
+		ArrayList<ArrayList<Double>> list_observations = Data.getObservations(); // all observations
+		ArrayList<Double> observations_per_city = list_observations.get(list_index);
+		
+		ArrayList<Double> orig_table_observations = new ArrayList<Double>();
+		ArrayList<Double> prop_table_observations = new ArrayList<Double>();
+		
+		for(int i=0;i<orig_table_members.size();i++)
+		{
+			double obs = observations_per_city.get(orig_table_members.get(i));
+			orig_table_observations.add(obs);
+		}
+		
+		for(int i=0;i<proposed_table_members.size();i++)
+		{
+			double obs = observations_per_city.get(proposed_table_members.get(i));
+			prop_table_observations.add(obs);
+		}
+		
+		double orig_table_loglikelihood = l.computeTableLogLikelihood(orig_table_observations);
+		double proposed_table_loglikelihood = l.computeTableLogLikelihood(prop_table_observations);
 		
 		//take union of the two lists
-		ArrayList<Integer> union_list = new ArrayList<Integer>();
+		/*ArrayList<Integer> union_list = new ArrayList<Integer>();
 		for(Integer member:orig_table_members)		
 			union_list.add(member);
 		for(Integer member:proposed_table_members)
+			union_list.add(member);*/
+		
+		ArrayList<Double> union_list = new ArrayList<Double>();
+		for(Double member:orig_table_observations)
 			union_list.add(member);
-		double table_union_loglikelihood = l.computeTableLogLikelihood(union_list, list_index); 
+		for(Double member:prop_table_observations)
+			union_list.add(member);
+		
+		
+		double table_union_loglikelihood = l.computeTableLogLikelihood(union_list); 
 		
 		double change_in_log_likelihood = table_union_loglikelihood - (orig_table_loglikelihood + proposed_table_loglikelihood);		
 		return change_in_log_likelihood;
