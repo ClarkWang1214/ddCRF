@@ -210,6 +210,32 @@ public class SamplerState {
 	}
 
 	/**
+	 * Returns the observations (NOT the indices) of the customers sitting at a table of a given city
+	 * @param tableId
+	 * @param listIndex
+	 * @return
+	 */
+	public ArrayList<Double> getObservationAtTable(int tableId,int listIndex)
+	{		
+		if(customersAtTableList.get(listIndex).get(tableId) == null)
+			return null;
+		ArrayList<ArrayList<Double>> list_observations = Data.getObservations(); // all observations
+		ArrayList<Double> observations_per_city = list_observations.get(listIndex);
+		ArrayList<Double> observationsAtTable = new ArrayList<Double>();
+		HashSet<Integer> customer_indices =  customersAtTableList.get(listIndex).get(tableId);
+		Iterator<Integer> iter = customer_indices.iterator();
+		while(iter.hasNext())
+		{
+			int customer_index = iter.next();
+			Double observation = observations_per_city.get(customer_index);
+			observationsAtTable.add(observation);
+		}
+		return observationsAtTable;
+	}
+
+	
+
+	/**
 	 * Sets the customers sitting at a table, given the indexes and the table number
 	 * @param s
 	 * @param table_id
