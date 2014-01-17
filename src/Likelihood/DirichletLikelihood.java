@@ -152,7 +152,7 @@ public class DirichletLikelihood extends Likelihood {
    * @param cond_table_members
    */
   public double computeConditionalLogLikelihood(ArrayList<Double> observations, ArrayList<Double> condObservations) {
-  	Double logLik = 0.0;
+  	double logLik = 0.0;
 		ArrayList<Double> dirichletParam =  hyperParameters.getDirichletParam();
 
 		// Count observations for condTableMembers 
