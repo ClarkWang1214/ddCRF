@@ -111,7 +111,7 @@ public class SamplerStateTracker {
 			}
 			state0.setC(customer_assignments);
 			state0.set_t(table_assignments);
-
+			state0.setT(num_data); //number of tables equal to num_data
 			//////
 			// state0.setCustomers_in_table(list_customers_in_table);
 			state0.setCustomersAtTableList(customersAtTableList);
