@@ -420,31 +420,21 @@ public class SamplerState {
 	 * @param topic
 	 * @return
 	 */
-	public static ArrayList<Double> getAllObservationsForTopic(int topic)
+	public ArrayList<Double> getAllObservationsForTopic(int topic)
 	{
-		ArrayList<HashMap<Integer,HashSet<Integer>>> table_members_all_cities_for_topic = topic_members_by_city_by_table.get(topic);
-		ArrayList<Double> observations_to_be_returned = new ArrayList<Double>();
-		int counter = 0;
-		ArrayList<ArrayList<Double>> list_observations = Data.getObservations(); // all observations
-		for(HashMap<Integer,HashSet<Integer>> map_tables_per_city:table_members_all_cities_for_topic)
-		{
-			ArrayList<Double> observations_per_city = list_observations.get(counter);
-			Collection<HashSet<Integer>> all_tables_per_city = map_tables_per_city.values();
-			Iterator<HashSet<Integer>> iter = all_tables_per_city.iterator();
-			while(iter.hasNext())
-			{
-				HashSet<Integer> table_members = iter.next();
-				Iterator<Integer> set_iter = table_members.iterator();
-				while(set_iter.hasNext())
-				{
-					Integer table_member_index = set_iter.next(); //this is the index of the observation
-					//now get the corresponding observation
-					Double observation = observations_per_city.get(table_member_index);
-					observations_to_be_returned.add(observation);
-				}
+		ArrayList<ArrayList<Double>> listObservations = Data.getObservations(); // all observations
+		ArrayList<Double> observationsForTopic = new ArrayList<Double>();
+		HashSet<CityTable> tables = tablesAssignedToTopic.get(topic);
+		for(CityTable table : tables) {
+			int cityId = table.getCityId();
+			int tableId = table.getTableId();
+			ArrayList<Double> observationsAtList = listObservations.get(cityId);
+			HashSet<Integer> customersAtTable = customersAtTableList.get(cityId).get(tableId);
+			for (Integer customer : customersAtTable) {
+				Double obs = observationsAtList.get(customer);
+				observationsForTopic.add(obs);
 			}
-			counter++;
 		}
-		return observations_to_be_returned;
+		return observationsForTopic;
 	}
 }
