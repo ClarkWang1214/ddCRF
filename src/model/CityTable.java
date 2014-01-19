@@ -7,22 +7,22 @@ package model;
  */
 public class CityTable {
 
-	int city_id;
+	int cityId;
 	
-	int table_id;
+	int tableId;
 	
 	
-	public int getCity_id() {
-		return city_id;
+	public int getCityId() {
+		return cityId;
 	}
-	public void setCity_id(int city_id) {
-		this.city_id = city_id;
+	public void setCityId(int cityId) {
+		this.cityId = cityId;
 	}
-	public int getTable_id() {
-		return table_id;
+	public int getTableId() {
+		return tableId;
 	}
-	public void setTable_id(int table_id) {
-		this.table_id = table_id;
+	public void setTableId(int tableId) {
+		this.tableId = tableId;
 	}
 	
 	
