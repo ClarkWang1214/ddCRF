@@ -67,14 +67,22 @@ public class SamplerState {
   /** 
    * The multinomial parameter seen for each city, for each table in the city.  each theta is a CRSMatrix
    */
-   private ArrayList<ArrayList<CRSMatrix>> thetas = new ArrayList<ArrayList<CRSMatrix>>();
+  private ArrayList<ArrayList<CRSMatrix>> thetas = new ArrayList<ArrayList<CRSMatrix>>();
 
   /**
    * This is a map of topics to lists, where each list represents a city and within each list, we have a map of table_id to the set of customer indexes sitting at the table   
    */
-   public static HashMap<Integer,ArrayList<HashMap<Integer,HashSet<Integer>>>> topic_members_by_city_by_table = new HashMap<Integer,ArrayList<HashMap<Integer,HashSet<Integer>>>>();
+  // public static HashMap<Integer,ArrayList<HashMap<Integer,HashSet<Integer>>>> topic_members_by_city_by_table = new HashMap<Integer,ArrayList<HashMap<Integer,HashSet<Integer>>>>();
   
-  
+  /**
+   * This is a map of topic IDs assigned to a CityTable 
+   */	 
+	public HashMap<CityTable, Integer> topicAtTable = new HashMap<CityTable, Integer>();
+
+  /**
+   * For a given topic ID, this maps to the set of CityTables assigned to that topic
+   */	 
+	public HashMap<Integer, HashSet<CityTable>> tablesAssignedToTopic = new HashMap<Integer, HashSet<CityTable>>();
 
 	/**
 	 * 
