@@ -2,7 +2,6 @@ package model;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -205,7 +204,7 @@ public class SamplerState {
 
 
 	/**
-	 * returns the string of customers sitting at a table in a given list
+	 * returns the set of customer indices sitting at a table in a given list
 	 * @param table_id
 	 * @param list_index
 	 * @return
@@ -215,6 +214,34 @@ public class SamplerState {
 		if(customersAtTableList.get(listIndex).get(tableId) == null)
 			return null;
 		return customersAtTableList.get(listIndex).get(tableId);
+	}
+	/**
+	 * returns the set of onservations (NOT indices) of customers at a table in a city. Null if the table is empty or table doesn't exist.
+	 * @param tableId
+	 * @param listIndex
+	 * @return
+	 */
+	public ArrayList<Double> getObservationsFromTable(int tableId, int listIndex)
+	{
+		ArrayList<ArrayList<Double>> list_observations = Data.getObservations(); // all observations
+		ArrayList<Double> observations_per_city = list_observations.get(listIndex);
+		HashSet<Integer> customersAtTable = getCustomersAtTable(tableId, listIndex);
+		ArrayList<Double> observationsFromTable = new ArrayList<Double>();
+		if(customersAtTable!=null)
+		{
+			Iterator<Integer> iter = customersAtTable.iterator();
+			while(iter.hasNext())
+			{
+				int customerIndex =  iter.next();
+				Double observation = observations_per_city.get(customerIndex);
+				observationsFromTable.add(observation);
+			}
+			if(observationsFromTable.size()==0)
+				return null;
+			else
+				return observationsFromTable;
+		}
+		return null;
 	}
 
 	/**
@@ -412,6 +439,59 @@ public class SamplerState {
 		// String s = String.valueOf(this.c.hashCode()) + ":" + String.valueOf(this.k_c.hashCode());
 		// return c.hashCode();  // need to take into account k_c too.  for now its buggy because of null.
 		return getTableSeatingsSet().hashCode();
+	}
+	
+	/**
+	 * returns the assigned topic for a city table
+	 * @param ct
+	 * @return
+	 */
+	public Integer getTopicForCityTable(CityTable ct)
+	{
+		return topicAtTable.get(ct);
+	}
+	
+	/**
+	 * increment the number of tables for topic. If new topic make a new entry in the table
+	 * @param topic
+	 */
+	public void addTableCountsForTopic(int topic)
+	{
+		Integer countTables = m.get(topic);
+		if(countTables == null) //new topic
+			m.put(topic, 1);
+		else
+			m.put(topic, countTables+1);
+	}
+	
+	/**
+	 * decrease table count for a topic, if the count reduces to 0, then remove the topic
+	 * @param topic
+	 */
+	public void decreaseTableCountsForTopic(int topic)
+	{
+		Integer countTables = m.get(topic);
+		countTables = countTables - 1;
+		if(countTables == 0) //remove the topic
+		{
+			m.remove(topic);
+			K = K - 1; //decreasing the number of total topics
+		}
+		else
+			m.put(topic, countTables);
+	}
+	
+	/**
+	 * Removes the corresponding city table entry from tablesAssignedToTopic t, if the topic has no tables
+	 * across all cities, then remove the topic from the map.
+	 * @param topic
+	 */
+	public void removeTableFromTopic(int topic, CityTable ct)
+	{
+		HashSet<CityTable> tables = tablesAssignedToTopic.get(topic);
+		tables.remove(ct);
+		if(tables.size() == 0) //topic doesnot have table in any city, then remove the topic		
+			tablesAssignedToTopic.remove(topic);
 	}
 	
 	/**

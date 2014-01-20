@@ -33,8 +33,9 @@ public class Driver {
 			for(int i=0;i<vocab_size;i++)
 				dirichlet.add(dirichlet_param);
 			double alpha = Double.parseDouble(args[3]);
+			double crp_alpha = Double.parseDouble(args[4]);
 			System.out.println("Self Linkage Prob is "+alpha);
-			HyperParameters h = new HyperParameters(vocab_size, dirichlet, alpha);
+			HyperParameters h = new HyperParameters(vocab_size, dirichlet, alpha,crp_alpha);
 			
 			ArrayList<ArrayList<Double>> list_observations = Data.getObservations();	
 			SamplerStateTracker.initializeSamplerState(list_observations);

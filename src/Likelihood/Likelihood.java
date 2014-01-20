@@ -35,5 +35,11 @@ abstract public class Likelihood {
    */
   abstract public double computeTableLogLikelihood(ArrayList<Double> observations);
 
-
+  /**
+   * Method for computing conditional log likelihood
+   * @param observations
+   * @param condObservations
+   * @return
+   */
+  abstract public double computeConditionalLogLikelihood(ArrayList<Double> observations, ArrayList<Double> condObservations);
 }

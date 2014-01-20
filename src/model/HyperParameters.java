@@ -23,11 +23,17 @@ public class HyperParameters {
 	 * The self link probability in the ddCRP prior
 	 */
 	private double selfLinkProb;
+	
+	/**
+	 * The self link probability in the CRP prior
+	 */
+	private double selfLinkProbCRP; 
 
-	public HyperParameters(int vocabSize, ArrayList<Double> dirichlet, double ddcrp) {
+	public HyperParameters(int vocabSize, ArrayList<Double> dirichlet, double ddcrp,double crp) {
 		VOCAB_SIZE = vocabSize;
 		dirichletParam = dirichlet;
 		selfLinkProb = ddcrp;
+		selfLinkProbCRP = crp;
 	}
 
 	/**

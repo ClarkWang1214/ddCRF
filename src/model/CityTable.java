@@ -11,6 +11,11 @@ public class CityTable {
 	
 	int tableId;
 	
+	public CityTable(int cityId, int tableId)
+	{
+		this.cityId = cityId;
+		this.tableId = tableId;
+	}
 	
 	public int getCityId() {
 		return cityId;
