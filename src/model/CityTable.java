@@ -25,5 +25,27 @@ public class CityTable {
 		this.tableId = tableId;
 	}
 	
+	/**
+	 * Equals comparator for CityTable based on cityId and tableId
+	 */
+	@Override
+	public boolean equals(Object obj) 
+	{
+		if (obj == null) return false;
+    if (obj == this) return true;
+    if (!(obj instanceof CityTable))return false;	
+		CityTable c = (CityTable) obj;
+		return ((c.getCityId() == cityId) && (c.getTableId() == tableId));
+	}
+
+	/**
+	 * Overrides hashCode to be unique by value for cityId and tableId
+	 */
+	@Override
+	public int hashCode() {
+		String myHashString = tableId + ":" + cityId;
+		return myHashString.hashCode();
+	}
+
 	
 }
