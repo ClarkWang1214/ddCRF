@@ -152,7 +152,6 @@ public class DirichletLikelihood extends Likelihood {
    * @param cond_table_members
    */
   public double computeConditionalLogLikelihood(ArrayList<Double> observations, ArrayList<Double> condObservations) {
-  	double logLik = 0.0;
 		ArrayList<Double> dirichletParam =  hyperParameters.getDirichletParam();
 
 		// Count observations for condTableMembers 
@@ -164,15 +163,18 @@ public class DirichletLikelihood extends Likelihood {
 				condObservationCounts.put(obs, condObservationCounts.get(obs) + 1 );  		
   	}
 
-  	// for each observation obs sum log(p(observation_i | condObservations))
+  	// compute the log likelihood. for each observation compute p(observation_i | condObservations)
+  	double normConst = 0.0;
   	for (Double obs : observations) {
   		Integer condObsCount = 0;
   		if(condObservationCounts.get(obs) != null) 
   			condObsCount = condObservationCounts.get(obs);
   		Integer obsInt = obs.intValue();
-  		logLik += Math.log( condObsCount + dirichletParam.get(obsInt) );   // log(counts + pseudocounts)
+  		Integer term = condObsCount + dirichletParam.get(obsInt)
+  		normConst += term; 
+  		logLik += Math.log(term);
   	}
-
+  	logLik -= Math.log(normConst);
   	return logLik;
   }
 
