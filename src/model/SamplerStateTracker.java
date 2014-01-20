@@ -61,6 +61,9 @@ public class SamplerStateTracker {
 			ArrayList<ArrayList<Long>> topic_assignments_table = new ArrayList<ArrayList<Long>>();
 			ArrayList<ArrayList<Long>> topic_assignments_customer = new ArrayList<ArrayList<Long>>();
 			
+			HashMap<Integer, HashSet<CityTable>> tablesAssignedToTopic = new HashMap<Integer, HashSet<CityTable>>();
+			HashMap<CityTable, Integer> topicAtTable = new HashMap<CityTable, Integer>();
+
 			/////
 			// ArrayList<HashMap<Integer,StringBuffer>> list_customers_in_table = new  ArrayList<HashMap<Integer,StringBuffer>>();
 			ArrayList<HashMap<Integer, HashSet<Integer>>> customersAtTableList = new ArrayList<HashMap<Integer, HashSet<Integer>>>();
@@ -91,13 +94,36 @@ public class SamplerStateTracker {
 					customersAtTable.put(j, hs);
 					
 					int topic = gen.nextInt(num_topics);
-					topic_assignments_table_per_list.add(new Long(topic));
+					// topic_assignments_table_per_list.add(new Long(topic));
 					topic_assignments_customer_per_list.add(new Long(topic));
 					Long count = count_each_topic.get(topic);
 					if(count == null) //new entry			
 						count_each_topic.put(new Long(topic), 1L);
 					else
 						count_each_topic.put(new Long(topic), count+1);
+
+					// initialize the topic structure
+					CityTable ct = new CityTable();
+					ct.setCityId(i);
+					ct.setTableId(j);
+
+					// ct is assigned to topic topic 
+					topicAtTable.put(ct, topic);
+
+					// add ct to the HashSet of tables assigned to topic topic
+					if (tablesAssignedToTopic.get(topic) == null) 
+					{
+						HashSet<CityTable> ctHashSet = new HashSet<CityTable>();
+				  	ctHashSet.add(ct);
+						tablesAssignedToTopic.put(topic, ctHashSet);
+					}
+					else 
+					{
+						HashSet<CityTable> ctHashSet = tablesAssignedToTopic.get(topic);
+						ctHashSet.add(ct);
+						tablesAssignedToTopic.put(topic, ctHashSet);
+					}
+
 				}
 				customer_assignments.add(customer_assignment_per_list);
 				table_assignments.add(table_assignment_per_list);
@@ -106,21 +132,17 @@ public class SamplerStateTracker {
 				// list_customers_in_table.add(customers_in_table_per_list);
 				customersAtTableList.add(customersAtTable);
 
-				topic_assignments_table.add(topic_assignments_table_per_list);
+				// topic_assignments_table.add(topic_assignments_table_per_list);
 				topic_assignments_customer.add(topic_assignments_customer_per_list);
 			}
 			state0.setC(customer_assignments);
 			state0.set_t(table_assignments);
 			state0.setT(num_data); //number of tables equal to num_data
-			//////
-			// state0.setCustomers_in_table(list_customers_in_table);
 			state0.setCustomersAtTableList(customersAtTableList);
 
-			/*state0.setK_c(topic_assignments_customer);
-			state0.setK_t(topic_assignments_table);
-			state0.setT(num_data); //number of tables equal to num_data
+			// Initialize the topics
 			state0.setK(new Long(num_topics));
-			state0.setM(count_each_topic);*/
+			state0.setM(count_each_topic);
 			
 			//Now putting into the arraylist of sampler states
 			current_iter = 0;

@@ -55,7 +55,7 @@ public class SamplerState {
 	/**
 	 * This stores the number of tables(clusters) assigned to each topic.
 	 */
-	private HashMap<Integer,Integer> m;
+	private HashMap<Long,Long> m;
 	
 	/**
 	 * Map of table and the customer_ids.
@@ -76,12 +76,12 @@ public class SamplerState {
   /**
    * This is a map of topic IDs assigned to a CityTable 
    */	 
-	public HashMap<CityTable, Integer> topicAtTable = new HashMap<CityTable, Integer>();
+	private HashMap<CityTable, Integer> topicAtTable = new HashMap<CityTable, Integer>();
 
   /**
    * For a given topic ID, this maps to the set of CityTables assigned to that topic
    */	 
-	public HashMap<Integer, HashSet<CityTable>> tablesAssignedToTopic = new HashMap<Integer, HashSet<CityTable>>();
+	private HashMap<Integer, HashSet<CityTable>> tablesAssignedToTopic = new HashMap<Integer, HashSet<CityTable>>();
 
 	/**
 	 * 
@@ -89,6 +89,22 @@ public class SamplerState {
 	 * 
 	 */
 	
+	public HashMap<CityTable, Integer> getTopicAtTable() {
+		return topicAtTable;
+	}
+
+	public void setTopicAtTable(HashMap<CityTable, Integer> topicAtTable) {
+		this.topicAtTable = topicAtTable;
+	}
+
+	public HashMap<Integer, HashSet<CityTable>> getTablesAssignedToTopic() {
+		return tablesAssignedToTopic;
+	}
+
+	public void setTablesAssignedToTopic(HashMap<Integer, HashSet<CityTable>> tablesAssignedToTopic) {
+		this.tablesAssignedToTopic = tablesAssignedToTopic;
+	}
+
 	public static Long getNum_data() {
 		return num_data;
 	}
@@ -114,11 +130,11 @@ public class SamplerState {
 		K = k;
 	}
 
-	public HashMap<Integer,Integer> getM() {
+	public HashMap<Long,Long> getM() {
 		return m;
 	}
 	
-	public void setM(HashMap<Integer,Integer> m) {
+	public void setM(HashMap<Long,Long> m) {
 		this.m = m;
 	}
 
