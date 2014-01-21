@@ -68,7 +68,7 @@ public class SamplerStateTracker {
 			// ArrayList<HashMap<Integer,StringBuffer>> list_customers_in_table = new  ArrayList<HashMap<Integer,StringBuffer>>();
 			ArrayList<HashMap<Integer, HashSet<Integer>>> customersAtTableList = new ArrayList<HashMap<Integer, HashSet<Integer>>>();
 
-			HashMap<Long,Long> count_each_topic = new HashMap<Long,Long>();
+			HashMap<Integer,Integer> count_each_topic = new HashMap<Integer,Integer>();
 			int num_topics = 100; //setting the initial number of topics to 100
 			Random gen = new Random();			
 			for(int i=0;i<list_observations.size();i++)		//keeping i as int, hoping that the number of cities/documents will be no greater than the size of integers
@@ -96,16 +96,14 @@ public class SamplerStateTracker {
 					int topic = gen.nextInt(num_topics);
 					// topic_assignments_table_per_list.add(new Long(topic));
 					topic_assignments_customer_per_list.add(new Long(topic));
-					Long count = count_each_topic.get(topic);
+					Integer count = count_each_topic.get(topic);
 					if(count == null) //new entry			
-						count_each_topic.put(new Long(topic), 1L);
+						count_each_topic.put(topic, 1);
 					else
-						count_each_topic.put(new Long(topic), count+1);
+						count_each_topic.put(topic, count+1);
 
 					// initialize the topic structure
-					CityTable ct = new CityTable();
-					ct.setCityId(i);
-					ct.setTableId(j);
+					CityTable ct = new CityTable(i,j);
 
 					// ct is assigned to topic topic 
 					topicAtTable.put(ct, topic);
