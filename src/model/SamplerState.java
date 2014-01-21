@@ -42,6 +42,12 @@ public class SamplerState {
 	 * The total number of topics
 	 */
 	private Long K;
+	
+	/**
+	 * The max topicId till now in this iteration 
+	 */
+	private int maxTopicId;
+	
 	/**
 	 * This stores the topic assignments for each data point (which is basically the topic assignment at the given table they are sitting at)
 	 */
@@ -55,7 +61,7 @@ public class SamplerState {
 	/**
 	 * This stores the number of tables(clusters) assigned to each topic.
 	 */
-	private HashMap<Long,Long> m;
+	private HashMap<Integer,Integer> m;
 	
 	/**
 	 * Map of table and the customer_ids.
@@ -74,7 +80,7 @@ public class SamplerState {
   // public static HashMap<Integer,ArrayList<HashMap<Integer,HashSet<Integer>>>> topic_members_by_city_by_table = new HashMap<Integer,ArrayList<HashMap<Integer,HashSet<Integer>>>>();
   
   /**
-   * This is a map of topic IDs assigned to a CityTable 
+   * This is a map of topic IDs assigned to a CityTable.
    */	 
 	private HashMap<CityTable, Integer> topicAtTable = new HashMap<CityTable, Integer>();
 
@@ -129,12 +135,19 @@ public class SamplerState {
 	public void setK(Long k) {
 		K = k;
 	}
+	
+	public int getMaxTopicId() {
+		return maxTopicId;
+	}
 
-	public HashMap<Long,Long> getM() {
+	public void setMaxTopicId(int maxTopicId) {
+		this.maxTopicId = maxTopicId;
+	}
+	public HashMap<Integer,Integer> getM() {
 		return m;
 	}
 	
-	public void setM(HashMap<Long,Long> m) {
+	public void setM(HashMap<Integer,Integer> m) {
 		this.m = m;
 	}
 
@@ -508,6 +521,23 @@ public class SamplerState {
 		tables.remove(ct);
 		if(tables.size() == 0) //topic doesnot have table in any city, then remove the topic		
 			tablesAssignedToTopic.remove(topic);
+	}
+	/**
+	 * Adds a new citytable to the topic. If its a new topic, makes a new entry 
+	 * @param topic
+	 * @param ct
+	 */
+	public void addTableToTopic(int topic, CityTable ct)
+	{
+		HashSet<CityTable> tables = tablesAssignedToTopic.get(topic);
+		if(tables == null) //new topic
+		{
+			HashSet<CityTable> newSet = new HashSet<CityTable>();
+			newSet.add(ct);
+			tablesAssignedToTopic.put(topic, newSet);
+			return;
+		}
+		tables.add(ct);
 	}
 	
 	/**

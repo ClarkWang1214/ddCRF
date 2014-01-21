@@ -29,6 +29,8 @@ public class HyperParameters {
 	 */
 	private double selfLinkProbCRP; 
 
+	
+
 	public HyperParameters(int vocabSize, ArrayList<Double> dirichlet, double ddcrp,double crp) {
 		VOCAB_SIZE = vocabSize;
 		dirichletParam = dirichlet;
@@ -55,5 +57,9 @@ public class HyperParameters {
    */
 	public double getSelfLinkProb() {
 		return selfLinkProb;
+	}
+	
+	public double getSelfLinkProbCRP() {
+		return selfLinkProbCRP;
 	}
 }
