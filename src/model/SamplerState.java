@@ -633,6 +633,8 @@ public class SamplerState {
 				observationsForTopic.add(obs);
 			}
 		}
+		//adding back the topic to the set
+		tables.add(tableToRemove);
 
 		return observationsForTopic;
 	}
