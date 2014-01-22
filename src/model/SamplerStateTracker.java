@@ -102,9 +102,7 @@ public class SamplerStateTracker {
 						count_each_topic.put(topic, count+1);
 
 					// initialize the topic structure
-					CityTable ct = new CityTable();
-					ct.setCityId(i);
-					ct.setTableId(j);
+					CityTable ct = new CityTable(i,j);
 
 					// ct is assigned to topic topic 
 					topicAtTable.put(ct, topic);

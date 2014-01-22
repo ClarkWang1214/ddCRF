@@ -336,4 +336,32 @@ public class GibbsSampler {
 		double change_in_log_likelihood = table_union_loglikelihood - (orig_table_loglikelihood + proposed_table_loglikelihood);		
 		return change_in_log_likelihood;
 	}
+
+
+	/**
+	 * Method to compute the change in log-likelihood due to joining two tables.
+	 * @param s The current sampler state
+	 * @param l This will compute the log-likelihood
+	 * @param tableId of the current table in listIndex
+	 * @param listIndex of the current table
+	 * @param currentTopicId - this is the topic of the current table
+	 * @param proposedTopicId - this is the proposed topic of the joined table
+	 * @return the log likelihood 
+	 
+	 */
+	private static double computeTopicChangeInLikelihood(SamplerState s,
+																				 		 					 Likelihood l, 
+																									     Integer tableId,
+																									     Integer listIndex,
+																									     Integer currentTopicId,
+																									     Integer proposedTopicId
+																									    ) 
+	{
+		double currentTopicLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopic(currentTopicId));
+		double proposedTopicLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopic(proposedTopicId));
+		double proposedTopicPlusTableLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopicPlusTable(proposedTopicId, tableId, listIndex));
+		double currentTopicMinusTableLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopicMinusTable(currentTopicId, tableId, listIndex));
+		return proposedTopicPlusTableLogLik + currentTopicMinusTableLogLik - currentTopicLogLik - proposedTopicLogLik;
+	}
+
 }

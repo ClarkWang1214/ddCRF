@@ -139,7 +139,7 @@ public class SamplerState {
 	public int getMaxTopicId() {
 		return maxTopicId;
 	}
-
+	
 	public void setMaxTopicId(int maxTopicId) {
 		this.maxTopicId = maxTopicId;
 	}
@@ -497,7 +497,7 @@ public class SamplerState {
 	 * decrease table count for a topic, if the count reduces to 0, then remove the topic
 	 * @param topic
 	 */
-	public void decreaseTableCountsForTopic(int topic)
+	public void decreaseTableCountsForTopic(Integer topic)
 	{
 		Integer countTables = m.get(topic);
 		countTables = countTables - 1;
@@ -563,4 +563,78 @@ public class SamplerState {
 		}
 		return observationsForTopic;
 	}
+
+
+	/**
+	 * Returns all the observations (NOT the indexes) of the customers of various cities having the topic t.
+	 * including those observations from table tableId at index listIndex
+	 * Quite expensive operation, Is there a way to hash it?
+	 * @param topic
+	 * @param tableId
+	 * @param listIndex
+	 * @return
+	 */
+	public ArrayList<Double> getAllObservationsForTopicPlusTable(int topic, int tableToAddId, int listIndex)
+	{
+		// create a CityTable instance for the target CityTable
+		CityTable tableToInclude = new CityTable(listIndex, tableToAddId);
+		boolean tableIncluded = false;
+
+		ArrayList<ArrayList<Double>> listObservations = Data.getObservations(); // all observations
+		ArrayList<Double> observationsForTopic = new ArrayList<Double>();
+		HashSet<CityTable> tables = tablesAssignedToTopic.get(topic);
+		for(CityTable table : tables) {
+			// check if this is the extra table we're supposed to include
+			if (table.equals(tableToInclude))
+				tableIncluded = true;
+			int cityId = table.getCityId();
+			int tableId = table.getTableId();
+			ArrayList<Double> observationsAtList = listObservations.get(cityId);
+			HashSet<Integer> customersAtTable = customersAtTableList.get(cityId).get(tableId);
+			for (Integer customer : customersAtTable) {
+				Double obs = observationsAtList.get(customer);
+				observationsForTopic.add(obs);
+			}
+		}
+
+		// if tableToInclude was missing, add its observations
+		if (!tableIncluded)
+			observationsForTopic.addAll(getObservationAtTable(tableToAddId, listIndex));
+
+		return observationsForTopic;
+	}
+
+
+	/**
+	 * Returns all the observations (NOT the indexes) of the customers of various cities having the topic t.
+	 * including those observations from table tableId at index listIndex
+	 * Quite expensive operation, Is there a way to hash it?
+	 * @param topic
+	 * @param tableId
+	 * @param listIndex
+	 * @return
+	 */
+	public ArrayList<Double> getAllObservationsForTopicMinusTable(int topic, int tableToRemoveId, int listIndex)
+	{
+		// create a CityTable instance for the target CityTable
+		CityTable tableToRemove = new CityTable(listIndex, tableToRemoveId);
+
+		ArrayList<ArrayList<Double>> listObservations = Data.getObservations(); // all observations
+		ArrayList<Double> observationsForTopic = new ArrayList<Double>();
+		HashSet<CityTable> tables = tablesAssignedToTopic.get(topic);
+		tables.remove(tableToRemove);  // Remove the table we're supposed to ignore from the hash set
+		for(CityTable table : tables) {
+			int cityId = table.getCityId();
+			int tableId = table.getTableId();
+			ArrayList<Double> observationsAtList = listObservations.get(cityId);
+			HashSet<Integer> customersAtTable = customersAtTableList.get(cityId).get(tableId);
+			for (Integer customer : customersAtTable) {
+				Double obs = observationsAtList.get(customer);
+				observationsForTopic.add(obs);
+			}
+		}
+
+		return observationsForTopic;
+	}
+
 }
