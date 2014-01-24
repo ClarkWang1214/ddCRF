@@ -326,16 +326,13 @@ public class SamplerState {
 		ArrayList<ArrayList<Integer>> new_c = new ArrayList<ArrayList<Integer>>(); //customer assignments
 		ArrayList<ArrayList<Integer>> new_t = new ArrayList<ArrayList<Integer>>(); //table assignments per customer
 		ArrayList<HashMap<Integer, HashSet<Integer>>> newCustomersAtTableList = new ArrayList<HashMap<Integer, HashSet<Integer>>>();  
-		//ArrayList<ArrayList<Long>> new_k_c = new ArrayList<ArrayList<Long>>(); //topic assignments per customer
+
 		for(int i=0; i<c.size(); i++)
 		{
 			ArrayList<Integer> customer_assignments_copy = new ArrayList<Integer>(c.get(i)); //this will create a new list pointing to the same long objects, but its ok since Long is immutable.
 			new_c.add(customer_assignments_copy);
 			ArrayList<Integer> table_assignments_copy = new ArrayList<Integer>(t.get(i));
-			new_t.add(table_assignments_copy);
-			
-			//ArrayList<Long> topic_assignments_copy = new ArrayList<Long>(k_c.get(i));
-			//new_k_c.add(topic_assignments_copy);
+			new_t.add(table_assignments_copy);			
 		}
 		for(int i=0; i<customersAtTableList.size(); i++)
 		{
@@ -346,7 +343,24 @@ public class SamplerState {
 		s.t = new_t;
 		s.T = new Long(T);
 		s.customersAtTableList = newCustomersAtTableList;
-		//s.K = new Long(K);
+
+		// topics
+		HashMap<Integer,Integer> newM = new HashMap<Integer,Integer>();
+
+		for (Integer key : m.keySet()) {
+    	newM.put(key, m.get(key));
+		}
+
+		s.K = new Long(K);
+		s.m = newM;
+		s.maxTopicId = maxTopicId;
+		// s.tablesAssignedToTopic = newTablesAssignedToTopic;
+		// s.topicAtTable = newTopicAtTable;
+
+		// Just copy reference for now to see if it is working
+		s.topicAtTable = topicAtTable;
+  	s.tablesAssignedToTopic = tablesAssignedToTopic;
+
 		return s;
 	}
 

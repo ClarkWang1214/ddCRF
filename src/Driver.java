@@ -22,7 +22,7 @@ public class Driver {
 	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		try {
-			
+
 			vocab_size = Integer.parseInt(args[1]);
 			System.out.println("Vocab Size is "+vocab_size);
 			

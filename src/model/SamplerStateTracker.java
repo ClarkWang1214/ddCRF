@@ -141,7 +141,14 @@ public class SamplerStateTracker {
 			state0.setK(new Long(num_topics));
 			state0.setM(count_each_topic);
 			state0.setMaxTopicId(state0.getK().intValue() - 1); //since numbering topic starts from 0.
-			
+			System.out.println("setTablesAssignedToTopic");
+			state0.setTablesAssignedToTopic(tablesAssignedToTopic);
+			System.out.println("setTopicAtTable");
+			state0.setTopicAtTable(topicAtTable);
+
+			CityTable ct0 = new CityTable(0,0);
+			System.out.println("Topic at 0:" + state0.getTopicForCityTable(ct0));
+
 			//Now putting into the arraylist of sampler states
 			current_iter = 0;
 			samplerStates.add(state0);

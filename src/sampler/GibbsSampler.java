@@ -18,6 +18,7 @@ import java.util.logging.SimpleFormatter;
 import model.HyperParameters;
 import model.SamplerState;
 import model.SamplerStateTracker;
+import model.CityTable;
 
 import org.jgraph.graph.DefaultEdge;
 import org.jgrapht.DirectedGraph;
@@ -245,13 +246,15 @@ public class GibbsSampler {
 				else //will have to compute the change in likelihood
 				{					
 
-					HashSet<Integer> proposedTableMembersSet = s.getCustomersAtTable(table_proposed, list_index);
-					ArrayList<Integer> proposed_table_members = new ArrayList<Integer>(proposedTableMembersSet);
+					CityTable currentCT = new CityTable(list_index, table_id);
+					CityTable proposedCT = new CityTable(list_index, table_proposed);
+					Integer currentTopic = s.getTopicForCityTable(currentCT);
+					Integer proposedTopic = s.getTopicForCityTable(proposedCT);
 
-					//Now compute the change in likelihood
-					double change_in_log_likelihood = compute_change_in_likelihood(ll,orig_table_members,proposed_table_members,list_index);
-					//System.out.println("Change in LL "+change_in_log_likelihood);
-					posterior.add(Math.exp(Math.log(priors.get(i)) + change_in_log_likelihood)); //adding the prior and likelihood
+					double changeInLogLik = computeTopicChangeInLikelihood(s, ll, table_id, list_index, currentTopic, proposedTopic);
+
+					// //Now compute the change in likelihood
+					posterior.add(Math.exp(Math.log(priors.get(i)) + changeInLogLik)); //adding the prior and likelihood
 				}
 			}
 		}
@@ -279,62 +282,13 @@ public class GibbsSampler {
 			//Then, update the orig_table to null
 			s.setCustomersAtTable(null,table_id, list_index);
 
+			//Now sample a new topic for the new table
+			CRPGibbsSampler.sampleTopic(ll, assigned_table, list_index);
+
 			//Atlast, enqueue this table_id, since this table is empty
 			emptyTables.get(list_index).add(table_id);
 		}		
 		LOGGER.log(Level.FINE, " DONE Sampling link for index "+index+" list_index "+list_index);
-	}
-
-	/**
-	 * Method to compute the change in log-likelihood due to join of two tables
-	 * @param l This will compute the log-likelihood
-	 * @param orig_table_members
-	 * @param proposed_table_members
-	 * @return
-	 
-	 */
-	private static double compute_change_in_likelihood(Likelihood l,ArrayList<Integer> orig_table_members,ArrayList<Integer> proposed_table_members,int list_index )
-	{
-		//get all data
-		ArrayList<ArrayList<Double>> list_observations = Data.getObservations(); // all observations
-		ArrayList<Double> observations_per_city = list_observations.get(list_index);
-		
-		ArrayList<Double> orig_table_observations = new ArrayList<Double>();
-		ArrayList<Double> prop_table_observations = new ArrayList<Double>();
-		
-		for(int i=0;i<orig_table_members.size();i++)
-		{
-			double obs = observations_per_city.get(orig_table_members.get(i));
-			orig_table_observations.add(obs);
-		}
-		
-		for(int i=0;i<proposed_table_members.size();i++)
-		{
-			double obs = observations_per_city.get(proposed_table_members.get(i));
-			prop_table_observations.add(obs);
-		}
-		
-		double orig_table_loglikelihood = l.computeTableLogLikelihood(orig_table_observations);
-		double proposed_table_loglikelihood = l.computeTableLogLikelihood(prop_table_observations);
-		
-		//take union of the two lists
-		/*ArrayList<Integer> union_list = new ArrayList<Integer>();
-		for(Integer member:orig_table_members)		
-			union_list.add(member);
-		for(Integer member:proposed_table_members)
-			union_list.add(member);*/
-		
-		ArrayList<Double> union_list = new ArrayList<Double>();
-		for(Double member:orig_table_observations)
-			union_list.add(member);
-		for(Double member:prop_table_observations)
-			union_list.add(member);
-		
-		
-		double table_union_loglikelihood = l.computeTableLogLikelihood(union_list); 
-		
-		double change_in_log_likelihood = table_union_loglikelihood - (orig_table_loglikelihood + proposed_table_loglikelihood);		
-		return change_in_log_likelihood;
 	}
 
 
@@ -347,7 +301,6 @@ public class GibbsSampler {
 	 * @param currentTopicId - this is the topic of the current table
 	 * @param proposedTopicId - this is the proposed topic of the joined table
 	 * @return the log likelihood 
-	 
 	 */
 	private static double computeTopicChangeInLikelihood(SamplerState s,
 																				 		 					 Likelihood l, 
@@ -357,10 +310,10 @@ public class GibbsSampler {
 																									     Integer proposedTopicId
 																									    ) 
 	{
-		double currentTopicLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopic(currentTopicId));
+		double currentTopicLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopic(currentTopicId));  // pull this out of method
 		double proposedTopicLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopic(proposedTopicId));
 		double proposedTopicPlusTableLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopicPlusTable(proposedTopicId, tableId, listIndex));
-		double currentTopicMinusTableLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopicMinusTable(currentTopicId, tableId, listIndex));
+		double currentTopicMinusTableLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopicMinusTable(currentTopicId, tableId, listIndex));  // pull this out of method
 		return proposedTopicPlusTableLogLik + currentTopicMinusTableLogLik - currentTopicLogLik - proposedTopicLogLik;
 	}
 
