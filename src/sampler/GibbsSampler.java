@@ -282,11 +282,14 @@ public class GibbsSampler {
 			//Then, update the orig_table to null
 			s.setCustomersAtTable(null,table_id, list_index);
 
-			//Now sample a new topic for the new table
-			CRPGibbsSampler.sampleTopic(ll, assigned_table, list_index);
+			//And remove the topic at the old table
+			s.removeTableFromTopic(table_id, list_index);
 
 			//Atlast, enqueue this table_id, since this table is empty
 			emptyTables.get(list_index).add(table_id);
+
+			//Now sample a new topic for the new table
+			CRPGibbsSampler.sampleTopic(ll, assigned_table, list_index);
 		}		
 		LOGGER.log(Level.FINE, " DONE Sampling link for index "+index+" list_index "+list_index);
 	}
