@@ -205,11 +205,23 @@ public class GibbsSampler {
 			  s.set_t(new_table_id, l, list_index);
 			int old_table_id = table_id;
 
+			// grab the topic of the old combined table (we'll need it)
+			CityTable oldCt = new CityTable(list_index, old_table_id);
+			Integer oldTopic = s.getTopicForCityTable(oldCt); 
+
 			s.setCustomersAtTable(new HashSet<Integer>(old_table_members),  old_table_id, list_index);
 
 			table_id = new_table_id; //updating, since this is the new table_id of the current customer we are trying to sample for.
 			s.setCustomersAtTable(new HashSet<Integer>(new_table_members),  new_table_id, list_index);
 
+			//now update the topic for the new table to be the previous topic of the combined table
+			CityTable ct = new CityTable(list_index, table_id);
+			if(oldTopic != null)
+			{
+				s.getTopicAtTable().put(ct, oldTopic); //removing the entry from the map of citytable to topic
+				s.addTableToTopic(oldTopic, ct); //adding the old topic to the new split table
+				s.addTableCountsForTopic(oldTopic); //increment the table count for oldTopic
+			}
 		}
 
 		//Now, will sample a new link for the customer
@@ -251,7 +263,21 @@ public class GibbsSampler {
 					Integer currentTopic = s.getTopicForCityTable(currentCT);
 					Integer proposedTopic = s.getTopicForCityTable(proposedCT);
 
+					if (currentTopic == null) {
+						System.out.println("There is a null in the current Topic");
+						System.out.println(currentCT.getCityId() + ":" + currentCT.getTableId());
+						System.out.println(s.getObservationAtTable(currentCT.getTableId(),currentCT.getCityId()));
+					}
+
 					double changeInLogLik = computeTopicChangeInLikelihood(s, ll, table_id, list_index, currentTopic, proposedTopic);
+
+					if (changeInLogLik > 1000000) {
+						System.out.println("----------");
+						System.out.println("changeInLogLik has a bad value");
+						System.out.println(changeInLogLik);
+						System.out.println(table_id + ":" + list_index + ":" + ":" + currentTopic + ":" + proposedTopic);
+						System.out.println("----------");
+					}
 
 					// //Now compute the change in likelihood
 					posterior.add(Math.exp(Math.log(priors.get(i)) + changeInLogLik)); //adding the prior and likelihood
@@ -265,7 +291,6 @@ public class GibbsSampler {
 		
 		System.out.println("posterior:indexes:sample -- " + posterior.size() + ":" + indexes.size() + ":" + sample);
 		if(sample == -1) {
-			System.out.println(ll.getHyperParameters().getSelfLinkProb());
 			System.out.println(posterior);
 		}
 
