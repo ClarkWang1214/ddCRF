@@ -259,14 +259,14 @@ public class GibbsSampler {
 			}
 		}
 		//the posterior probabilities are computed for each possible customer assignment, Now lets sample from it.
-		System.out.println(posterior);
+		//System.out.println(posterior);
 
 		int sample = Util.sample(posterior);		
 		
-		System.out.println("posterior:indexes:sample -- " + posterior.size() + ":" + indexes.size() + ":" + sample);
+		/*System.out.println("posterior:indexes:sample -- " + posterior.size() + ":" + indexes.size() + ":" + sample);
 		if(sample == -1) {
 			System.out.println(ll.getHyperParameters().getSelfLinkProb());
-		}
+		}*/
 
 		int customer_assignment_index = indexes.get(sample); //this is the customer assignment in this iteration, phew!		
 		LOGGER.log(Level.FINE, "The sampled link for customer indexed "+index +" of list "+list_index+" is "+customer_assignment_index);
@@ -329,6 +329,11 @@ public class GibbsSampler {
 		double proposedTopicLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopic(proposedTopicId));
 		double proposedTopicPlusTableLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopicPlusTable(proposedTopicId, tableId, listIndex));
 		double currentTopicMinusTableLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopicMinusTable(currentTopicId, tableId, listIndex));  // pull this out of method
+		System.out.println("currentTopicLogLik "+currentTopicLogLik);
+		System.out.println("proposedTopicLogLik "+proposedTopicLogLik);
+		System.out.println("proposedTopicPlusTableLogLik "+proposedTopicPlusTableLogLik);
+		System.out.println("currentTopicMinusTableLogLik "+currentTopicMinusTableLogLik);
+		
 		return proposedTopicPlusTableLogLik + currentTopicMinusTableLogLik - currentTopicLogLik - proposedTopicLogLik;
 	}
 
