@@ -259,13 +259,13 @@ public class GibbsSampler {
 			}
 		}
 		//the posterior probabilities are computed for each possible customer assignment, Now lets sample from it.
-		
+		System.out.println(posterior);
+
 		int sample = Util.sample(posterior);		
 		
 		System.out.println("posterior:indexes:sample -- " + posterior.size() + ":" + indexes.size() + ":" + sample);
 		if(sample == -1) {
 			System.out.println(ll.getHyperParameters().getSelfLinkProb());
-			System.out.println(posterior);
 		}
 
 		int customer_assignment_index = indexes.get(sample); //this is the customer assignment in this iteration, phew!		

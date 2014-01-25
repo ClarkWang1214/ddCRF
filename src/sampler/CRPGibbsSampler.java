@@ -64,6 +64,10 @@ public class CRPGibbsSampler {
 		indexes.add(maxTopicId+1); //incrementing maxTopicId to account for the new topic
 		
 		//Now finally sample for a topic
+
+		System.out.println(posterior);
+
+		
 		int sampledTopicIndex = Util.sample(posterior);
 		
 		System.out.println("posterior:indexes:sampledTopicIndex -- " + posterior.size() + ":" + indexes.size() + ":" + sampledTopicIndex);		
