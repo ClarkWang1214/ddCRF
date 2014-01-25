@@ -65,16 +65,16 @@ public class CRPGibbsSampler {
 		
 		//Now finally sample for a topic
 
-		System.out.println(posterior);
+		// System.out.println(posterior);
 
 		
 		int sampledTopicIndex = Util.sample(posterior);
 		
-		System.out.println("posterior:indexes:sampledTopicIndex -- " + posterior.size() + ":" + indexes.size() + ":" + sampledTopicIndex);		
-		System.out.println(l.getHyperParameters().getSelfLinkProbCRP());
-		if(sampledTopicIndex == -1) {
-			System.out.println(posterior);
-		}
+		// System.out.println("posterior:indexes:sampledTopicIndex -- " + posterior.size() + ":" + indexes.size() + ":" + sampledTopicIndex);		
+		// System.out.println(l.getHyperParameters().getSelfLinkProbCRP());
+		// if(sampledTopicIndex == -1) {
+		// 	System.out.println(posterior);
+		// }
 
 		int sampledTopicId = indexes.get(sampledTopicIndex); //actual topic id
 		if(sampledTopicId == maxTopicId+1) //The table sat chose to sit in a new topic table ie new topic sampled

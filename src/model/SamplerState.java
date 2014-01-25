@@ -653,18 +653,18 @@ public class SamplerState {
 		return observationsForTopic;
 	}
 
-	public void removeTableFromTopic(int tableId, int listIndex) {
-		CityTable ct = new CityTable(listIndex, tableId);
-		Integer topicId = topicAtTable.get(ct);
-		if (topicId != null) {
-			topicAtTable.remove(ct);
-			tablesAssignedToTopic.get(topicId).remove(ct);
-			// remove one from the tables at topic count
-			if (m.get(topicId)==null)
-				System.out.println("Error, m count does not exist, but topic exists.");
-			else
-				m.put(topicId, m.get(topicId) - 1);
-		}
-	}
+	// public void removeTableFromTopic(int tableId, int listIndex) {
+	// 	CityTable ct = new CityTable(listIndex, tableId);
+	// 	Integer topicId = topicAtTable.get(ct);
+	// 	if (topicId != null) {
+	// 		topicAtTable.remove(ct);
+	// 		tablesAssignedToTopic.get(topicId).remove(ct);
+	// 		// remove one from the tables at topic count
+	// 		if (m.get(topicId)==null)
+	// 			System.out.println("Error, m count does not exist, but topic exists.");
+	// 		else
+	// 			m.put(topicId, m.get(topicId) - 1);
+	// 	}
+	// }
 
 }

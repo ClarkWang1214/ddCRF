@@ -259,14 +259,15 @@ public class GibbsSampler {
 			}
 		}
 		//the posterior probabilities are computed for each possible customer assignment, Now lets sample from it.
-		//System.out.println(posterior);
+		//
 
 		int sample = Util.sample(posterior);		
 		
-		/*System.out.println("posterior:indexes:sample -- " + posterior.size() + ":" + indexes.size() + ":" + sample);
+		System.out.println("posterior:indexes:sample -- " + posterior.size() + ":" + indexes.size() + ":" + sample);
 		if(sample == -1) {
 			System.out.println(ll.getHyperParameters().getSelfLinkProb());
-		}*/
+			System.out.println(posterior);
+		}
 
 		int customer_assignment_index = indexes.get(sample); //this is the customer assignment in this iteration, phew!		
 		LOGGER.log(Level.FINE, "The sampled link for customer indexed "+index +" of list "+list_index+" is "+customer_assignment_index);
@@ -291,7 +292,14 @@ public class GibbsSampler {
 			s.setCustomersAtTable(null,table_id, list_index);
 
 			//And remove the topic at the old table
-			s.removeTableFromTopic(table_id, list_index);
+			CityTable ct = new CityTable(list_index, table_id);
+			Integer oldTopic = s.getTopicForCityTable(ct); //old topic for the table
+			if(oldTopic != null)
+			{
+				s.getTopicAtTable().remove(ct); //removing the entry from the map of citytable to topic
+				s.removeTableFromTopic(oldTopic, ct); //removing the table from the corresponding topic
+				s.decreaseTableCountsForTopic(oldTopic); //decrementing the table count for k_old
+			}
 
 			//Atlast, enqueue this table_id, since this table is empty
 			emptyTables.get(list_index).add(table_id);
