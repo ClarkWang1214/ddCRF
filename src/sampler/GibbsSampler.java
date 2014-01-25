@@ -263,8 +263,10 @@ public class GibbsSampler {
 		int sample = Util.sample(posterior);		
 		
 		System.out.println("posterior:indexes:sample -- " + posterior.size() + ":" + indexes.size() + ":" + sample);
-		if(sample == -1)
+		if(sample == -1) {
+			System.out.println(ll.getHyperParameters().getSelfLinkProb());
 			System.out.println(posterior);
+		}
 
 		int customer_assignment_index = indexes.get(sample); //this is the customer assignment in this iteration, phew!		
 		LOGGER.log(Level.FINE, "The sampled link for customer indexed "+index +" of list "+list_index+" is "+customer_assignment_index);
