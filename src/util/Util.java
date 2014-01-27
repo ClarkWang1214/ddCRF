@@ -21,8 +21,8 @@ public class Util {
 	public static int sample(List<Double> probs)
 	{
 		ArrayList<Double> cumulative_probs = new ArrayList<Double>();
-		double sum_probs = 0;
-		for(double prob:probs)
+		Double sum_probs = new Double(0.0);
+		for(Double prob:probs)
 		{
 			sum_probs = sum_probs + prob;
 			cumulative_probs.add(sum_probs);
@@ -34,7 +34,7 @@ public class Util {
 				cumulative_probs.set(i, cumulative_probs.get(i)/sum_probs);
 			}
 		Random r  = new Random();
-		double nextRandom = r.nextDouble();
+		Double nextRandom = r.nextDouble();
 		for(int i=0;i<cumulative_probs.size();i++)		
 			if(cumulative_probs.get(i)>nextRandom)			
 				return i;

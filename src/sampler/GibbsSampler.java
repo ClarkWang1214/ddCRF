@@ -245,6 +245,7 @@ public class GibbsSampler {
 		
 		ArrayList<Double> posterior = new ArrayList<Double>(); //this will hold the posterior probabilities for all possible customer assignment and we will sample according to these probabilities
 		ArrayList<Integer> indexes = new ArrayList<Integer>(); // for storing the indexes of the customers who could be possible assignments
+		Double maxLogPosterior = new Double(-1000000000.0);
 		for(int i=0;i<priors.length();i++)
 		{
 			if(priors.get(i)!=0)
@@ -253,8 +254,12 @@ public class GibbsSampler {
 				//get the table id of this table				
 				int table_proposed = s.get_t(i, list_index); //table_proposed is the proposed table to be joined
 				if(table_proposed == table_id) //since the proposed table is the same, hence there will be no change in the likelihood if this is the customer assignment				
-					posterior.add(priors.get(i)); //since the posterior will be determined only by the prior probability
-				
+				{ 
+					double logPosterior = Math.log(priors.get(i));
+					if (logPosterior > maxLogPosterior)
+						maxLogPosterior = logPosterior;
+					posterior.add(logPosterior); //since the posterior will be determined only by the prior probability
+				}
 				else //will have to compute the change in likelihood
 				{					
 
@@ -270,30 +275,23 @@ public class GibbsSampler {
 					}
 
 					double changeInLogLik = computeTopicChangeInLikelihood(s, ll, table_id, list_index, currentTopic, proposedTopic);
+					double logPosterior = Math.log(priors.get(i)) + changeInLogLik;
 
-					if (changeInLogLik > 1000000) {
-						System.out.println("----------");
-						System.out.println("changeInLogLik has a bad value");
-						System.out.println(changeInLogLik);
-						System.out.println(table_id + ":" + list_index + ":" + ":" + currentTopic + ":" + proposedTopic);
-						System.out.println("----------");
-					}
+					if (logPosterior > maxLogPosterior)
+						maxLogPosterior = logPosterior;
 
 					// //Now compute the change in likelihood
-					posterior.add(Math.exp(Math.log(priors.get(i)) + changeInLogLik)); //adding the prior and likelihood
+					posterior.add(logPosterior); //adding the prior and likelihood
 				}
 			}
 		}
-		//the posterior probabilities are computed for each possible customer assignment, Now lets sample from it.
-		//
+		// Subtract the maxLogPosterior from each term of posterior (avoid overflows), then exponentiate
+		for (int i=0; i<posterior.size(); i++)
+			posterior.set(i, Math.exp(posterior.get(i) - maxLogPosterior));
 
+		//the posterior probabilities are computed for each possible customer assignment, Now lets sample from it.
 		int sample = Util.sample(posterior);		
 		
-		System.out.println("posterior:indexes:sample -- " + posterior.size() + ":" + indexes.size() + ":" + sample);
-		if(sample == -1) {
-			System.out.println(posterior);
-		}
-
 		int customer_assignment_index = indexes.get(sample); //this is the customer assignment in this iteration, phew!		
 		LOGGER.log(Level.FINE, "The sampled link for customer indexed "+index +" of list "+list_index+" is "+customer_assignment_index);
 		
@@ -354,18 +352,14 @@ public class GibbsSampler {
 																									     Integer proposedTopicId
 																									    ) 
 	{
-		if (currentTopicId == null || proposedTopicId == null || tableId == null || s == null || l == null) {
-			System.out.println("   null in computeTopicChangeInLikelihood");
-			System.out.println(currentTopicId + ":" + proposedTopicId + ":" + tableId + ":" + s + ":" + l);
-		}
 		double currentTopicLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopic(currentTopicId));  // pull this out of method
 		double proposedTopicLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopic(proposedTopicId));
 		double proposedTopicPlusTableLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopicPlusTable(proposedTopicId, tableId, listIndex));
 		double currentTopicMinusTableLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopicMinusTable(currentTopicId, tableId, listIndex));  // pull this out of method
-		System.out.println("currentTopicLogLik "+currentTopicLogLik);
-		System.out.println("proposedTopicLogLik "+proposedTopicLogLik);
-		System.out.println("proposedTopicPlusTableLogLik "+proposedTopicPlusTableLogLik);
-		System.out.println("currentTopicMinusTableLogLik "+currentTopicMinusTableLogLik);
+		// System.out.println("currentTopicLogLik "+currentTopicLogLik);
+		// System.out.println("proposedTopicLogLik "+proposedTopicLogLik);
+		// System.out.println("proposedTopicPlusTableLogLik "+proposedTopicPlusTableLogLik);
+		// System.out.println("currentTopicMinusTableLogLik "+currentTopicMinusTableLogLik);
 		
 		return proposedTopicPlusTableLogLik + currentTopicMinusTableLogLik - currentTopicLogLik - proposedTopicLogLik;
 	}

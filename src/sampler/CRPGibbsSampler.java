@@ -43,6 +43,7 @@ public class CRPGibbsSampler {
 		Iterator<Entry<Integer,Integer>> iter = allTopicsToNumTablesMapping.iterator();
 		ArrayList<Double> posterior = new ArrayList<Double>(); //this will hold all the posterior probabilities
 		ArrayList<Integer> indexes = new ArrayList<Integer>();
+		Double maxLogPosterior = new Double(-1000000000.0);
 		while(iter.hasNext()) //iterating over all topics
 		{
 			Entry<Integer,Integer> mapEntry = iter.next();
@@ -52,30 +53,28 @@ public class CRPGibbsSampler {
 			ArrayList<Double> allObservationFromTopic = currentState.getAllObservationsForTopic(topicId);
 			double logConditionalLikelihood = l.computeConditionalLogLikelihood(observationsAtTable, allObservationFromTopic);
 			double logPosteriorProb = logPrior + logConditionalLikelihood;
-			posterior.add(Math.exp(logPosteriorProb));
+			if (logPosteriorProb > maxLogPosterior)
+				maxLogPosterior = logPosteriorProb;
+			posterior.add(logPosteriorProb);
 			indexes.add(topicId); //to keep track of which topic_id got selected.
 		}
 		//now for self-linkage
 		double logBeta = Math.log(l.getHyperParameters().getSelfLinkProbCRP());
 		double logMarginalLikelihood = l.computeTableLogLikelihood(observationsAtTable); //this is marginal likelihood, instead of conditional
 		double logPosteriorProb = logBeta + logMarginalLikelihood;
+		if (logPosteriorProb > maxLogPosterior)
+			maxLogPosterior = logPosteriorProb;		
 		posterior.add(Math.exp(logPosteriorProb));
 		int maxTopicId = currentState.getMaxTopicId();
 		indexes.add(maxTopicId+1); //incrementing maxTopicId to account for the new topic
 		
+		// Subtract the maxLogPosterior from each term of posterior (avoid overflows), then exponentiate
+		for (int i=0; i<posterior.size(); i++)
+			posterior.set(i, Math.exp(posterior.get(i) - maxLogPosterior));
+
 		//Now finally sample for a topic
-
-		// System.out.println(posterior);
-
-		
 		int sampledTopicIndex = Util.sample(posterior);
 		
-		// System.out.println("posterior:indexes:sampledTopicIndex -- " + posterior.size() + ":" + indexes.size() + ":" + sampledTopicIndex);		
-		// System.out.println(l.getHyperParameters().getSelfLinkProbCRP());
-		// if(sampledTopicIndex == -1) {
-		// 	System.out.println(posterior);
-		// }
-
 		int sampledTopicId = indexes.get(sampledTopicIndex); //actual topic id
 		if(sampledTopicId == maxTopicId+1) //The table sat chose to sit in a new topic table ie new topic sampled
 		{
