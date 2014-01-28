@@ -69,11 +69,6 @@ public class SamplerState {
 	 */
 	private ArrayList<HashMap<Integer,HashSet<Integer>>> customersAtTableList;
 
-  /** 
-   * The multinomial parameter seen for each city, for each table in the city.  each theta is a CRSMatrix
-   */
-  private ArrayList<ArrayList<CRSMatrix>> thetas = new ArrayList<ArrayList<CRSMatrix>>();
-
   /**
    * This is a map of topics to lists, where each list represents a city and within each list, we have a map of table_id to the set of customer indexes sitting at the table   
    */
@@ -376,18 +371,6 @@ public class SamplerState {
 		out.println("Total number of topics "+K);
 	}
 	
-	/*
-	 * Computes the expected value of the theta vectors for this stampler state, for each city, for each table in the city
-	 * Each table has a CRSMatrix theta, where
-	 * theta_j = (N_j + a_j) / (n + sum_i(a_i))
-	 * where a_j is the Dirichlet prior parameter
-	 */
-	// public void estimateThetas() {
-	// 	// ArrayList<ArrayList<Double>> listObservations = Data.getObservations();  
-	// 	// private ArrayList<ArrayList<CRSMatrix>> thetas
-
-	// }
-
 	/**
 	 * Returns for each city, a set of sets of customers sitting at each table
 	 */
@@ -536,6 +519,7 @@ public class SamplerState {
 		if(tables.size() == 0) //topic doesnot have table in any city, then remove the topic		
 			tablesAssignedToTopic.remove(topic);
 	}
+
 	/**
 	 * Adds a new citytable to the topic. If its a new topic, makes a new entry 
 	 * @param topic
@@ -552,6 +536,15 @@ public class SamplerState {
 			return;
 		}
 		tables.add(ct);
+	}
+
+	/**
+	 * Returns a set of all currently used topics
+	 * @return HashSet<Integer>
+	 */
+	public HashSet<Integer> getAllTopics() 
+	{
+		return new HashSet(tablesAssignedToTopic.keySet());
 	}
 	
 	/**
@@ -653,18 +646,6 @@ public class SamplerState {
 		return observationsForTopic;
 	}
 
-	// public void removeTableFromTopic(int tableId, int listIndex) {
-	// 	CityTable ct = new CityTable(listIndex, tableId);
-	// 	Integer topicId = topicAtTable.get(ct);
-	// 	if (topicId != null) {
-	// 		topicAtTable.remove(ct);
-	// 		tablesAssignedToTopic.get(topicId).remove(ct);
-	// 		// remove one from the tables at topic count
-	// 		if (m.get(topicId)==null)
-	// 			System.out.println("Error, m count does not exist, but topic exists.");
-	// 		else
-	// 			m.put(topicId, m.get(topicId) - 1);
-	// 	}
-	// }
+
 
 }

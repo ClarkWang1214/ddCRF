@@ -243,6 +243,12 @@ public class GibbsSampler {
 		//we calculate the posterior probability of forming the link with that customer.
 		//For that we calculate the change in likelihood if there are joins of tables
 		
+		// Compute components of the change in likelihood that don't varry across the posterior for a proposed link
+		CityTable currentCT = new CityTable(list_index, table_id);
+		Integer currentTopic = s.getTopicForCityTable(currentCT);
+		double currentTopicLogLik = ll.computeTableLogLikelihood(s.getAllObservationsForTopic(currentTopic));  // pull this out of method
+		double currentTopicMinusTableLogLik = ll.computeTableLogLikelihood(s.getAllObservationsForTopicMinusTable(currentTopic, table_id, list_index));  // pull this out of method		
+
 		ArrayList<Double> posterior = new ArrayList<Double>(); //this will hold the posterior probabilities for all possible customer assignment and we will sample according to these probabilities
 		ArrayList<Integer> indexes = new ArrayList<Integer>(); // for storing the indexes of the customers who could be possible assignments
 		Double maxLogPosterior = new Double(-1000000000.0);
@@ -263,9 +269,7 @@ public class GibbsSampler {
 				else //will have to compute the change in likelihood
 				{					
 
-					CityTable currentCT = new CityTable(list_index, table_id);
 					CityTable proposedCT = new CityTable(list_index, table_proposed);
-					Integer currentTopic = s.getTopicForCityTable(currentCT);
 					Integer proposedTopic = s.getTopicForCityTable(proposedCT);
 
 					if (currentTopic == null) {
@@ -274,7 +278,7 @@ public class GibbsSampler {
 						System.out.println(s.getObservationAtTable(currentCT.getTableId(),currentCT.getCityId()));
 					}
 
-					double changeInLogLik = computeTopicChangeInLikelihood(s, ll, table_id, list_index, currentTopic, proposedTopic);
+					double changeInLogLik = computeCachedTopicChangeInLikelihood(s, ll, table_id, list_index, currentTopic, proposedTopic, currentTopicLogLik, currentTopicMinusTableLogLik);
 					double logPosterior = Math.log(priors.get(i)) + changeInLogLik;
 
 					if (logPosterior > maxLogPosterior)
@@ -355,12 +359,32 @@ public class GibbsSampler {
 		double currentTopicLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopic(currentTopicId));  // pull this out of method
 		double proposedTopicLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopic(proposedTopicId));
 		double proposedTopicPlusTableLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopicPlusTable(proposedTopicId, tableId, listIndex));
-		double currentTopicMinusTableLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopicMinusTable(currentTopicId, tableId, listIndex));  // pull this out of method
-		// System.out.println("currentTopicLogLik "+currentTopicLogLik);
-		// System.out.println("proposedTopicLogLik "+proposedTopicLogLik);
-		// System.out.println("proposedTopicPlusTableLogLik "+proposedTopicPlusTableLogLik);
-		// System.out.println("currentTopicMinusTableLogLik "+currentTopicMinusTableLogLik);
-		
+		double currentTopicMinusTableLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopicMinusTable(currentTopicId, tableId, listIndex));  // pull this out of method		
+		return proposedTopicPlusTableLogLik + currentTopicMinusTableLogLik - currentTopicLogLik - proposedTopicLogLik;
+	}
+
+		/**
+	 * Method to compute the change in log-likelihood due to joining two tables.
+	 * @param s The current sampler state
+	 * @param l This will compute the log-likelihood
+	 * @param tableId of the current table in listIndex
+	 * @param listIndex of the current table
+	 * @param currentTopicId - this is the topic of the current table
+	 * @param proposedTopicId - this is the proposed topic of the joined table
+	 * @return the log likelihood 
+	 */
+	private static double computeCachedTopicChangeInLikelihood(SamplerState s,
+																				 		 				       	 Likelihood l, 
+																									     			 Integer tableId,
+																									     			 Integer listIndex,
+																									     			 Integer currentTopicId,
+																									     			 Integer proposedTopicId,
+																									     			 Double currentTopicLogLik,
+																									     			 Double currentTopicMinusTableLogLik
+																									    			) 
+	{
+		double proposedTopicLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopic(proposedTopicId));
+		double proposedTopicPlusTableLogLik = l.computeTableLogLikelihood(s.getAllObservationsForTopicPlusTable(proposedTopicId, tableId, listIndex));
 		return proposedTopicPlusTableLogLik + currentTopicMinusTableLogLik - currentTopicLogLik - proposedTopicLogLik;
 	}
 

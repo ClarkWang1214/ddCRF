@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import model.HyperParameters;
 import model.SamplerStateTracker;
+import model.SamplerState;
+import model.Theta;
 import sampler.GibbsSampler;
 import util.Util;
 import Likelihood.DirichletLikelihood;
@@ -57,7 +59,14 @@ public class Driver {
 			System.out.println("Time taken for Sampling "+(double)diff/1000+" seconds");		
 			for(int i=0;i<list_observations.size();i++)
 				Util.printTableConfiguration(i, new PrintStream("tables/table_configuration"+i+".txt"));
-			
+	
+			// TEMP: just a quick test of theta estimate on the last state
+
+			SamplerState s = SamplerStateTracker.returnCurrentSamplerState();
+			Theta t = new Theta(s, h);
+			t.estimateThetas();
+			t.prettyPrint();
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
