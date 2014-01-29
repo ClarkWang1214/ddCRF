@@ -51,8 +51,11 @@ public class Driver {
 			{
 				long init_time_iter = System.currentTimeMillis();
 				GibbsSampler.doSampling(l);
+				System.out.println("----------------------");
 				System.out.println("Iteration "+i+" done");
 				System.out.println("Took "+(System.currentTimeMillis() - init_time_iter)/(double)1000+" seconds");
+				SamplerStateTracker.returnCurrentSamplerState().prettyPrint(System.out);
+				System.out.println("----------------------");
 			}
 			
 			long diff = System.currentTimeMillis() - init_time; 
@@ -65,7 +68,7 @@ public class Driver {
 			SamplerState s = SamplerStateTracker.returnCurrentSamplerState();
 			Theta t = new Theta(s, h);
 			t.estimateThetas();
-			t.prettyPrint();
+			t.printMostProbWordsPerTopic(10);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -2,12 +2,20 @@ package model;
 
 import data.Data;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.TreeMap;
+import java.util.Comparator;
+import java.util.Collections;
 
-import org.la4j.matrix.sparse.CRSMatrix;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 
 
 /**
@@ -16,27 +24,6 @@ import org.la4j.matrix.sparse.CRSMatrix;
  * @author jcransh
  */
 public class Theta {
-
-  /** 
-   * Constructor
-   * @author jcransh
-   */
-  public Theta(SamplerState samplerState, HyperParameters hyperParameters)
-  {
-    this.samplerState = samplerState;
-    this.hyperParameters = hyperParameters;
-  }
-
-  /** 
-   * Constructor
-   * @author jcransh
-   */
-  public Theta(){}
-
-  /** 
-   * The multinomial parameter seen for each city, for each table in the city.  each theta is a CRSMatrix
-   */
-  private HashMap<Integer, CRSMatrix> topicToThetaMap = new HashMap<Integer, CRSMatrix>();
 
   /**
    * The SamplerState for which we'd like to compute thetas for
@@ -47,6 +34,56 @@ public class Theta {
    * The model hyperparameters
    */ 
   private static HyperParameters hyperParameters;
+
+  /**
+   * The vocab file
+   */ 
+  private static final String vocabFile = "Data/venue_categories.txt";
+
+  /**
+   * The vocabulary, numeric observations are indexes into Strings
+   */ 
+  private ArrayList<String> vocabulary = new ArrayList<String>();
+
+  /** 
+   * The multinomial parameter seen for each city, for each table in the city.  
+   * Each theta is a HashMap from Integer to Double (key:observation to value:probability)
+   */
+  private HashMap<Integer, HashMap<Integer, Double>> topicToThetaMap = new HashMap<Integer, HashMap<Integer, Double>>();
+
+  /** 
+   * The multinomial parameter seen for each city, for each table in the city.  
+   * Each theta is a HashMap from String to Double (key:observation string to value:probability)
+   */
+  private HashMap<Integer, HashMap<String, Double>> topicToThetaMapString = new HashMap<Integer, HashMap<String, Double>>();
+
+
+  /** 
+   * Constructor
+   * @author jcransh
+   */
+  public Theta(SamplerState samplerState, HyperParameters hyperParameters)
+  {
+    this.samplerState = samplerState;
+    this.hyperParameters = hyperParameters;
+
+    try {
+      BufferedReader reader = new BufferedReader(new FileReader(vocabFile));
+      String line;
+      while ((line = reader.readLine())!=null) 
+        vocabulary.add(line);     
+    } catch(FileNotFoundException ex){
+      ex.printStackTrace();
+    } catch(IOException ex){
+      ex.printStackTrace();
+    }
+  }
+
+  /** 
+   * Constructor
+   * @author jcransh
+   */
+  public Theta(){}
 
   /**
    * Getter for the samplerState
@@ -79,7 +116,7 @@ public class Theta {
  /**
    * Getter for the computed theta map
    */
-  public HashMap<Integer, CRSMatrix> getTopicToThetaMap() {
+  public HashMap<Integer, HashMap<Integer, Double>> getTopicToThetaMap() {
     return topicToThetaMap;
   }
 
@@ -90,7 +127,9 @@ public class Theta {
    * where a_j is the Dirichlet prior parameter
    */
   public void estimateThetas() {
-    HashMap<Integer, CRSMatrix> newTopicToThetaMap = new HashMap<Integer, CRSMatrix>();
+    HashMap<Integer, HashMap<Integer, Double>> newTopicToThetaMap = new HashMap<Integer, HashMap<Integer, Double>>();
+    HashMap<Integer, HashMap<String, Double>> newTopicToThetaMapString = new HashMap<Integer, HashMap<String, Double>>();
+
 
     // for each topic
     //   init a CRSMatrix of length of the vocab size (all zeros)
@@ -99,57 +138,77 @@ public class Theta {
     HashSet<Integer> topics = samplerState.getAllTopics(); 
     for (Integer topic : topics) {
       // Initialize the topics's theta vector
-      CRSMatrix topicTheta = new CRSMatrix(1,hyperParameters.getVocabSize()); 
+      HashMap<Integer, Double> topicTheta = new HashMap<Integer, Double>(); 
+      HashMap<String, Double> topicThetaString = new HashMap<String, Double>(); 
       
       // add the dirichlet parameters
       ArrayList<Double> dirichletParam = hyperParameters.getDirichletParam();
       for (int j=0; j<dirichletParam.size(); j++) {
-        topicTheta.set(0, j, dirichletParam.get(j));
+        topicTheta.put(j, dirichletParam.get(j));
+        topicThetaString.put(vocabulary.get(j), dirichletParam.get(j));
       }
 
       // get all the observatiosn for this topic and add them to the counts
       ArrayList<Double> topicObservations = samplerState.getAllObservationsForTopic(topic);
       for (Double obs : topicObservations) {
         Integer observation = obs.intValue();
-        double currentObservationCount = topicTheta.get(0, observation);
-        topicTheta.set(0, observation, currentObservationCount + 1);
+        String observationString = vocabulary.get(observation);
+        double currentObservationCount = topicTheta.get(observation);
+        topicTheta.put(observation, currentObservationCount + 1);
+        topicThetaString.put(observationString, currentObservationCount + 1);        
       }
 
       // get the normalizing constant
       double norm = 0.0;
       for (int j=0; j<hyperParameters.getVocabSize(); j++) {
-        norm += topicTheta.get(0,j);
+        norm += topicTheta.get(j);
       }
 
       // divide by the normalizing constant
       for (int j=0; j<hyperParameters.getVocabSize(); j++) {
-        double thetaJ = topicTheta.get(0,j);
-        topicTheta.set(0, j, thetaJ/norm);
+        String obsStringJ = vocabulary.get(j);
+        double thetaJ = topicTheta.get(j) / norm;
+        topicTheta.put(j, thetaJ);
+        topicThetaString.put(obsStringJ, thetaJ);
       }    
 
       newTopicToThetaMap.put(topic, topicTheta);
+      newTopicToThetaMapString.put(topic, topicThetaString);
     } 
 
     topicToThetaMap = newTopicToThetaMap;
+    topicToThetaMapString = newTopicToThetaMapString;
   }
 
   /*
-   * Output the thetas by topic
+   * Output the k most probable tokens per topic
+   * Should pass an outstream to this method
    */
-  public void prettyPrint() {
-    for (Map.Entry<Integer, CRSMatrix> entry : topicToThetaMap.entrySet()) {
+  public void printMostProbWordsPerTopic(int k) {
+    System.out.println("Most probable words per topic: ");
+    for (Map.Entry<Integer, HashMap<String, Double>> entry : topicToThetaMapString.entrySet()) {
       Integer topic = entry.getKey();
-      CRSMatrix theta = entry.getValue();
+      HashMap<String, Double> theta = entry.getValue();
       System.out.println("Topic " + topic);
-      String out = "       ";
-      for (int k=0; k<hyperParameters.getVocabSize(); k++) {
-        double count = theta.get(0, k);
-        if (count > 0) {
-          out += k + ":" + count + " ";
-        } 
+
+      ArrayList<Map.Entry> entries = new ArrayList(theta.entrySet());
+
+      Collections.sort(
+         entries,  
+         new Comparator() {  
+             public int compare(Object o1, Object o2) {  
+                 Map.Entry e1 = (Map.Entry) o1;  
+                 Map.Entry e2 = (Map.Entry) o2;  
+                 return ((Comparable) e2.getValue()).compareTo(e1.getValue());  
+             }  
+         }
+      ); 
+
+      for (int i=0; i<k; i++) {
+        Map.Entry e = entries.get(i);
+        System.out.println(e.getKey() + " --- " + e.getValue());
       }
-      if (out != "       ")
-        System.out.println(out);
+
     } 
   }
 }

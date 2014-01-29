@@ -367,7 +367,6 @@ public class SamplerState {
 		out.println("Total number of observations are "+SamplerState.num_data);
 		out.println("Total number of documents: "+c.size());
 		out.println("Total number of tables are "+T);
-		
 		out.println("Total number of topics "+K);
 	}
 	
