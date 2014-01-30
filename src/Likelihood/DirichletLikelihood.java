@@ -165,7 +165,6 @@ public class DirichletLikelihood extends Likelihood {
   	}
 
   	// compute the log likelihood. for each observation compute p(observation_i | condObservations)
-  	double normConst = 0.0;
   	double logLik = 0.0;
   	for (Double obs : observations) {
   		Integer condObsCount = 0;
@@ -173,9 +172,15 @@ public class DirichletLikelihood extends Likelihood {
   			condObsCount = condObservationCounts.get(obs);
   		Integer obsInt = obs.intValue()-1;
   		double term = condObsCount + dirichletParam.get(obsInt);
-  		normConst += term; 
   		logLik += Math.log(term);
   	}
+
+  	// compute the normalizing constant A + N - 1
+  	double normConst = 0.0;
+  	for (i=0; i<dirichletParam.size(); i++)
+  		normConst += dirichletParam.get(i);
+  	normconst += observations.size() + condObservations.size() - 1;
+
   	logLik -= Math.log(normConst);
   	return logLik;
   }
