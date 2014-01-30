@@ -64,7 +64,7 @@ public class CRPGibbsSampler {
 		double logPosteriorProb = logBeta + logMarginalLikelihood;
 		if (logPosteriorProb > maxLogPosterior)
 			maxLogPosterior = logPosteriorProb;		
-		posterior.add(Math.exp(logPosteriorProb));
+		posterior.add(logPosteriorProb);
 		int maxTopicId = currentState.getMaxTopicId();
 		indexes.add(maxTopicId+1); //incrementing maxTopicId to account for the new topic
 		

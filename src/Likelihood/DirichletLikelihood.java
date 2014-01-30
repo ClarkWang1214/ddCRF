@@ -175,13 +175,15 @@ public class DirichletLikelihood extends Likelihood {
   		logLik += Math.log(term);
   	}
 
+  	double preNorm = logLik;
+
   	// compute the normalizing constant A + N - 1
   	double normConst = 0.0;
   	for (int i=0; i<dirichletParam.size(); i++)
   		normConst += dirichletParam.get(i);
   	normConst += observations.size() + condObservations.size() - 1;
   	logLik -= observations.size() * Math.log(normConst);
-  	
+
   	return logLik;
   }
 
