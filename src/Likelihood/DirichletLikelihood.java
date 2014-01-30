@@ -81,6 +81,7 @@ public class DirichletLikelihood extends Likelihood {
 		// Counts for each observation
 		HashMap<Double,Integer> observationCounts = new HashMap<Double,Integer>(); 
 		for (Double obs : observations) {
+			obs = obs - 1; // index shift
 			if(observationCounts.get(obs) == null) //new category			
 				observationCounts.put(obs, 1);
 			else
