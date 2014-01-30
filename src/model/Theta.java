@@ -151,7 +151,7 @@ public class Theta {
       // get all the observatiosn for this topic and add them to the counts
       ArrayList<Double> topicObservations = samplerState.getAllObservationsForTopic(topic);
       for (Double obs : topicObservations) {
-        Integer observation = obs.intValue();
+        Integer observation = obs.intValue() - 1;
         String observationString = vocabulary.get(observation);
         double currentObservationCount = topicTheta.get(observation);
         topicTheta.put(observation, currentObservationCount + 1);

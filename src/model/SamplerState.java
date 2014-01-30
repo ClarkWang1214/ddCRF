@@ -364,10 +364,12 @@ public class SamplerState {
 	 */
 	public void prettyPrint(PrintStream out)
 	{
-		out.println("Total number of observations are "+SamplerState.num_data);
-		out.println("Total number of documents: "+c.size());
-		out.println("Total number of tables are "+T);
-		out.println("Total number of topics "+K);
+		out.println("Total number of observations are " + SamplerState.num_data);
+		out.println("Total number of documents: " + c.size());
+		out.println("Total number of tables are " + T);
+		out.println("Total number of topics " + K);
+		out.println("Average number of tables per topic: " + T / (double) K);
+		out.println("Number of tables per topic: " + m);
 	}
 	
 	/**

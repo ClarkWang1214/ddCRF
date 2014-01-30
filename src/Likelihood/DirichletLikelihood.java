@@ -38,7 +38,7 @@ public class DirichletLikelihood extends Likelihood {
 		//creating the map
 		for(int i=0;i<table_members.size();i++)
 		{
-			Double obs_category = observations.get(table_members.get(i));
+			Double obs_category = observations.get(table_members.get(i)) - 1;
 			if(obs_category_count.get(obs_category) == null) //new category			
 				obs_category_count.put(obs_category, 1);
 			else
@@ -170,7 +170,7 @@ public class DirichletLikelihood extends Likelihood {
   		Integer condObsCount = 0;
   		if(condObservationCounts.get(obs) != null) 
   			condObsCount = condObservationCounts.get(obs);
-  		Integer obsInt = obs.intValue();
+  		Integer obsInt = obs.intValue()-1;
   		double term = condObsCount + dirichletParam.get(obsInt);
   		normConst += term; 
   		logLik += Math.log(term);
