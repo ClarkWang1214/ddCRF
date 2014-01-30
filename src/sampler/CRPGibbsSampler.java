@@ -60,7 +60,7 @@ public class CRPGibbsSampler {
 		}
 		//now for self-linkage
 		double logBeta = Math.log(l.getHyperParameters().getSelfLinkProbCRP());
-		double logMarginalLikelihood = l.computeTableLogLikelihood(observationsAtTable); //this is marginal likelihood, instead of conditional
+		double logMarginalLikelihood = l.computeConditionalLogLikelihood(observationsAtTable, new ArrayList<Double>()); //this is marginal likelihood, instead of conditional
 		double logPosteriorProb = logBeta + logMarginalLikelihood;
 		if (logPosteriorProb > maxLogPosterior)
 			maxLogPosterior = logPosteriorProb;		
