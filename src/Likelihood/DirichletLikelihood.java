@@ -180,8 +180,8 @@ public class DirichletLikelihood extends Likelihood {
   	for (int i=0; i<dirichletParam.size(); i++)
   		normConst += dirichletParam.get(i);
   	normConst += observations.size() + condObservations.size() - 1;
-
-  	logLik -= Math.log(normConst);
+  	logLik -= observations.size() * Math.log(normConst);
+  	
   	return logLik;
   }
 
