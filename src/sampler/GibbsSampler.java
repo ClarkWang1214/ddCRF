@@ -264,7 +264,6 @@ public class GibbsSampler {
 
 		// Set up a thread pool
 		ExecutorService exec = Executors.newFixedThreadPool(8);
-
 		for(int i=0;i<priors.length();i++)
 		{
 	    /* ...execute as a concurrently runnable task: */
@@ -281,6 +280,7 @@ public class GibbsSampler {
 												 							 s, 
 												 							 ll
 																			));
+		
 		}
 		exec.shutdown();
 
@@ -294,8 +294,10 @@ public class GibbsSampler {
 
 		// Subtract the maxLogPosterior from each term of posterior (avoid overflows), then exponentiate
 		for (int i=0; i<posterior.size(); i++) {
-			if (posteriorIndices.get(i) == 1)
+			if (posteriorIndices.get(i) == 1) {
 				posterior.set(i, Math.exp(posterior.get(i) - maxLogPosterior));
+				System.out.println(i + " : " + posterior.get(i));
+			}
 		}
 
 		//the posterior probabilities are computed for each possible customer assignment, Now lets sample from it.

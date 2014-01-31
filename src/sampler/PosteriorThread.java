@@ -101,7 +101,7 @@ public class PosteriorThread implements Runnable {
       int table_proposed = s.get_t(i, list_index); //table_proposed is the proposed table to be joined
       if(table_proposed == table_id) //since the proposed table is the same, hence there will be no change in the likelihood if this is the customer assignment       
       { 
-        double logPosterior = Math.log(priors.get(i));
+        Double logPosterior = Math.log(priors.get(i));
         posterior.set(i, logPosterior); //since the posterior will be determined only by the prior probability
         posteriorIndices.set(i, 1);
       }
@@ -117,8 +117,8 @@ public class PosteriorThread implements Runnable {
           System.out.println(s.getObservationAtTable(currentCT.getTableId(),currentCT.getCityId()));
         }
 
-        double changeInLogLik = GibbsSampler.computeCachedTopicChangeInLikelihood(s, ll, table_id, list_index, currentTopic, proposedTopic, currentTopicLogLik, currentTopicMinusTableLogLik);
-        double logPosterior = Math.log(priors.get(i)) + changeInLogLik;
+        Double changeInLogLik = GibbsSampler.computeCachedTopicChangeInLikelihood(s, ll, table_id, list_index, currentTopic, proposedTopic, currentTopicLogLik, currentTopicMinusTableLogLik);
+        Double logPosterior = Math.log(priors.get(i)) + changeInLogLik;
 
         // //Now compute the change in likelihood
         posterior.set(i, logPosterior); //adding the prior and likelihood
