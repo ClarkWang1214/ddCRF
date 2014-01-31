@@ -14,6 +14,8 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 import model.HyperParameters;
 import model.SamplerState;
@@ -35,6 +37,7 @@ import util.Util;
 import Likelihood.Likelihood;
 
 import data.Data;
+
 
 /**
  * Gibbs Sampler for Distance Dependent Chinese Restaurant Process. This is the implementation
@@ -249,54 +252,57 @@ public class GibbsSampler {
 		double currentTopicLogLik = ll.computeTableLogLikelihood(s.getAllObservationsForTopic(currentTopic));  // pull this out of method
 		double currentTopicMinusTableLogLik = ll.computeTableLogLikelihood(s.getAllObservationsForTopicMinusTable(currentTopic, table_id, list_index));  // pull this out of method		
 
-		ArrayList<Double> posterior = new ArrayList<Double>(); //this will hold the posterior probabilities for all possible customer assignment and we will sample according to these probabilities
-		ArrayList<Integer> indexes = new ArrayList<Integer>(); // for storing the indexes of the customers who could be possible assignments
-		Double maxLogPosterior = new Double(-1000000000.0);
+		// ArrayList<Double> posterior = new ArrayList<Double>(); //this will hold the posterior probabilities for all possible customer assignment and we will sample according to these probabilities
+		// ArrayList<Integer> indexes = new ArrayList<Integer>(); // for storing the indexes of the customers who could be possible assignments
+		
+		ArrayList<Double> posterior = new ArrayList<Double>(priors.length());
+		ArrayList<Integer> posteriorIndices = new ArrayList<Integer>(priors.length());
+		for(int i=0; i<priors.length(); i++) {
+			posterior.add(0.0);
+			posteriorIndices.add(0);
+		}
+
+		// Set up a thread pool
+		ExecutorService exec = Executors.newFixedThreadPool(8);
+
 		for(int i=0;i<priors.length();i++)
 		{
-			if(priors.get(i)!=0)
-			{
-				indexes.add(i); //adding the index of this possible customer assignment.
-				//get the table id of this table				
-				int table_proposed = s.get_t(i, list_index); //table_proposed is the proposed table to be joined
-				if(table_proposed == table_id) //since the proposed table is the same, hence there will be no change in the likelihood if this is the customer assignment				
-				{ 
-					double logPosterior = Math.log(priors.get(i));
-					if (logPosterior > maxLogPosterior)
-						maxLogPosterior = logPosterior;
-					posterior.add(logPosterior); //since the posterior will be determined only by the prior probability
-				}
-				else //will have to compute the change in likelihood
-				{					
-
-					CityTable proposedCT = new CityTable(list_index, table_proposed);
-					Integer proposedTopic = s.getTopicForCityTable(proposedCT);
-
-					if (currentTopic == null) {
-						System.out.println("There is a null in the current Topic");
-						System.out.println(currentCT.getCityId() + ":" + currentCT.getTableId());
-						System.out.println(s.getObservationAtTable(currentCT.getTableId(),currentCT.getCityId()));
-					}
-
-					double changeInLogLik = computeCachedTopicChangeInLikelihood(s, ll, table_id, list_index, currentTopic, proposedTopic, currentTopicLogLik, currentTopicMinusTableLogLik);
-					double logPosterior = Math.log(priors.get(i)) + changeInLogLik;
-
-					if (logPosterior > maxLogPosterior)
-						maxLogPosterior = logPosterior;
-
-					// //Now compute the change in likelihood
-					posterior.add(logPosterior); //adding the prior and likelihood
-				}
-			}
+	    /* ...execute as a concurrently runnable task: */
+	    exec.execute(new PosteriorThread(i, 
+	    																 list_index, 
+	    																 table_id, 
+	    																 currentCT,
+	    																 currentTopic, 
+	    																 currentTopicLogLik, 
+	    																 currentTopicMinusTableLogLik, 
+	    																 priors, 
+	    																 posterior,
+												 							 posteriorIndices,
+												 							 s, 
+												 							 ll
+																			));
 		}
+		exec.shutdown();
+
+		// Compute the maxLogPosterior
+		Double maxLogPosterior = new Double(-1000000000.0);
+		for (int i=0; i<posterior.size(); i++) {
+			double logPosterior = posterior.get(i);
+			if (logPosterior > maxLogPosterior)
+				maxLogPosterior = logPosterior;
+		}
+
 		// Subtract the maxLogPosterior from each term of posterior (avoid overflows), then exponentiate
-		for (int i=0; i<posterior.size(); i++)
-			posterior.set(i, Math.exp(posterior.get(i) - maxLogPosterior));
+		for (int i=0; i<posterior.size(); i++) {
+			if (posteriorIndices.get(i) == 1)
+				posterior.set(i, Math.exp(posterior.get(i) - maxLogPosterior));
+		}
 
 		//the posterior probabilities are computed for each possible customer assignment, Now lets sample from it.
 		int sample = Util.sample(posterior);		
 		
-		int customer_assignment_index = indexes.get(sample); //this is the customer assignment in this iteration, phew!		
+		// int customer_assignment_index = indexes.get(sample); //this is the customer assignment in this iteration, phew!		
+		int customer_assignment_index = sample;
 		LOGGER.log(Level.FINE, "The sampled link for customer indexed "+index +" of list "+list_index+" is "+customer_assignment_index);
 		
 		int assigned_table = s.get_t(customer_assignment_index, list_index);
@@ -373,7 +379,7 @@ public class GibbsSampler {
 	 * @param proposedTopicId - this is the proposed topic of the joined table
 	 * @return the log likelihood 
 	 */
-	private static double computeCachedTopicChangeInLikelihood(SamplerState s,
+	protected static double computeCachedTopicChangeInLikelihood(SamplerState s,
 																				 		 				       	 Likelihood l, 
 																									     			 Integer tableId,
 																									     			 Integer listIndex,

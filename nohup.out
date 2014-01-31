@@ -1,0 +1,771 @@
+mkdir: cannot create directory `tables': File exists
+mkdir: cannot create directory `bin': File exists
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Vocab Size is 419
+Dirichlet parameter is 0.1
+Self Linkage Prob is 1.0
+Number of data points are 85187
+Gibbs Sampler will run for 10 iterations.
+----------------------
+Iteration 1 done
+Took 3820.704 seconds
+Total number of observations are 85187
+Total number of documents: 20
+Total number of tables are 12016
+Total number of topics 101
+Average number of tables per topic: 118.97029702970298
+Number of tables per topic: {0=168, 1=103, 2=105, 3=100, 4=117, 5=104, 6=98, 7=124, 8=112, 9=252, 10=134, 11=119, 12=129, 13=101, 14=131, 15=101, 17=119, 16=108, 19=95, 18=104, 21=84, 20=135, 23=128, 22=108, 25=97, 24=121, 27=97, 26=125, 29=117, 28=84, 31=100, 30=133, 34=176, 35=271, 32=145, 33=98, 38=130, 39=104, 36=123, 37=99, 42=112, 43=95, 40=148, 41=134, 46=122, 47=113, 44=104, 45=97, 51=124, 50=112, 49=94, 48=119, 55=112, 54=99, 53=136, 52=113, 59=121, 58=164, 57=127, 56=129, 63=175, 62=111, 61=113, 60=111, 68=113, 69=104, 70=99, 71=112, 64=134, 65=130, 66=89, 67=134, 76=150, 77=107, 78=89, 79=115, 72=141, 73=132, 74=140, 75=104, 85=108, 84=93, 87=148, 86=105, 81=117, 80=190, 83=133, 82=100, 93=117, 92=119, 95=63, 94=109, 89=134, 88=91, 91=146, 90=100, 98=103, 99=135, 96=121, 97=106, 106=1}
+----------------------
+----------------------
+Iteration 2 done
+Took 2191.716 seconds
+Total number of observations are 85187
+Total number of documents: 20
+Total number of tables are 6767
+Total number of topics 108
+Average number of tables per topic: 62.657407407407405
+Number of tables per topic: {0=215, 1=65, 2=58, 3=60, 4=69, 5=38, 6=51, 7=76, 8=57, 9=188, 10=62, 11=55, 12=84, 13=22, 14=69, 15=46, 17=86, 16=34, 19=45, 18=40, 21=28, 20=74, 23=73, 22=59, 25=38, 24=62, 27=49, 26=61, 29=59, 28=29, 31=41, 30=84, 34=154, 35=206, 32=104, 33=29, 38=63, 39=30, 36=51, 37=66, 42=57, 43=20, 40=151, 41=70, 46=80, 47=76, 44=45, 45=38, 51=39, 50=61, 49=48, 48=65, 55=56, 54=42, 53=67, 52=50, 59=56, 58=100, 57=73, 56=84, 63=117, 62=52, 61=57, 60=64, 68=27, 69=92, 70=20, 71=52, 64=103, 65=75, 66=13, 67=77, 76=96, 77=88, 78=37, 79=54, 72=104, 73=105, 74=61, 75=54, 85=80, 84=27, 87=137, 86=50, 81=44, 80=211, 83=72, 82=45, 93=58, 92=64, 95=22, 94=47, 89=83, 88=36, 91=110, 90=24, 98=44, 99=80, 96=68, 97=51, 111=1, 108=1, 106=1, 118=1, 116=1, 124=1, 123=1, 120=1}
+----------------------
+----------------------
+Iteration 3 done
+Took 2193.217 seconds
+Total number of observations are 85187
+Total number of documents: 20
+Total number of tables are 5227
+Total number of topics 106
+Average number of tables per topic: 49.31132075471698
+Number of tables per topic: {0=303, 1=57, 2=21, 3=47, 4=42, 5=18, 6=31, 7=57, 8=26, 9=171, 10=42, 11=25, 12=47, 13=11, 14=49, 15=24, 17=78, 16=14, 19=27, 18=13, 21=6, 20=79, 23=41, 22=51, 25=35, 24=58, 27=29, 26=52, 29=34, 28=9, 31=29, 30=72, 34=170, 35=199, 32=112, 33=11, 38=58, 39=5, 36=43, 37=35, 42=48, 43=9, 40=154, 41=57, 46=60, 47=50, 44=42, 45=18, 51=17, 50=55, 49=33, 48=45, 55=43, 54=26, 53=49, 52=40, 59=24, 58=84, 57=62, 56=63, 63=94, 62=44, 61=41, 60=39, 68=8, 69=93, 70=3, 71=27, 64=71, 65=42, 66=6, 67=67, 76=77, 77=73, 78=28, 79=31, 72=67, 73=91, 74=47, 75=38, 85=65, 84=3, 87=134, 86=28, 81=12, 80=192, 83=53, 82=35, 93=43, 92=52, 95=25, 94=37, 89=68, 88=7, 91=117, 90=2, 98=26, 99=34, 96=48, 97=42, 123=2, 138=1, 141=1, 140=1, 142=1, 145=1}
+----------------------
+----------------------
+Iteration 4 done
+Took 2374.378 seconds
+Total number of observations are 85187
+Total number of documents: 20
+Total number of tables are 4367
+Total number of topics 101
+Average number of tables per topic: 43.23762376237624
+Number of tables per topic: {0=348, 1=37, 2=3, 3=26, 4=43, 5=11, 6=16, 7=46, 8=18, 9=162, 10=30, 11=4, 12=41, 13=6, 14=34, 15=6, 17=73, 16=9, 19=25, 18=3, 20=81, 23=18, 22=37, 25=31, 24=51, 27=15, 26=34, 29=23, 28=1, 31=18, 30=66, 34=188, 35=175, 32=90, 33=8, 38=45, 36=37, 37=24, 42=51, 40=138, 41=36, 46=45, 47=38, 44=46, 45=4, 51=16, 50=47, 49=25, 48=34, 55=29, 54=22, 53=43, 52=35, 59=16, 58=68, 57=46, 56=59, 63=88, 62=38, 61=36, 60=33, 68=6, 69=89, 70=4, 71=18, 64=47, 65=40, 66=1, 67=47, 76=65, 77=62, 78=12, 79=22, 72=52, 73=84, 74=35, 75=35, 85=53, 84=2, 87=151, 86=11, 80=201, 83=37, 82=36, 93=30, 92=44, 95=22, 94=24, 89=39, 88=2, 91=116, 98=20, 99=13, 96=30, 97=34, 158=1, 145=1, 168=1, 160=1, 167=1, 165=2}
+----------------------
+----------------------
+Iteration 5 done
+Took 2673.867 seconds
+Total number of observations are 85187
+Total number of documents: 20
+Total number of tables are 3716
+Total number of topics 93
+Average number of tables per topic: 39.956989247311824
+Number of tables per topic: {0=403, 1=33, 3=13, 4=36, 5=12, 6=2, 7=39, 8=11, 9=154, 10=19, 11=1, 12=16, 13=6, 14=30, 15=1, 17=68, 16=6, 19=17, 20=75, 23=4, 22=42, 25=27, 24=52, 27=13, 26=19, 29=18, 28=2, 31=15, 30=62, 34=192, 35=163, 32=80, 33=1, 38=30, 36=20, 37=14, 42=47, 40=140, 41=24, 46=42, 47=19, 44=35, 45=1, 51=25, 50=40, 49=17, 48=19, 55=19, 54=11, 53=39, 52=33, 59=8, 58=53, 57=28, 56=42, 63=90, 62=41, 61=18, 60=34, 68=5, 69=69, 70=3, 71=11, 64=43, 65=19, 67=31, 76=62, 77=60, 78=1, 79=19, 72=38, 73=66, 74=21, 75=25, 85=45, 84=1, 87=162, 86=6, 80=171, 83=18, 82=29, 93=15, 92=32, 95=25, 94=17, 89=26, 88=2, 91=110, 98=12, 96=16, 97=30, 168=1, 180=4}
+----------------------
+----------------------
+Iteration 6 done
+Took 3059.121 seconds
+Total number of observations are 85187
+Total number of documents: 20
+Total number of tables are 3191
+Total number of topics 85
+Average number of tables per topic: 37.54117647058823
+Number of tables per topic: {0=434, 1=31, 3=3, 4=28, 5=7, 6=1, 7=29, 8=6, 9=145, 10=2, 12=8, 13=7, 14=25, 17=51, 16=7, 19=13, 20=66, 22=31, 25=24, 24=46, 27=9, 26=28, 29=10, 28=1, 31=5, 30=60, 34=186, 35=141, 32=73, 38=17, 36=7, 37=6, 42=50, 40=109, 41=9, 46=20, 47=7, 44=29, 51=19, 50=38, 49=16, 48=17, 55=17, 54=8, 53=27, 52=30, 58=51, 57=21, 56=28, 63=82, 62=36, 61=14, 60=35, 68=6, 69=58, 70=4, 71=10, 64=35, 65=8, 67=26, 76=55, 77=57, 79=14, 72=26, 73=65, 195=1, 74=11, 194=1, 75=20, 85=42, 87=179, 86=2, 80=124, 83=9, 82=26, 93=5, 92=26, 95=21, 94=12, 89=8, 88=2, 91=125, 98=9, 96=8, 97=26}
+----------------------
+----------------------
+Iteration 7 done
+Took 3376.586 seconds
+Total number of observations are 85187
+Total number of documents: 20
+Total number of tables are 2797
+Total number of topics 83
+Average number of tables per topic: 33.69879518072289
+Number of tables per topic: {0=399, 1=27, 3=4, 4=23, 5=5, 7=21, 8=7, 9=132, 12=3, 13=7, 14=11, 17=56, 16=7, 19=18, 20=49, 22=9, 25=22, 24=55, 27=5, 26=21, 29=10, 31=5, 30=63, 34=183, 35=148, 32=62, 38=16, 36=3, 37=6, 42=47, 40=101, 41=4, 46=16, 47=1, 44=20, 51=18, 50=42, 49=14, 48=12, 55=1, 54=4, 53=19, 52=29, 58=39, 57=18, 56=16, 63=72, 62=21, 61=7, 60=27, 68=5, 69=56, 207=1, 70=3, 71=6, 64=22, 65=1, 203=1, 67=28, 76=54, 77=53, 79=9, 72=14, 73=53, 74=4, 75=18, 85=29, 87=206, 86=3, 80=88, 83=3, 82=24, 93=3, 92=22, 214=1, 95=22, 94=1, 89=1, 209=1, 88=4, 91=122, 98=5, 97=29}
+----------------------
+----------------------
+Iteration 8 done
+Took 3664.493 seconds
+Total number of observations are 85187
+Total number of documents: 20
+Total number of tables are 2465
+Total number of topics 75
+Average number of tables per topic: 32.86666666666667
+Number of tables per topic: {0=374, 1=24, 3=3, 4=27, 5=4, 7=11, 8=8, 9=129, 12=2, 13=7, 14=1, 17=47, 16=5, 19=17, 20=49, 25=25, 24=46, 27=6, 26=19, 29=11, 31=4, 30=61, 34=174, 35=129, 32=66, 38=14, 36=2, 37=3, 42=50, 40=79, 46=13, 44=7, 51=13, 50=33, 49=8, 48=8, 54=2, 53=22, 52=23, 58=28, 57=2, 56=5, 63=72, 62=20, 60=18, 68=6, 69=39, 70=3, 71=1, 64=13, 67=30, 76=54, 77=54, 79=8, 72=11, 73=48, 75=22, 85=11, 221=1, 222=1, 87=214, 223=1, 86=1, 80=70, 83=1, 82=15, 92=17, 95=25, 88=2, 91=110, 98=5, 233=1, 97=28, 230=1, 226=1}
+----------------------
+----------------------
+Iteration 9 done
+Took 3883.309 seconds
+Total number of observations are 85187
+Total number of documents: 20
+Total number of tables are 2225
+Total number of topics 64
+Average number of tables per topic: 34.765625
+Number of tables per topic: {0=351, 1=22, 3=3, 4=28, 5=4, 7=5, 8=6, 9=124, 12=2, 13=6, 14=2, 17=37, 16=5, 19=11, 20=50, 25=23, 24=49, 27=1, 26=18, 29=11, 31=3, 30=60, 34=175, 35=143, 32=53, 38=13, 42=43, 40=85, 46=5, 44=2, 51=13, 50=21, 49=1, 48=8, 54=2, 53=22, 52=26, 58=8, 56=1, 63=70, 62=15, 60=11, 68=6, 69=22, 70=3, 64=9, 67=25, 76=53, 77=60, 79=7, 72=10, 73=36, 75=21, 85=3, 87=197, 80=50, 82=5, 92=13, 95=21, 88=3, 91=111, 98=5, 233=1, 97=26}
+----------------------
+----------------------
+Iteration 10 done
+Took 4003.038 seconds
+Total number of observations are 85187
+Total number of documents: 20
+Total number of tables are 2052
+Total number of topics 60
+Average number of tables per topic: 34.2
+Number of tables per topic: {0=329, 1=23, 3=3, 4=30, 5=3, 8=3, 9=121, 12=2, 13=6, 17=36, 16=5, 19=13, 20=47, 25=18, 24=45, 26=15, 29=9, 31=3, 30=59, 34=164, 35=136, 32=46, 38=7, 42=47, 40=85, 46=3, 44=1, 51=10, 50=18, 49=2, 48=7, 54=1, 53=22, 52=25, 58=2, 63=70, 62=16, 60=6, 68=5, 69=11, 70=2, 64=1, 67=21, 76=49, 77=55, 79=6, 72=10, 73=32, 75=21, 85=3, 87=188, 80=41, 82=2, 92=10, 95=23, 88=3, 91=97, 98=6, 97=27, 249=1}
+----------------------
+Time taken for Sampling 31240.433 seconds
+Most probable words per topic: 
+Topic 0
+Shop & Service::Gas Station / Garage --- 0.031798987053813614
+Food::Mexican Restaurant --- 0.031575082061180086
+Shop & Service::Automotive Shop --- 0.031082491077386327
+Food::Fast Food Restaurant --- 0.03054511909506586
+Shop & Service::Food & Drink Shop::Grocery Store --- 0.025574428258601543
+Professional & Other Places::Building --- 0.023648845321953205
+Shop & Service::Bank --- 0.02176804338383157
+Food::Pizza Place --- 0.021185890402984398
+Food::Sandwich Place --- 0.02087242341329746
+Professional & Other Places::Spiritual Center::Church --- 0.020200708435396876
+Topic 1
+Travel & Transport::Hotel --- 0.037363657461127554
+Food::American Restaurant --- 0.037363657461127554
+Professional & Other Places::Office --- 0.03272220932931046
+Arts & Entertainment::Performing Arts Venue::Dance Studio --- 0.03272220932931046
+Professional & Other Places::Building --- 0.03040148526340192
+Residence::Residential Building (Apartment / Condo) --- 0.03040148526340192
+Arts & Entertainment::Performing Arts Venue::Theater --- 0.02808076119749338
+Arts & Entertainment::Art Gallery --- 0.025760037131584833
+Arts & Entertainment::General Entertainment --- 0.02343931306567629
+Food::Italian Restaurant --- 0.02111858899976775
+Topic 3
+Food::Indian Restaurant --- 0.32752992383025337
+Shop & Service::Car Wash --- 0.02285092491838977
+Professional & Other Places::Spiritual Center::Synagogue --- 0.02285092491838977
+Outdoors & Recreation::Athletic & Sport::Golf Course --- 0.02285092491838977
+Food::Donut Shop --- 0.011969532100108928
+Food::Fast Food Restaurant --- 0.011969532100108928
+Food::Middle Eastern Restaurant --- 0.011969532100108928
+Professional & Other Places::Spiritual Center::Church --- 0.011969532100108928
+Food::Vegetarian / Vegan Restaurant --- 0.011969532100108928
+Shop & Service::Automotive Shop --- 0.011969532100108928
+Topic 4
+Outdoors & Recreation::Beach --- 0.20389228332201703
+Outdoors & Recreation::Park --- 0.07037791355510245
+Outdoors & Recreation::Other Great Outdoors --- 0.05453722561665495
+Outdoors & Recreation::Playground --- 0.03869653767820746
+Outdoors & Recreation::Scenic Lookout --- 0.025118805159538172
+Outdoors & Recreation::Beach::Surf Spot --- 0.025118805159538172
+Professional & Other Places::School::High School --- 0.025118805159538172
+Outdoors & Recreation::Hiking Trail --- 0.025118805159538172
+Outdoors & Recreation::Athletic & Sport::Skate Park --- 0.022855849739759956
+Outdoors & Recreation::Athletic & Sport::Golf Course --- 0.01832993890020353
+Topic 5
+Food::Korean Restaurant --- 0.14608555286521577
+Nightlife Spot::Karaoke Bar --- 0.057304277643261424
+Professional & Other Places::Office --- 0.049233252623083756
+Travel & Transport::Embassy / Consulate --- 0.041162227602906096
+Shop & Service::Bank --- 0.03309120258272843
+Food::Mexican Restaurant --- 0.03309120258272843
+Nightlife Spot::Bar --- 0.025020177562550764
+Food::Coffee Shop --- 0.025020177562550764
+Food::Asian Restaurant --- 0.0169491525423731
+College & University::Trade School --- 0.0169491525423731
+Topic 8
+Food::Ethiopian Restaurant --- 0.13610798650168818
+Shop & Service::Automotive Shop --- 0.03487064116985399
+Shop & Service::Gas Station / Garage --- 0.023622047244094644
+Food::Bakery --- 0.023622047244094644
+Food::Pizza Place --- 0.023622047244094644
+Professional & Other Places::Government Building --- 0.01237345331833529
+Travel & Transport::Bus Station::Bus Line --- 0.01237345331833529
+Professional & Other Places::Voting Booth --- 0.01237345331833529
+Food::Fast Food Restaurant --- 0.01237345331833529
+Professional & Other Places::Spiritual Center::Church --- 0.01237345331833529
+Topic 9
+Shop & Service::Clothing Store --- 0.1015097914129398
+Shop & Service::Clothing Store::Boutique --- 0.039262309342921485
+Shop & Service::Clothing Store::Shoe Store --- 0.03694252740242391
+Shop & Service::Clothing Store::Women's Store --- 0.03365616965338567
+Shop & Service::Department Store --- 0.03346285449167754
+Shop & Service::Cosmetics Shop --- 0.03172301803630436
+Shop & Service::Electronics Store --- 0.02592356318506042
+Food::American Restaurant --- 0.02476367221481163
+Food::Coffee Shop --- 0.02476367221481163
+Shop & Service::Miscellaneous Shop --- 0.0245703570531035
+Topic 12
+College & University::College Rec Center --- 0.07334525939177049
+Food::Diner --- 0.03756708407871172
+Food::New American Restaurant --- 0.019677996422182327
+Shop & Service::Salon / Barbershop --- 0.019677996422182327
+Food::French Restaurant --- 0.019677996422182327
+Arts & Entertainment::Stadium::Tennis --- 0.019677996422182327
+Food::Café --- 0.019677996422182327
+Nightlife Spot::Nightclub --- 0.019677996422182327
+Professional & Other Places::School::Music School --- 0.019677996422182327
+Travel & Transport::Rest Area --- 0.019677996422182327
+Topic 13
+Outdoors & Recreation::City --- 0.4036265950302233
+Professional & Other Places::Office --- 0.027535258562793933
+Travel & Transport::General Travel --- 0.02081934184016127
+Shop & Service::Department Store --- 0.02081934184016127
+Food::Chinese Restaurant --- 0.014103425117528602
+Food::Café --- 0.014103425117528602
+Shop & Service::Cosmetics Shop --- 0.014103425117528602
+Professional & Other Places::Event Space --- 0.014103425117528602
+Arts & Entertainment::Art Gallery --- 0.014103425117528602
+Travel & Transport::Bus Station::Bus Line --- 0.007387508394895935
+Topic 17
+Nightlife Spot::Bar --- 0.17201564342914133
+Nightlife Spot::Nightclub --- 0.05903532186976304
+Arts & Entertainment::Music Venue --- 0.02985908498354997
+Nightlife Spot::Lounge --- 0.02923831398597097
+Professional & Other Places::Office --- 0.026755229995654967
+Food::American Restaurant --- 0.026755229995654967
+Arts & Entertainment::Music Venue::Rock Club --- 0.02489291700291796
+Food::Pizza Place --- 0.02054752001986495
+Food::Food Truck --- 0.019926749022285948
+Arts & Entertainment::General Entertainment --- 0.019305978024706946
+Topic 16
+Travel & Transport::Embassy / Consulate --- 0.09607577807848458
+Outdoors & Recreation::Hiking Trail --- 0.06901217861975652
+Travel & Transport::General Travel --- 0.0554803788903925
+Travel & Transport::Hotel --- 0.04194857916102848
+Outdoors & Recreation::Playground --- 0.028416779431664454
+Professional & Other Places::Office::Tech Startup --- 0.028416779431664454
+Outdoors & Recreation::Sculpture Garden --- 0.01488497970230043
+College & University::General College & University --- 0.01488497970230043
+Shop & Service::Garden Center --- 0.01488497970230043
+Shop & Service::Clothing Store::Shoe Store --- 0.01488497970230043
+Topic 19
+Travel & Transport::Hotel --- 0.27500847744998175
+Professional & Other Places::Building --- 0.05120379789759217
+Professional & Other Places::Office --- 0.05120379789759217
+Food::American Restaurant --- 0.030857917938284022
+Shop & Service::Department Store --- 0.027466937945065998
+Food::Coffee Shop --- 0.02068497795862995
+Food::Italian Restaurant --- 0.017293997965411922
+Shop & Service::Gas Station / Garage --- 0.017293997965411922
+Shop & Service::Car Dealership --- 0.017293997965411922
+College & University::Trade School --- 0.0139030179721939
+Topic 20
+Professional & Other Places::Office --- 0.10063740012568491
+Professional & Other Places::Building --- 0.051261334051530855
+Shop & Service::Gym / Fitness Center::Gym --- 0.03061316096597552
+Nightlife Spot::Bar --- 0.02971541431008181
+Food::American Restaurant --- 0.028817667654188098
+Travel & Transport::Bus Station::Bus Line --- 0.02791992099829439
+Arts & Entertainment::Performing Arts Venue::Theater --- 0.024328934374719547
+Food::Italian Restaurant --- 0.019840201095250996
+Travel & Transport::Bus Station --- 0.019840201095250996
+Outdoors & Recreation::Park --- 0.018044707783463575
+Topic 25
+Professional & Other Places::Government Building --- 0.13408330799635018
+Professional & Other Places::Government Building::Courthouse --- 0.10975980541197827
+Professional & Other Places::Government Building::City Hall --- 0.05199148677409497
+Professional & Other Places::Office --- 0.03070842201276954
+Food::Food Truck --- 0.03070842201276954
+Professional & Other Places::Government Building::Police Station --- 0.03070842201276954
+Professional & Other Places::Parking --- 0.027667984189723053
+Food::Coffee Shop --- 0.021587108543630076
+Shop & Service::Automotive Shop --- 0.018546670720583584
+Outdoors & Recreation::Athletic & Sport::Basketball Court --- 0.015506232897537095
+Topic 24
+Residence::Residential Building (Apartment / Condo) --- 0.1219643337216599
+Professional & Other Places::Building --- 0.07088448785733503
+Travel & Transport::Bus Station --- 0.06461152433013724
+Travel & Transport::Bus Station::Bus Line --- 0.03593511963437592
+Shop & Service::Gym / Fitness Center::Gym --- 0.03593511963437592
+Outdoors & Recreation::Park --- 0.028766018460435586
+Arts & Entertainment::General Entertainment --- 0.02518146787346542
+Outdoors & Recreation::Dog Run --- 0.018012366699525086
+Outdoors & Recreation::Pool --- 0.018012366699525086
+Shop & Service::Salon / Barbershop --- 0.015323953759297463
+Topic 26
+Professional & Other Places::Government Building --- 0.05827776167004885
+Travel & Transport::Train Station --- 0.04668019715859634
+Arts & Entertainment::Performing Arts Venue::Theater --- 0.03798202377500696
+Outdoors & Recreation::Plaza --- 0.03798202377500696
+Travel & Transport::Bus Station::Bus Line --- 0.03508263264714383
+Food::Coffee Shop --- 0.0321832415192807
+Travel & Transport::Bus Station --- 0.029283850391417576
+Professional & Other Places::Office --- 0.02638445926355445
+Food::American Restaurant --- 0.02638445926355445
+Professional & Other Places::Building --- 0.023485068135691324
+Topic 29
+Nightlife Spot::Nightclub --- 0.184479237576585
+Nightlife Spot::Bar --- 0.06194690265486802
+Outdoors & Recreation::Scenic Lookout --- 0.04152484683458186
+Nightlife Spot::Lounge --- 0.04152484683458186
+Professional & Other Places::Building --- 0.03471749489448647
+Arts & Entertainment::Historic Site --- 0.027910142954391082
+Nightlife Spot::Sports Bar --- 0.0211027910142957
+Nightlife Spot::Strip Club --- 0.0211027910142957
+Arts & Entertainment::General Entertainment --- 0.0211027910142957
+Food::Asian Restaurant --- 0.014295439074200313
+Topic 31
+Arts & Entertainment::Theme Park --- 0.3347236704900982
+Professional & Other Places::Office --- 0.05318039624609036
+Professional & Other Places::Government Building --- 0.011470281543274393
+Professional & Other Places::Spiritual Center::Church --- 0.011470281543274393
+Arts & Entertainment::Stadium::Football Stadium --- 0.011470281543274393
+Food::Chinese Restaurant --- 0.011470281543274393
+Professional & Other Places::Building --- 0.011470281543274393
+Outdoors & Recreation::Lake --- 0.011470281543274393
+Nightlife Spot::Strip Club --- 0.011470281543274393
+Arts & Entertainment::Performing Arts Venue::Theater --- 0.011470281543274393
+Topic 30
+College & University::College Academic Building --- 0.07780721979421228
+College & University::College Residence Hall --- 0.05784782683506008
+College & University::General College & University --- 0.040297326129598666
+College & University::College Administrative Building --- 0.032382394438900376
+College & University::University --- 0.03203826697408741
+College & University::College Library --- 0.030317629650022566
+College & University::Student Center --- 0.027908737396331783
+College & University::College Quad --- 0.024811590213015062
+College & University::College Academic Building::College Science Building --- 0.024811590213015062
+College & University::College Academic Building::College Arts Building --- 0.024467462748202093
+Topic 34
+Food::Italian Restaurant --- 0.03341684428323882
+Shop & Service::Salon / Barbershop --- 0.03117326652457303
+Food::Coffee Shop --- 0.027060040633685743
+Food::American Restaurant --- 0.026062894963167615
+Food::Sushi Restaurant --- 0.024442533248575652
+Professional & Other Places::Office --- 0.01995537773124407
+Nightlife Spot::Bar --- 0.01995537773124407
+Shop & Service::Cosmetics Shop --- 0.019332161687170238
+Food::Mexican Restaurant --- 0.019207518478355473
+Food::Café --- 0.016590011093245382
+Topic 35
+Professional & Other Places::Office --- 0.2534868613789464
+Professional & Other Places::Office::Tech Startup --- 0.06433657287699403
+Professional & Other Places::Building --- 0.04179138697474113
+Food::Coffee Shop --- 0.026124393381650117
+Food::Sandwich Place --- 0.025742271586696678
+Professional & Other Places::Office::Coworking Space --- 0.025614897655045533
+Arts & Entertainment::General Entertainment --- 0.018481957482581336
+Food::Food Truck --- 0.018099835687627897
+Shop & Service::Gym / Fitness Center::Gym --- 0.017590339961023313
+Shop & Service::Bank --- 0.016698722439465286
+Topic 32
+Shop & Service::Salon / Barbershop --- 0.03490982274169853
+Nightlife Spot::Bar --- 0.027943339267745386
+Food::Mexican Restaurant --- 0.02484712439043288
+Arts & Entertainment::Performing Arts Venue::Theater --- 0.02484712439043288
+Arts & Entertainment::Comedy Club --- 0.022524963232448496
+Travel & Transport::Bus Station --- 0.02175090951312037
+Shop & Service::Laundry Service --- 0.02175090951312037
+Shop & Service::Spa / Massage --- 0.020202802074464118
+Arts & Entertainment::General Entertainment --- 0.01942874835513599
+Food::Sushi Restaurant --- 0.01942874835513599
+Topic 38
+Nightlife Spot::Bar --- 0.07970604861503755
+Nightlife Spot::Dive Bar --- 0.04578858111927689
+Travel & Transport::Light Rail --- 0.03448275862069
+Outdoors & Recreation::Scenic Lookout --- 0.028829847371396558
+Outdoors & Recreation::Dog Run --- 0.028829847371396558
+Nightlife Spot::Strip Club --- 0.028829847371396558
+Nightlife Spot::Speakeasy --- 0.028829847371396558
+Travel & Transport::Hotel::Bed & Breakfast --- 0.023176936122103114
+Arts & Entertainment::Music Venue::Rock Club --- 0.023176936122103114
+Shop & Service::Cosmetics Shop --- 0.023176936122103114
+Topic 42
+Travel & Transport::Hotel --- 0.11436145899990902
+Nightlife Spot::Hotel Bar --- 0.05311271597038141
+Professional & Other Places::Office --- 0.04671359356431136
+Food::American Restaurant --- 0.043971112533138484
+Professional & Other Places::Building --- 0.03757199012706843
+Professional & Other Places::Event Space --- 0.031172867720998386
+Nightlife Spot::Lounge --- 0.0293445470335498
+Professional & Other Places::Parking --- 0.024773745314928337
+Arts & Entertainment::General Entertainment --- 0.024773745314928337
+Food::Coffee Shop --- 0.02203126428375546
+Topic 40
+Travel & Transport::Hotel --- 0.03308836456978128
+Food::Thai Restaurant --- 0.031681845353212466
+Food::Coffee Shop --- 0.028868806920074847
+Food::Indian Restaurant --- 0.027462287703506037
+Food::American Restaurant --- 0.025704138682795023
+Food::Sushi Restaurant --- 0.025704138682795023
+Food::Italian Restaurant --- 0.023945989662084007
+Shop & Service::Salon / Barbershop --- 0.023945989662084007
+Food::Mexican Restaurant --- 0.023945989662084007
+Professional & Other Places::Office --- 0.023242730053799603
+Topic 46
+College & University::College Classroom --- 0.08144192256341806
+Arts & Entertainment::Movie Theater::Indie Movie Theater --- 0.028037383177570156
+Professional & Other Places::Office::Tech Startup --- 0.028037383177570156
+Travel & Transport::Embassy / Consulate --- 0.028037383177570156
+Professional & Other Places::School::High School --- 0.028037383177570156
+Arts & Entertainment::General Entertainment --- 0.028037383177570156
+Shop & Service::Food & Drink Shop::Grocery Store --- 0.028037383177570156
+Food::Hot Dog Joint --- 0.014686248331108178
+Food::Italian Restaurant --- 0.014686248331108178
+Shop & Service::Gas Station / Garage --- 0.014686248331108178
+Topic 44
+Professional & Other Places::Spiritual Center::Synagogue --- 0.02505694760820025
+Professional & Other Places::School --- 0.02505694760820025
+Outdoors & Recreation::Playground --- 0.0022779043280182045
+Shop & Service::Motorcycle Shop --- 0.0022779043280182045
+Professional & Other Places::Government Building --- 0.0022779043280182045
+::College & University --- 0.0022779043280182045
+Food::Indian Restaurant --- 0.0022779043280182045
+Shop & Service::Clothing Store::Accessories Store --- 0.0022779043280182045
+Outdoors & Recreation::Rock Climbing Spot --- 0.0022779043280182045
+Nightlife Spot::Beer Garden --- 0.0022779043280182045
+Topic 51
+Food::Korean Restaurant --- 0.39677666922485905
+Professional & Other Places::Spiritual Center::Church --- 0.020721412125863047
+Food::Chinese Restaurant --- 0.020721412125863047
+Food::Mexican Restaurant --- 0.01816321309797872
+Food::Bakery --- 0.01816321309797872
+Food::BBQ Joint --- 0.01816321309797872
+Food::Coffee Shop --- 0.015605014070094392
+Shop & Service::Mall --- 0.015605014070094392
+Food::Indian Restaurant --- 0.013046815042210065
+Shop & Service::Salon / Barbershop --- 0.013046815042210065
+Topic 50
+College & University::Fraternity House --- 0.11173028698801787
+Outdoors & Recreation::Park --- 0.09501253831150648
+Outdoors & Recreation::Other Great Outdoors --- 0.05321816662022797
+College & University::Sorority House --- 0.050431875174142736
+College & University::College Residence Hall --- 0.036500417943716564
+Outdoors & Recreation::Athletic & Sport::Soccer Field --- 0.030927835051546095
+Residence::Residential Building (Apartment / Condo) --- 0.030927835051546095
+Travel & Transport::Light Rail --- 0.025355252159375626
+Outdoors & Recreation::Field --- 0.025355252159375626
+Outdoors & Recreation::Scenic Lookout --- 0.02256896071329039
+Topic 49
+Shop & Service::Food & Drink Shop::Farmers Market --- 0.06960950764006749
+Shop & Service::Food & Drink Shop::Gourmet Shop --- 0.052631578947368106
+Travel & Transport::Ferry --- 0.03565365025466872
+Food::Gastropub --- 0.018675721561969328
+College & University::Trade School --- 0.018675721561969328
+Food::German Restaurant --- 0.018675721561969328
+Food::Sandwich Place --- 0.018675721561969328
+Food::Coffee Shop --- 0.018675721561969328
+Shop & Service::Credit Union --- 0.018675721561969328
+Arts & Entertainment::Movie Theater::Multiplex --- 0.018675721561969328
+Topic 48
+Food::Food Truck --- 0.37193203272498615
+Professional & Other Places::Office --- 0.050975456261800126
+Arts & Entertainment::Art Gallery --- 0.03838892385147911
+Arts & Entertainment::General Entertainment --- 0.032095657646318596
+Food::Restaurant --- 0.01950912523599758
+Food::Italian Restaurant --- 0.01321585903083707
+Shop & Service::Bookstore --- 0.01321585903083707
+Shop & Service::Miscellaneous Shop --- 0.01321585903083707
+Professional & Other Places::Parking --- 0.01321585903083707
+Arts & Entertainment::Museum --- 0.01321585903083707
+Topic 54
+Outdoors & Recreation::Athletic & Sport::Basketball Court --- 0.025056947608200264
+Food::Caribbean Restaurant --- 0.025056947608200264
+Outdoors & Recreation::Playground --- 0.0022779043280182058
+Shop & Service::Motorcycle Shop --- 0.0022779043280182058
+Professional & Other Places::Government Building --- 0.0022779043280182058
+::College & University --- 0.0022779043280182058
+Food::Indian Restaurant --- 0.0022779043280182058
+Shop & Service::Clothing Store::Accessories Store --- 0.0022779043280182058
+Outdoors & Recreation::Rock Climbing Spot --- 0.0022779043280182058
+Nightlife Spot::Beer Garden --- 0.0022779043280182058
+Topic 53
+Arts & Entertainment::Music Venue --- 0.19679328116052536
+Arts & Entertainment::General Entertainment --- 0.05745371254056076
+Arts & Entertainment::Concert Hall --- 0.04981866768467229
+Outdoors & Recreation::Park --- 0.04409238404275593
+Professional & Other Places::Event Space --- 0.03454857797289534
+Nightlife Spot::Nightclub --- 0.030731055544951105
+Outdoors & Recreation::Other Great Outdoors --- 0.025004771903034746
+Arts & Entertainment::Art Gallery --- 0.023096010689062627
+Outdoors & Recreation::Lake --- 0.017369727047146274
+Travel & Transport::Bus Station::Bus Line --- 0.015460965833174157
+Topic 52
+Professional & Other Places::Convention Center --- 0.1858849246623474
+Professional & Other Places::Event Space --- 0.17807791396674272
+Professional & Other Places::Convention Center::Meeting Room --- 0.10234991021937734
+Arts & Entertainment::General Entertainment --- 0.049262237489265524
+Travel & Transport::Hotel --- 0.036771020376298036
+Food::Coffee Shop --- 0.013349988289484001
+Nightlife Spot::Hotel Bar --- 0.013349988289484001
+Arts & Entertainment::Art Gallery --- 0.013349988289484001
+Nightlife Spot::Lounge --- 0.010227184011242129
+Professional & Other Places::Parking --- 0.00944648294168166
+Topic 58
+Shop & Service::Car Dealership --- 0.03756708407871172
+Outdoors & Recreation::Playground --- 0.019677996422182327
+Food::Falafel Restaurant --- 0.019677996422182327
+Outdoors & Recreation::Park --- 0.019677996422182327
+Professional & Other Places::Office --- 0.019677996422182327
+Shop & Service::Gym / Fitness Center::Yoga Studio --- 0.019677996422182327
+Outdoors & Recreation::Lake --- 0.019677996422182327
+Shop & Service::Clothing Store::Shoe Store --- 0.019677996422182327
+Food::Food Truck --- 0.019677996422182327
+Food::Fried Chicken Joint --- 0.019677996422182327
+Topic 63
+Professional & Other Places::Medical Center::Doctor's Office --- 0.15263489397438787
+Professional & Other Places::Medical Center::Hospital --- 0.14983553782630188
+Professional & Other Places::Medical Center --- 0.06025614108755064
+Professional & Other Places::Office --- 0.02386451116243295
+Professional & Other Places::Medical Center::Emergency Room --- 0.021764994051368468
+Food::Coffee Shop --- 0.01896563790328249
+College & University::Medical School --- 0.018265798866260997
+Professional & Other Places::Spiritual Center::Church --- 0.017565959829239502
+Food::American Restaurant --- 0.015466442718175022
+College & University::College Academic Building --- 0.014766603681153527
+Topic 62
+Travel & Transport::Train Station::Train --- 0.15833117387924153
+Travel & Transport::Train Station --- 0.11427831044311867
+Professional & Other Places::Office --- 0.049494687742938026
+Travel & Transport::Train Station::Platform --- 0.041720653018916344
+Travel & Transport::Light Rail --- 0.02876392847888021
+Food::Coffee Shop --- 0.023581238662865756
+Travel & Transport::Bus Station::Bus Line --- 0.020989893754858532
+Travel & Transport::Bus Station --- 0.018398548846851305
+Food::American Restaurant --- 0.018398548846851305
+Professional & Other Places::Building --- 0.015807203938844078
+Topic 60
+Nightlife Spot::Nightclub --- 0.14101184068891398
+Nightlife Spot::Bar --- 0.04413347685683567
+Outdoors & Recreation::Other Great Outdoors --- 0.04413347685683567
+Nightlife Spot::Hotel Bar --- 0.03336921420882698
+Nightlife Spot::Cocktail Bar --- 0.03336921420882698
+Food::Café --- 0.022604951560818275
+Shop & Service::Clothing Store --- 0.022604951560818275
+Food::American Restaurant --- 0.022604951560818275
+Travel & Transport::Airport --- 0.022604951560818275
+Professional & Other Places::Government Building --- 0.011840688912809573
+Topic 68
+Arts & Entertainment::Zoo --- 0.34381701215154015
+Arts & Entertainment::General Entertainment --- 0.029306647605432733
+Outdoors & Recreation::Other Great Outdoors --- 0.029306647605432733
+Food::Café --- 0.022158684774839385
+Food::American Restaurant --- 0.022158684774839385
+Professional & Other Places::Event Space --- 0.022158684774839385
+Food::Italian Restaurant --- 0.015010721944246037
+Outdoors & Recreation::Park --- 0.015010721944246037
+Outdoors & Recreation::Dog Run --- 0.015010721944246037
+Outdoors & Recreation::Beach --- 0.015010721944246037
+Topic 69
+Shop & Service::Bookstore --- 0.03241296518607467
+Food::Dessert Shop --- 0.028411364545818538
+Food::Bakery --- 0.028411364545818538
+Professional & Other Places::Medical Center::Doctor's Office --- 0.028411364545818538
+Food::Indian Restaurant --- 0.024409763905562407
+Food::Mexican Restaurant --- 0.024409763905562407
+Food::Coffee Shop --- 0.024409763905562407
+Food::Sushi Restaurant --- 0.024409763905562407
+Shop & Service::Gift Shop --- 0.024409763905562407
+Food::Pizza Place --- 0.024409763905562407
+Topic 70
+Arts & Entertainment::Museum::History Museum --- 0.22373300370828375
+College & University::College Stadium::College Football Field --- 0.03831891223733037
+Food::Fast Food Restaurant --- 0.025957972805933472
+Arts & Entertainment::Stadium::Football Stadium --- 0.025957972805933472
+Arts & Entertainment::Museum::Science Museum --- 0.025957972805933472
+Outdoors & Recreation::Other Great Outdoors --- 0.025957972805933472
+Arts & Entertainment::Music Venue --- 0.025957972805933472
+Shop & Service::Gas Station / Garage --- 0.013597033374536582
+Food::Bakery --- 0.013597033374536582
+Food::Seafood Restaurant --- 0.013597033374536582
+Topic 64
+::Travel & Transport --- 0.06609808102345366
+Food::French Restaurant --- 0.023454157782515816
+Food::American Restaurant --- 0.023454157782515816
+Outdoors & Recreation::Playground --- 0.0021321961620468922
+Shop & Service::Motorcycle Shop --- 0.0021321961620468922
+Professional & Other Places::Government Building --- 0.0021321961620468922
+::College & University --- 0.0021321961620468922
+Food::Indian Restaurant --- 0.0021321961620468922
+Shop & Service::Clothing Store::Accessories Store --- 0.0021321961620468922
+Outdoors & Recreation::Rock Climbing Spot --- 0.0021321961620468922
+Topic 67
+Outdoors & Recreation::Hiking Trail --- 0.10918544194107305
+Outdoors & Recreation::Athletic & Sport::Golf Course --- 0.05719237435008588
+Outdoors & Recreation::Park --- 0.044813072542707985
+Professional & Other Places::Office --- 0.037385491458281246
+Outdoors & Recreation::Other Great Outdoors --- 0.037385491458281246
+Outdoors & Recreation::Scenic Lookout --- 0.034909631096805664
+Shop & Service::Gas Station / Garage --- 0.03243377073533008
+Arts & Entertainment::General Entertainment --- 0.03243377073533008
+Shop & Service::Food & Drink Shop::Grocery Store --- 0.022530329289427768
+College & University::University --- 0.01757860856647661
+Topic 76
+Food::Chinese Restaurant --- 0.11135172593009786
+Food::Japanese Restaurant --- 0.05851271168088767
+Food::Vietnamese Restaurant --- 0.04118844471393351
+Food::Asian Restaurant --- 0.040755338039759656
+Food::Bakery --- 0.031660097882108724
+Shop & Service::Food & Drink Shop::Grocery Store --- 0.03079388453376101
+Food::Korean Restaurant --- 0.02819524448871789
+Food::Sushi Restaurant --- 0.02646281779202248
+Food::Dim Sum Restaurant --- 0.0234310710728055
+Food::Café --- 0.018666897656893104
+Topic 77
+Outdoors & Recreation::Harbor / Marina --- 0.08191959865337706
+Travel & Transport::Ferry::Boat or Ferry --- 0.07729883160604717
+Outdoors & Recreation::Park --- 0.06409664004224748
+Outdoors & Recreation::Other Great Outdoors --- 0.05287477721301774
+Outdoors & Recreation::Hiking Trail --- 0.043633243118357964
+Outdoors & Recreation::Scenic Lookout --- 0.041652914383788014
+Arts & Entertainment::General Entertainment --- 0.03769225691464811
+Food::Seafood Restaurant --- 0.02779061324179834
+Outdoors & Recreation::Lake --- 0.02449006535084842
+Arts & Entertainment::Music Venue --- 0.022509736616278468
+Topic 79
+Arts & Entertainment::Museum::Art Museum --- 0.09107303877367097
+Arts & Entertainment::Museum --- 0.06402164111812514
+Arts & Entertainment::Performing Arts Venue::Theater --- 0.055004508566276526
+Shop & Service::Food & Drink Shop::Farmers Market --- 0.0369702434625793
+Arts & Entertainment::General Entertainment --- 0.027953110910730695
+Professional & Other Places::Medical Center::Doctor's Office --- 0.027953110910730695
+Outdoors & Recreation::Playground --- 0.018935978358882083
+Travel & Transport::Bus Station::Bus Line --- 0.018935978358882083
+Professional & Other Places::Government Building::Monument / Landmark --- 0.018935978358882083
+Nightlife Spot::Bar --- 0.018935978358882083
+Topic 72
+Shop & Service::Automotive Shop --- 0.11188325225851403
+Outdoors & Recreation::Cemetery --- 0.06323835997220358
+Outdoors & Recreation::Scenic Lookout --- 0.04933981931897202
+Nightlife Spot::Sports Bar --- 0.04239054899235624
+Travel & Transport::General Travel --- 0.04239054899235624
+Shop & Service::Gas Station / Garage --- 0.03544127866574046
+Professional & Other Places::Spiritual Center::Church --- 0.028492008339124686
+Professional & Other Places::Building --- 0.028492008339124686
+Shop & Service::Pet Store --- 0.021542738012508913
+Shop & Service::Flea Market --- 0.021542738012508913
+Topic 73
+Professional & Other Places::Office --- 0.05349988215885031
+Professional & Other Places::Government Building --- 0.03700212114070264
+Food::Coffee Shop --- 0.03543090580564096
+Food::Sandwich Place --- 0.028360436797863386
+Professional & Other Places::Building --- 0.02207557545761665
+Travel & Transport::Hotel --- 0.02050436012255497
+Food::Vietnamese Restaurant --- 0.02050436012255497
+Shop & Service::Bank --- 0.019718752455024125
+Professional & Other Places::Office::Tech Startup --- 0.019718752455024125
+Food::Sushi Restaurant --- 0.01657632178490076
+Topic 75
+Outdoors & Recreation::Park --- 0.15875446656457498
+Outdoors & Recreation::Cemetery --- 0.07708014293006694
+Outdoors & Recreation::Athletic & Sport::Tennis Court --- 0.05666156202143994
+Outdoors & Recreation::Playground --- 0.03624298111281293
+Professional & Other Places::Spiritual Center::Church --- 0.031138335885656183
+Outdoors & Recreation::Athletic & Sport::Skating Rink --- 0.031138335885656183
+Residence::Housing Development --- 0.02092904543134268
+Shop & Service::Laundry Service --- 0.02092904543134268
+Outdoors & Recreation::Garden --- 0.02092904543134268
+Outdoors & Recreation::Field --- 0.02092904543134268
+Topic 85
+Professional & Other Places::Government Building::Courthouse --- 0.08983799705449146
+Shop & Service::Salon / Barbershop --- 0.045655375552282544
+Nightlife Spot::Bar --- 0.03092783505154624
+Professional & Other Places::Government Building --- 0.016200294550809936
+Outdoors & Recreation::Lighthouse --- 0.016200294550809936
+Shop & Service::Music Store --- 0.016200294550809936
+College & University::Fraternity House --- 0.016200294550809936
+Food::Mexican Restaurant --- 0.016200294550809936
+Shop & Service::Paper / Office Supplies Store --- 0.016200294550809936
+Shop & Service::Laundry Service --- 0.016200294550809936
+Topic 87
+Nightlife Spot::Bar --- 0.0541891908017989
+Food::Pizza Place --- 0.02769722789054729
+Food::Mexican Restaurant --- 0.0262652298953445
+Food::Coffee Shop --- 0.024475232401341012
+Shop & Service::Salon / Barbershop --- 0.021611236410935434
+Food::Italian Restaurant --- 0.019582572584398147
+Food::Sandwich Place --- 0.01946323941813125
+Food::Café --- 0.018269907755462257
+Food::American Restaurant --- 0.016121910762658072
+Food::Thai Restaurant --- 0.013615914271053192
+Topic 80
+Food::Mexican Restaurant --- 0.07158737216540763
+Shop & Service::Gas Station / Garage --- 0.047738388778851726
+Food::Fast Food Restaurant --- 0.04531306843445621
+Professional & Other Places::Spiritual Center::Church --- 0.0428877480900607
+Shop & Service::Food & Drink Shop::Grocery Store --- 0.033590686769877885
+Professional & Other Places::Building --- 0.028335826023687605
+Professional & Other Places::School::High School --- 0.021868305105299565
+Nightlife Spot::Bar --- 0.02065564493310181
+Shop & Service::Automotive Shop --- 0.019847204818303304
+Food::Taco Place --- 0.019847204818303304
+Topic 82
+Food::Gastropub --- 0.023454157782515812
+::Shop & Service --- 0.023454157782515812
+Outdoors & Recreation::Lake --- 0.023454157782515812
+Residence::Residential Building (Apartment / Condo) --- 0.023454157782515812
+Nightlife Spot::Hotel Bar --- 0.023454157782515812
+Outdoors & Recreation::Playground --- 0.0021321961620468922
+Shop & Service::Motorcycle Shop --- 0.0021321961620468922
+Professional & Other Places::Government Building --- 0.0021321961620468922
+::College & University --- 0.0021321961620468922
+Food::Indian Restaurant --- 0.0021321961620468922
+Topic 92
+Professional & Other Places::Office --- 0.04374187960155942
+Outdoors & Recreation::Dog Run --- 0.039411000433088185
+Outdoors & Recreation::Park --- 0.03508012126461696
+Arts & Entertainment::General Entertainment --- 0.03508012126461696
+Professional & Other Places::Spiritual Center::Church --- 0.026418362927674497
+Food::American Restaurant --- 0.026418362927674497
+Arts & Entertainment::Movie Theater --- 0.022087483759203268
+Food::Café --- 0.022087483759203268
+Arts & Entertainment::Museum --- 0.022087483759203268
+Nightlife Spot::Wine Bar --- 0.022087483759203268
+Topic 95
+Travel & Transport::Airport::Airport Gate --- 0.2730494755495965
+Travel & Transport::Airport::Plane --- 0.15618564107476485
+Travel & Transport::Airport::Airport Terminal --- 0.12265913118444427
+Travel & Transport::Airport --- 0.07955361846831781
+Travel & Transport::General Travel --- 0.028305953350256367
+Travel & Transport::Airport::Airport Lounge --- 0.02734805306767578
+Food::Coffee Shop --- 0.025432252502514605
+Travel & Transport::Rental Car Location --- 0.019684850807031078
+Professional & Other Places::Parking --- 0.018248000383160195
+Food::American Restaurant --- 0.016811149959289316
+Topic 88
+Professional & Other Places::Auditorium --- 0.06038291605301893
+Outdoors & Recreation::Athletic & Sport::Basketball Court --- 0.030927835051546285
+Shop & Service::Antique Shop --- 0.030927835051546285
+Shop & Service::Clothing Store --- 0.030927835051546285
+Shop & Service::Gym / Fitness Center::Gym --- 0.030927835051546285
+Outdoors & Recreation::Ski Area --- 0.030927835051546285
+Travel & Transport::Ferry::Boat or Ferry --- 0.030927835051546285
+Food::Distillery --- 0.030927835051546285
+Outdoors & Recreation::Athletic & Sport::Skate Park --- 0.01620029455080996
+Arts & Entertainment::Bowling Alley --- 0.01620029455080996
+Topic 91
+Arts & Entertainment::Art Gallery --- 0.07277338046568874
+Professional & Other Places::Office --- 0.049719511257973185
+Food::Food Truck --- 0.03844873075642337
+Professional & Other Places::Building --- 0.03537488152872796
+Arts & Entertainment::General Entertainment --- 0.03511872742642001
+Nightlife Spot::Bar --- 0.02461640923179404
+Food::Mexican Restaurant --- 0.02333563872025429
+Nightlife Spot::Nightclub --- 0.022567176413330437
+Arts & Entertainment::Music Venue --- 0.01949332718563503
+Food::Café --- 0.01795640257178733
+Topic 98
+Arts & Entertainment::Museum::Science Museum --- 0.25173852573018146
+Travel & Transport::Hotel --- 0.029207232267037628
+Arts & Entertainment::Zoo --- 0.015299026425591137
+Food::New American Restaurant --- 0.015299026425591137
+Nightlife Spot::Sports Bar --- 0.015299026425591137
+Arts & Entertainment::Pool Hall --- 0.015299026425591137
+Nightlife Spot::Gay Bar --- 0.015299026425591137
+College & University::College Administrative Building --- 0.015299026425591137
+Shop & Service::Gym / Fitness Center::Martial Arts Dojo --- 0.015299026425591137
+Arts & Entertainment::Historic Site --- 0.015299026425591137
+Topic 97
+Arts & Entertainment::General Entertainment --- 0.1390395554967578
+Arts & Entertainment::Stadium::Baseball Stadium --- 0.09670591348061841
+Professional & Other Places::Parking --- 0.05304934515147468
+Professional & Other Places::Office --- 0.046434713586452896
+Outdoors & Recreation::Athletic & Sport::Baseball Field --- 0.03320545045640934
+Nightlife Spot::Bar --- 0.03188252414340498
+Arts & Entertainment::Stadium --- 0.029236671517396267
+Arts & Entertainment::Stadium::Hockey Arena --- 0.027913745204391913
+Arts & Entertainment::Stadium::Football Stadium --- 0.023944966265378845
+Nightlife Spot::Sports Bar --- 0.023944966265378845
+Topic 249
+Arts & Entertainment::Performing Arts Venue::Theater --- 0.02296450939457186
+Professional & Other Places::Medical Center::Dentist's Office --- 0.02296450939457186
+Shop & Service::Food & Drink Shop --- 0.02296450939457186
+Travel & Transport::Tourist Information Center --- 0.02296450939457186
+Shop & Service::Clothing Store::Women's Store --- 0.02296450939457186
+Travel & Transport::Rest Area --- 0.02296450939457186
+Outdoors & Recreation::Playground --- 0.002087682672233805
+Shop & Service::Motorcycle Shop --- 0.002087682672233805
+Professional & Other Places::Government Building --- 0.002087682672233805
+::College & University --- 0.002087682672233805
