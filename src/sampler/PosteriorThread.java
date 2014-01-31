@@ -117,6 +117,18 @@ public class PosteriorThread implements Runnable {
           System.out.println(s.getObservationAtTable(currentCT.getTableId(),currentCT.getCityId()));
         }
 
+        System.out.println("_____________");
+        System.out.println("THREAD PARAMS");
+        System.out.println("s: " + s);
+        System.out.println("ll: " +ll);
+        System.out.println("table_id: " + table_id);
+        System.out.println("list_index: " + list_index);
+        System.out.println("currentTopic: " + currentTopic);
+        System.out.println("proposedTopic: " + proposedTopic);
+        System.out.println("currentTopicLogLik: " + currentTopicLogLik);
+        System.out.println("currentTopicMinusTableLogLik: " + currentTopicMinusTableLogLik);
+
+
         Double changeInLogLik = GibbsSampler.computeCachedTopicChangeInLikelihood(s, ll, table_id, list_index, currentTopic, proposedTopic, currentTopicLogLik, currentTopicMinusTableLogLik);
         Double logPosterior = Math.log(priors.get(i)) + changeInLogLik;
 

@@ -3,6 +3,9 @@ package model;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collections;
+import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -582,7 +585,7 @@ public class SamplerState {
 	 * @param listIndex
 	 * @return
 	 */
-	public ArrayList<Double> getAllObservationsForTopicPlusTable(int topic, int tableToAddId, int listIndex)
+	public ArrayList<Double> getAllObservationsForTopicPlusTable(Integer topic, Integer tableToAddId, Integer listIndex)
 	{
 		// create a CityTable instance for the target CityTable
 		CityTable tableToInclude = new CityTable(listIndex, tableToAddId);
@@ -591,7 +594,9 @@ public class SamplerState {
 		ArrayList<ArrayList<Double>> listObservations = Data.getObservations(); // all observations
 		ArrayList<Double> observationsForTopic = new ArrayList<Double>();
 		HashSet<CityTable> tables = tablesAssignedToTopic.get(topic);
-		for(CityTable table : tables) {
+		ArrayList<CityTable> tablesList = new ArrayList<CityTable>(tables);
+
+		for(CityTable table : tablesList) {
 			// check if this is the extra table we're supposed to include
 			if (table.equals(tableToInclude))
 				tableIncluded = true;
@@ -605,9 +610,24 @@ public class SamplerState {
 			}
 		}
 
+		if (tableToAddId == null)
+			System.out.println("------------------tableToAddId == null");
+		if (listIndex == null)
+			System.out.println("------------------listIndex == null");
+		if (observationsForTopic == null)
+			System.out.println("------------------observationsForTopic == null");
+
 		// if tableToInclude was missing, add its observations
-		if (!tableIncluded)
-			observationsForTopic.addAll(getObservationAtTable(tableToAddId, listIndex));
+		if (!tableIncluded) {
+			ArrayList<Double> tableObservations = getObservationAtTable(tableToAddId, listIndex);
+			if (tableObservations == null) {
+				System.out.println("------------------tableObservations == null");
+			  System.out.println("------------------tableToAddId " + tableToAddId);
+			  System.out.println("------------------listIndex " + listIndex);
+			}
+
+			observationsForTopic.addAll(tableObservations);
+		}
 
 		return observationsForTopic;
 	}
