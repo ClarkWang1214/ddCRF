@@ -296,7 +296,6 @@ public class GibbsSampler {
 		for (int i=0; i<posterior.size(); i++) {
 			if (posteriorIndices.get(i) == 1) {
 				posterior.set(i, Math.exp(posterior.get(i) - maxLogPosterior));
-				System.out.println(i + " : " + posterior.get(i));
 			}
 		}
 
