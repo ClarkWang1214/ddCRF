@@ -121,14 +121,14 @@ public class GibbsSampler {
 	 * @param list_index
 	 * @param ll
 	 */
-	private static void sampleLink(Integer index, int list_index, Likelihood ll)
+	private static void sampleLink(Integer index, Integer list_index, Likelihood ll)
 	{
 		LOGGER.log(Level.FINE, "Sampling link for index "+index+" list_index "+list_index);
 		
 		//check to see if the table has circle or not
 		//get the table id where this observation is sitting
 		SamplerState s = SamplerStateTracker.samplerStates.get(SamplerStateTracker.current_iter);
-		int table_id = s.get_t(index, list_index); //the table id where the observation is sitting
+		Integer table_id = s.get_t(index, list_index); //the table id where the observation is sitting
 		
 		// TO CHANGE /////////////////////////////////
 
@@ -201,7 +201,7 @@ public class GibbsSampler {
 			//Ok, now since the table has split, update the sampler state accordingly
 			s.setT(s.getT()+1); //incrementing the number of tables
 			s.setC(null, index, list_index); //since this customer has 'no' customer assignment as of now
-			int new_table_id = emptyTables.get(list_index).remove(); //getting an empty table
+			Integer new_table_id = emptyTables.get(list_index).remove(); //getting an empty table
 			LOGGER.log(Level.FINE, "The new table id after splitting is "+new_table_id);
 
 			for(int l:new_table_members) //setting the table assignment to the new table number			 
@@ -216,6 +216,8 @@ public class GibbsSampler {
 
 			table_id = new_table_id; //updating, since this is the new table_id of the current customer we are trying to sample for.
 			s.setCustomersAtTable(new HashSet<Integer>(new_table_members),  new_table_id, list_index);
+
+			System.out.println("---------------------------NEW TABLE: " + old_table_id + " : " + new_table_id);
 
 			//now update the topic for the new table to be the previous topic of the combined table
 			CityTable ct = new CityTable(list_index, table_id);
@@ -251,6 +253,9 @@ public class GibbsSampler {
 		Integer currentTopic = s.getTopicForCityTable(currentCT);
 		double currentTopicLogLik = ll.computeTableLogLikelihood(s.getAllObservationsForTopic(currentTopic));  // pull this out of method
 		double currentTopicMinusTableLogLik = ll.computeTableLogLikelihood(s.getAllObservationsForTopicMinusTable(currentTopic, table_id, list_index));  // pull this out of method		
+		double currentTopicPlusTableLogLik = ll.computeTableLogLikelihood(s.getAllObservationsForTopicPlusTable(currentTopic, table_id, list_index));  // pull this out of method		
+
+		System.out.println("@@@@@@@@@@@@@@@@@@Current topic plust table: " + currentTopicPlusTableLogLik);
 
 		// ArrayList<Double> posterior = new ArrayList<Double>(); //this will hold the posterior probabilities for all possible customer assignment and we will sample according to these probabilities
 		// ArrayList<Integer> indexes = new ArrayList<Integer>(); // for storing the indexes of the customers who could be possible assignments

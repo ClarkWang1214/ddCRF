@@ -279,17 +279,18 @@ public class SamplerState {
 	 */
 	public ArrayList<Double> getObservationAtTable(int tableId,int listIndex)
 	{		
-		if(customersAtTableList.get(listIndex).get(tableId) == null)
+		if(customersAtTableList.get(listIndex).get(tableId) == null) {
+			System.out.println(" -------- null: " + listIndex + " : " + tableId);
 			return null;
+		}
 		ArrayList<ArrayList<Double>> list_observations = Data.getObservations(); // all observations
 		ArrayList<Double> observations_per_city = list_observations.get(listIndex);
 		ArrayList<Double> observationsAtTable = new ArrayList<Double>();
 		HashSet<Integer> customer_indices =  customersAtTableList.get(listIndex).get(tableId);
-		Iterator<Integer> iter = customer_indices.iterator();
-		while(iter.hasNext())
+		ArrayList<Integer> customerIndicesList = new ArrayList<Integer>(customer_indices);
+		for(Integer customerIndex : customerIndicesList)
 		{
-			int customer_index = iter.next();
-			Double observation = observations_per_city.get(customer_index);
+			Double observation = observations_per_city.get(customerIndex);
 			observationsAtTable.add(observation);
 		}
 		return observationsAtTable;
@@ -303,7 +304,7 @@ public class SamplerState {
 	 * @param table_id
 	 * @param list_index
 	 */
-	public void setCustomersAtTable(HashSet<Integer> customers, int tableId, int listIndex)
+	public void setCustomersAtTable(HashSet<Integer> customers, Integer tableId, Integer listIndex)
 	{
 		customersAtTableList.get(listIndex).put(tableId, customers);
 	}
@@ -355,7 +356,7 @@ public class SamplerState {
 		// s.tablesAssignedToTopic = newTablesAssignedToTopic;
 		// s.topicAtTable = newTopicAtTable;
 
-		// Just copy reference for now to see if it is working
+		// TODO: Just copy reference for now to see if it is working
 		s.topicAtTable = topicAtTable;
   	s.tablesAssignedToTopic = tablesAssignedToTopic;
 
@@ -562,12 +563,14 @@ public class SamplerState {
 		ArrayList<ArrayList<Double>> listObservations = Data.getObservations(); // all observations
 		ArrayList<Double> observationsForTopic = new ArrayList<Double>();
 		HashSet<CityTable> tables = tablesAssignedToTopic.get(topic);
-		for(CityTable table : tables) {
+		ArrayList<CityTable> tablesList = new ArrayList<CityTable>(tables);
+		for(CityTable table : tablesList) {
 			int cityId = table.getCityId();
 			int tableId = table.getTableId();
 			ArrayList<Double> observationsAtList = listObservations.get(cityId);
 			HashSet<Integer> customersAtTable = customersAtTableList.get(cityId).get(tableId);
-			for (Integer customer : customersAtTable) {
+			ArrayList<Integer> customersAtTableList = new ArrayList<Integer>(customersAtTable);
+			for (Integer customer : customersAtTableList) {
 				Double obs = observationsAtList.get(customer);
 				observationsForTopic.add(obs);
 			}
@@ -604,7 +607,8 @@ public class SamplerState {
 			int tableId = table.getTableId();
 			ArrayList<Double> observationsAtList = listObservations.get(cityId);
 			HashSet<Integer> customersAtTable = customersAtTableList.get(cityId).get(tableId);
-			for (Integer customer : customersAtTable) {
+			ArrayList<Integer> customersAtTableList = new ArrayList<Integer>(customersAtTable);
+			for (Integer customer : customersAtTableList) {
 				Double obs = observationsAtList.get(customer);
 				observationsForTopic.add(obs);
 			}
