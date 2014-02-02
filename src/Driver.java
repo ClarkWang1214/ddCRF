@@ -60,8 +60,11 @@ public class Driver {
 			
 			long diff = System.currentTimeMillis() - init_time; 
 			System.out.println("Time taken for Sampling "+(double)diff/1000+" seconds");		
-			for(int i=0;i<list_observations.size();i++)
-				Util.printTableConfiguration(i, new PrintStream("tables/table_configuration"+i+".txt"));
+			/*for(int i=0;i<list_observations.size();i++)
+				Util.printTableConfiguration(i, new PrintStream("tables/table_configuration"+i+".txt"));*/
+			
+			//Printing the output csv file
+			Util.outputCSVforMap();
 	
 			// TEMP: just a quick test of theta estimate on the last state
 

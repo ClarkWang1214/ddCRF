@@ -58,8 +58,7 @@ public class GibbsSampler {
 			FileHandler logFileHandler;
 			logFileHandler = new FileHandler("log.txt");
 			logFileHandler.setFormatter(new SimpleFormatter());
-			LOGGER.addHandler(logFileHandler);
-		
+			LOGGER.addHandler(logFileHandler);		
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

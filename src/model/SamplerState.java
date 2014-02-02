@@ -547,6 +547,15 @@ public class SamplerState {
 	{
 		return new HashSet(tablesAssignedToTopic.keySet());
 	}
+	/**
+	 * returns the set of city tables
+	 * @param topicId
+	 * @return
+	 */
+	public HashSet<CityTable> getCityTablesForTopic(int topicId)
+	{
+		return tablesAssignedToTopic.get(topicId);
+	}
 	
 	/**
 	 * Returns all the observations (NOT the indexes) of the customers of various cities having the topic t.

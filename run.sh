@@ -10,7 +10,7 @@ numIter=
 vocabSize=
 dir_param=0.3 #default value
 self_link_prob=0.1 #default value
-
+OUTPUTCSVFILE=./output.csv
 while getopts ":n:v:d:s:t:h" o; do
 
 	case "${o}" in
@@ -54,6 +54,11 @@ if [ -z $vocabSize ];
 then
 	usage;
 	exit 1;
+fi
+
+if [ -f $OUTPUTCSVFILE ];
+then
+	rm $OUTPUTCSVFILE;
 fi
 
 mkdir tables
