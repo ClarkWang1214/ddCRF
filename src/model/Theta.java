@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 
 
 
@@ -184,13 +185,12 @@ public class Theta {
    * Output the k most probable tokens per topic
    * Should pass an outstream to this method
    */
-  public void printMostProbWordsPerTopic(int k) {
-    System.out.println("Most probable words per topic: ");
+  public void printMostProbWordsPerTopic(int k, PrintStream out) {
     for (Map.Entry<Integer, HashMap<String, Double>> entry : topicToThetaMapString.entrySet()) {
       Integer topic = entry.getKey();
       HashMap<String, Double> theta = entry.getValue();
-      System.out.println("Topic " + topic);
-
+      out.println("Topic " + topic);
+      out.println("---------------");
       ArrayList<Map.Entry> entries = new ArrayList(theta.entrySet());
 
       Collections.sort(
@@ -206,8 +206,9 @@ public class Theta {
 
       for (int i=0; i<k; i++) {
         Map.Entry e = entries.get(i);
-        System.out.println(e.getKey() + " --- " + e.getValue());
+        out.println(e.getKey() + " --- " + e.getValue());
       }
+      out.println("");
 
     } 
   }

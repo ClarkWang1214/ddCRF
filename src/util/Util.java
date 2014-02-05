@@ -3,6 +3,7 @@ package util;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -17,13 +18,46 @@ import data.Data;
 import model.CityTable;
 import model.SamplerState;
 import model.SamplerStateTracker;
+import model.Theta;
 
 public class Util {
 
 	public static final String cityNamesFile = "Data/cities.txt";
 	public static final String venueCategoriesFile = "Data/venue_categories.txt";
-	public static final String outputCSV = "output.csv";
-	
+
+	public static String outputDirectory;
+	public static final String clustersOutCSVFilename = "clusters.csv";
+	public static final String topicsOutFilename = "top_words_per_topic.txt";
+	public static String clustersOutCSVPath;
+	public static String topicsOutPath;
+
+	/**
+	 * Set the value for outputDirectory, and update all the dependent paths, and create directory if
+	 * it doesn't exist
+	 */
+	public static void setOutputDirectory(String dir) {
+		outputDirectory = dir;
+
+		// Create the directory if it doesn't exist
+		File theDir = new File(outputDirectory);
+		if (!theDir.exists())
+		  theDir.mkdirs();  
+
+		// Compute the new output paths given the outputDirectory
+		if (outputDirectory.substring(outputDirectory.length() - 1) != "/")
+			outputDirectory += "/";
+		clustersOutCSVPath = topicsOutPath = outputDirectory;
+		clustersOutCSVPath += clustersOutCSVFilename;
+		topicsOutPath += topicsOutFilename;
+	}
+
+	/**
+	 * Set the value for outputDirectory based on the command line arguments
+	 */
+	public static void setOutputDirectoryFromArgs(int numIter, double dirichletParam, double dDCRPSelfLink, double cRPSelfLink) {
+		setOutputDirectory("results/" + numIter + "__" + dirichletParam + "__" + dDCRPSelfLink + "__" + cRPSelfLink);
+	}
+
 	/**
 	 * Samples from a discrete distribution. The input is a list of probabilites (non negative and non zero)
 	 * They need not sum to 1, the list will be normalized. 
@@ -69,12 +103,24 @@ public class Util {
 			{
 				count++;
 				out.println("Table "+table_id+" Count "+customers.size()+" :\t"+customers);
-				
 			}
 		}
 		out.println("There are "+count+" occupied tables");
 	}
 	
+	/**
+	 * Utility method for outputting top words per topic to a file
+	 */
+	public static void outputTopKWordsPerTopic(Theta t, int k) {
+		try {
+			PrintStream out = new PrintStream(topicsOutPath);	
+			t.printMostProbWordsPerTopic(k, out);
+		} catch(FileNotFoundException ex) {
+			ex.printStackTrace();
+		} 
+	}
+
+
 	/**
 	 * Utility method for generating the csv file for cities.
 	 */
@@ -153,7 +199,7 @@ public class Util {
 		Iterator<Integer> iter = allTopicIds.iterator();
 		PrintStream p = null;
 		try {
-			 p = new PrintStream("output.csv");
+			 p = new PrintStream(clustersOutCSVPath);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -196,56 +242,6 @@ public class Util {
 
 
 
-	public static void testSamplerStateEquals() {
-	  SamplerState s1 = SamplerStateTracker.returnCurrentSamplerState();
-    SamplerState s2 = s1.copy();
-
-    // Make a different state
-    SamplerState s3 = s1.copy();
-    ArrayList<ArrayList<Integer>> c = s3.getC();
-    ArrayList<Integer> c1 = c.get(1);
-    c1.set(1, 999999);
-    c.set(1, c1);
-    s3.setC(c);
-
-    HashMap<SamplerState, Integer> countsMap = new HashMap<SamplerState, Integer>();  
-    if (countsMap.get(s1) == null) {
-      System.out.println("  Get s1 returns null as expected");
-    } else {
-      System.out.println("  Get s1 didn't return null");
-    }
-
-    countsMap.put(s1, 0);
-    Integer n = countsMap.get(s2);
-    if (n == null) {
-      System.out.println("  n is unexpectedly null");
-    } else {
-      System.out.println("  n is not null as expected.  value: " + String.valueOf(n));
-      countsMap.put(s1,n+1);
-      System.out.println("  updated value: " + String.valueOf(countsMap.get(s2)));
-    }
-
-    if (countsMap.get(s2) == null) {
-      System.out.println("  Get s2 returned null.  this is a problem.");
-    } else {
-      System.out.println("  Get s2 didn't return null, as expected.");
-    }
-
-    if (countsMap.get(s3) == null) {
-      System.out.println("  Get s3 returns null as expected");
-    } else {
-      System.out.println("  Get s3 didn't return null");
-    }
-
-    System.out.println("Does s1 equal s2?");
-    System.out.println(s1.equals(s2));
-    System.out.println("Does s2 equal s3?");
-    System.out.println(s2.equals(s3));
-    System.out.println("hashCode()");
-    System.out.println(String.valueOf(s1.hashCode()));
-    System.out.println(String.valueOf(s2.hashCode()));
-    System.out.println(String.valueOf(s3.hashCode()));
-	}
 
 
 }

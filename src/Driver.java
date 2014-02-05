@@ -43,9 +43,13 @@ public class Driver {
 			SamplerStateTracker.initializeSamplerState(list_observations);
 			Likelihood l = new DirichletLikelihood(h);
 			
-			//do sampling		
 			SamplerStateTracker.max_iter = Integer.parseInt(args[0]);
 			System.out.println("Gibbs Sampler will run for "+SamplerStateTracker.max_iter+" iterations.");
+			
+			// set the output directory based on the parameters
+			Util.setOutputDirectoryFromArgs(SamplerStateTracker.max_iter, dirichlet_param, alpha, crp_alpha);
+			
+			//do sampling		
 			long init_time = System.currentTimeMillis();
 			for(int i=1;i<=SamplerStateTracker.max_iter;i++)
 			{
@@ -71,7 +75,7 @@ public class Driver {
 			SamplerState s = SamplerStateTracker.returnCurrentSamplerState();
 			Theta t = new Theta(s, h);
 			t.estimateThetas();
-			t.printMostProbWordsPerTopic(10);
+			Util.outputTopKWordsPerTopic(t, 15);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
