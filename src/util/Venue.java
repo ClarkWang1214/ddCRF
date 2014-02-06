@@ -81,7 +81,7 @@ public class Venue {
 	public void printVenueConfig(PrintStream out)
 	{
 		//topicId, tableId, cityId, cityName, name, category, lat, lon  
-		out.println(topicId+","+tableId+","+cityId+","+cityName+","+venueName+","+venueCategory+","+lat+","+lon);
+		out.println(topicId+"\t"+tableId+"\t"+cityId+"\t"+cityName+"\t"+venueName+"\t"+venueCategory+"\t"+lat+"\t"+lon);
 	}
 
 }

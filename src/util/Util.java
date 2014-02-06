@@ -26,7 +26,7 @@ public class Util {
 	public static final String venueCategoriesFile = "Data/venue_categories.txt";
 
 	public static String outputDirectory;
-	public static final String clustersOutCSVFilename = "clusters.csv";
+	public static final String clustersOutCSVFilename = "clusters.tsv";
 	public static final String topicsOutFilename = "top_words_per_topic.txt";
 	public static String clustersOutCSVPath;
 	public static String topicsOutPath;
