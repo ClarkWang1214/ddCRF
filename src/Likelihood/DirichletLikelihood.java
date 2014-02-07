@@ -31,6 +31,8 @@ public class DirichletLikelihood extends Likelihood {
 	public double computeTableLogLikelihoodFromCustomers(ArrayList<Integer> table_members,
 			int list_index) {
 		
+    // THIS IS NOT USED ANYMORE. WE SHOULD UPDATE THE INTERFACE.
+
 		//get the observations
 		ArrayList<ArrayList<Double>> list_observations = Data.getObservations();
 		ArrayList<Double> observations = list_observations.get(list_index);
@@ -128,20 +130,7 @@ public class DirichletLikelihood extends Likelihood {
 			return cached_gamma_values.get(arg);		
 	}
 
-	public double computeFullLogLikelihood(ArrayList<HashMap<Integer, HashSet<Integer>>> customersAtTableList) {
-		double ll = 0;
-		for (int listIndex=0; listIndex<customersAtTableList.size(); listIndex++) {
-			HashMap<Integer, HashSet<Integer>> customersAtTable = customersAtTableList.get(listIndex);
-			for (Integer tableId : customersAtTable.keySet()) {
-				if (customersAtTable.get(tableId) != null) {
-					HashSet<Integer> hs = customersAtTable.get(tableId);
-					ArrayList<Integer> tableMembers = new ArrayList<Integer>(hs);
-					ll += computeTableLogLikelihoodFromCustomers(tableMembers, listIndex);
-				}
-			}
-		}
-		return ll;
-	}
+
 
 	 /**
    * Computes the sum of the dirichlet conditional likelihood, p(x_t | x_{-t}^l), where x_t is the set of 
@@ -187,5 +176,18 @@ public class DirichletLikelihood extends Likelihood {
   	return logLik;
   }
 
+
+  /**
+   * Returns the full log likelihood of the model at the given sampler state
+   * @return
+   */
+  public double computeFullLogLikelihood(SamplerState s) {
+    double ll = 0;
+    HashSet<Integer> topics = s.getAllTopics();
+    for (Integer topic : topics) {
+      ll += computeTableLogLikelihood(s.getAllObservationsForTopic(topic));  
+    }
+    return ll;
+  }
 
 }
