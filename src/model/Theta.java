@@ -131,11 +131,6 @@ public class Theta {
     HashMap<Integer, HashMap<Integer, Double>> newTopicToThetaMap = new HashMap<Integer, HashMap<Integer, Double>>();
     HashMap<Integer, HashMap<String, Double>> newTopicToThetaMapString = new HashMap<Integer, HashMap<String, Double>>();
 
-
-    // for each topic
-    //   init a CRSMatrix of length of the vocab size (all zeros)
-    //       for each observation of the topic, compute the counts per category
-
     HashSet<Integer> topics = samplerState.getAllTopics(); 
     for (Integer topic : topics) {
       // Initialize the topics's theta vector
@@ -180,6 +175,62 @@ public class Theta {
     topicToThetaMap = newTopicToThetaMap;
     topicToThetaMapString = newTopicToThetaMapString;
   }
+
+  /*
+   * Computes the MAP estimate of the theta vectors for this stampler state, for each city, for each table in the city
+   * Each table has a CRSMatrix theta, where
+   * theta_j = (N_j + a_j - 1) / (n + sum_i(a_i - 1))
+   * where a_j is the Dirichlet prior parameter
+   */
+  public void estimateThetasMAP() {
+    HashMap<Integer, HashMap<Integer, Double>> newTopicToThetaMap = new HashMap<Integer, HashMap<Integer, Double>>();
+    HashMap<Integer, HashMap<String, Double>> newTopicToThetaMapString = new HashMap<Integer, HashMap<String, Double>>();
+
+    HashSet<Integer> topics = samplerState.getAllTopics(); 
+    for (Integer topic : topics) {
+      // Initialize the topics's theta vector
+      HashMap<Integer, Double> topicTheta = new HashMap<Integer, Double>(); 
+      HashMap<String, Double> topicThetaString = new HashMap<String, Double>(); 
+      
+      // add the dirichlet parameters (a_i - 1)
+      ArrayList<Double> dirichletParam = hyperParameters.getDirichletParam();
+      for (int j=0; j<dirichletParam.size(); j++) {
+        topicTheta.put(j, dirichletParam.get(j) - 1);
+        topicThetaString.put(vocabulary.get(j), dirichletParam.get(j) - 1);
+      }
+
+      // get all the observatiosn for this topic and add them to the counts
+      ArrayList<Double> topicObservations = samplerState.getAllObservationsForTopic(topic);
+      for (Double obs : topicObservations) {
+        Integer observation = obs.intValue() - 1;
+        String observationString = vocabulary.get(observation);
+        double currentObservationCount = topicTheta.get(observation);
+        topicTheta.put(observation, currentObservationCount + 1);
+        topicThetaString.put(observationString, currentObservationCount + 1);        
+      }
+
+      // get the normalizing constant
+      double norm = 0.0;
+      for (int j=0; j<hyperParameters.getVocabSize(); j++) {
+        norm += topicTheta.get(j);
+      }
+
+      // divide by the normalizing constant
+      for (int j=0; j<hyperParameters.getVocabSize(); j++) {
+        String obsStringJ = vocabulary.get(j);
+        double thetaJ = topicTheta.get(j) / norm;
+        topicTheta.put(j, thetaJ);
+        topicThetaString.put(obsStringJ, thetaJ);
+      }    
+
+      newTopicToThetaMap.put(topic, topicTheta);
+      newTopicToThetaMapString.put(topic, topicThetaString);
+    } 
+
+    topicToThetaMap = newTopicToThetaMap;
+    topicToThetaMapString = newTopicToThetaMapString;
+  }
+
 
   /*
    * Output the k most probable tokens per topic
