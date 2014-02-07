@@ -69,7 +69,7 @@ public class SamplerStateTracker {
 			ArrayList<HashMap<Integer, HashSet<Integer>>> customersAtTableList = new ArrayList<HashMap<Integer, HashSet<Integer>>>();
 
 			HashMap<Integer,Integer> count_each_topic = new HashMap<Integer,Integer>();
-			int num_topics = 100; //setting the initial number of topics to 100
+			int num_topics = 50; //setting the initial number of topics to 50
 			Random gen = new Random();			
 			for(int i=0;i<list_observations.size();i++)		//keeping i as int, hoping that the number of cities/documents will be no greater than the size of integers
 			{
