@@ -3,6 +3,7 @@ package Likelihood;
 import java.util.ArrayList;
 
 import model.HyperParameters;
+import model.SamplerState;
 
 
 /**
@@ -42,4 +43,13 @@ abstract public class Likelihood {
    * @return
    */
   abstract public double computeConditionalLogLikelihood(ArrayList<Double> observations, ArrayList<Double> condObservations);
+
+  /**
+   * Method for computing the full log likelihood of a sampler state
+   * @param SamplerState s
+   * @return the log likelihood
+   */
+  abstract public double computeFullLogLikelihood(SamplerState s);
+
+
 }

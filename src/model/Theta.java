@@ -29,12 +29,12 @@ public class Theta {
   /**
    * The SamplerState for which we'd like to compute thetas for
    */ 
-  private static SamplerState samplerState;
+  private SamplerState samplerState;
 
   /**
    * The model hyperparameters
    */ 
-  private static HyperParameters hyperParameters;
+  private HyperParameters hyperParameters;
 
   /**
    * The vocab file

@@ -656,6 +656,4 @@ public class SamplerState {
 		return observationsForTopic;
 	}
 
-
-
 }

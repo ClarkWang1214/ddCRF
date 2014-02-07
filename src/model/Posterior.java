@@ -16,41 +16,49 @@ public class Posterior {
   /**
    *  The number of observations of each state (after the burnin period)
    */
-  public static ArrayList<Integer> counts = new ArrayList<Integer>();
+  private ArrayList<Integer> counts;
   
   /**
    *  The estimated probability (normalized counts) of each observed state 
    *  in the estimated joint distribution.
    */
-  public static ArrayList<Double> probabilities = new ArrayList<Double>();
+  private ArrayList<Double> probabilities;
     
   /**
    *  The possible states. 
    */
-  public static ArrayList<SamplerState> states = new ArrayList<SamplerState>();
+  private ArrayList<SamplerState> states;
 
   /**
    *  The burnin period (number of initial samples to ignore)
    */
-  public static int burnInPeriod;
+  private int burnInPeriod;
 
   /**
    * The number of Gibbs samples computed
    */
-  public static int numSamples;
+  private int numSamples;
 
   /**
    * The normalizing constant (should be numSamples - burnInPeriod, but as a sanity check, keep store it)
    */
-  public static int normConstant;
+  private int normConstant;
+
+  /**
+   * The model hyperparameters
+   */
+  private HyperParameters hyperParameters;
+
+  public Posterior(HyperParemeters hyperparameters) {
+    this.hyperparameters = hyperparameters;
+  }
 
 
   /**
    * Estimates the probabilities over states discovered by the sampler
    */
-  public static void estimatePosterior(int b)
+  public void estimatePosterior()
   {
-    burnInPeriod = b;
     ArrayList<SamplerState> states = SamplerStateTracker.samplerStates;
     numSamples = states.size();
 
@@ -90,14 +98,24 @@ public class Posterior {
 
   }
   
-  // public static SamplerState getMapEstimate() {
-
-  // }
+  /**
+   * Return the Sampler state with largest posterior density
+   * Instead of counting the state that appears most frequently in our samples,
+   * for high dimensional problems we get the posterior density of each state,
+   * and return the state that maximizes this.
+   */
+  public SamplerState getMapEstimateDensity() {
+    ArrayList<SamplerState> states = SamplerStateTracker.samplerStates;
+    double maxLogLik = -10000000000000000000.0;
+    for (SamplerState s : states) {
+      Theta t = new Theta(s, );
+    }
+  }
   
   /**
    * Prints the object state
    */
-  public static void prettyPrint(PrintStream out)
+  public void prettyPrint(PrintStream out)
   {
     out.println("Total number of states are "+probabilities.size());
     out.println("Probabilities: ");
@@ -108,14 +126,5 @@ public class Posterior {
     out.println(probs);
   }  
 
-
-  /* 
-   * Here we estimate the observed draw from the Dirichlet for each table for each unique sampler state.  
-   * That is, we would like to get the multinomial probability over observations for each table.  This is basically
-   * just word counts, plus pseudocounts
-   */
-  // public static void estimateEmissionProb() {
-
-  // }
 
 }

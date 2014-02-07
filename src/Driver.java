@@ -59,6 +59,8 @@ public class Driver {
 				System.out.println("Iteration "+i+" done");
 				System.out.println("Took "+(System.currentTimeMillis() - init_time_iter)/(double)1000+" seconds");
 				SamplerStateTracker.returnCurrentSamplerState().prettyPrint(System.out);
+				double logLik = l.computeFullLogLikelihood(SamplerStateTracker.returnCurrentSamplerState());
+				System.out.println("Log likelihood: " + logLik);
 				System.out.println("----------------------");
 			}
 			

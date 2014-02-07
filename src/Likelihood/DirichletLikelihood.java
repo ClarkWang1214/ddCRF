@@ -11,6 +11,7 @@ import java.util.HashSet;
 import org.apache.commons.math3.special.Gamma;
 
 import model.HyperParameters;
+import model.SamplerState;
 
 import data.Data;
 
@@ -181,6 +182,7 @@ public class DirichletLikelihood extends Likelihood {
    * Returns the full log likelihood of the model at the given sampler state
    * @return
    */
+  @Override
   public double computeFullLogLikelihood(SamplerState s) {
     double ll = 0;
     HashSet<Integer> topics = s.getAllTopics();
