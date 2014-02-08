@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -72,7 +73,7 @@ public class GibbsSampler {
 	 * 
 	 * @param l
 	 */	
-	public static void doSampling(Likelihood l) 
+	public static void doSampling(Likelihood l, boolean sampleTopics) 
 	{
 		//create the copy of the latest sampler state and assign it to the new one
 		SamplerState s = SamplerStateTracker.samplerStates.get(SamplerStateTracker.current_iter).copy();
@@ -87,27 +88,41 @@ public class GibbsSampler {
 				emptyTables.add(new LinkedList<Integer>());
 		
 		//Sampling for each list (city/document)
-		
-			for(int i=0;i<all_observations.size();i++)
-			{
-				LOGGER.log(Level.FINE, "Starting to sample for list "+i);			
-				ArrayList<Double> list = all_observations.get(i); //each city in our case
-				
-				//Get the set of test indices, those which we should ignore while sampling
-				//HashMap<Integer,Integer> venue_ids = Test.getTest_venue_ids(i);
-				//HashMap<Integer,Integer> venue_ids = t.getTestVenueIdsForCity(i);
+		for(int i=0;i<all_observations.size();i++)
+		{
+			LOGGER.log(Level.FINE, "Starting to sample for list "+i);			
+			ArrayList<Double> list = all_observations.get(i); //each city in our case
+			
+			//Get the set of test indices, those which we should ignore while sampling
+			//HashMap<Integer,Integer> venue_ids = Test.getTest_venue_ids(i);
+			//HashMap<Integer,Integer> venue_ids = t.getTestVenueIdsForCity(i);
 
-				//For each observation in the list sample customer assignments (for each venue in a city)				
-				for(int j=0;j<list.size();j++) //Concern: No of observation in a list should not cross the size of integers
-				{				
-					//sample customer link for this observation
-					//if(venue_ids.get(j)==null) //if it is not a part of the test sample.
-						//sampleLink(j,i,l,venue_ids); //sending the list (city) and the index so that the observation can be accessed
-					sampleLink(j,i,l);
-				}
-				LOGGER.log(Level.FINE, "Done for list "+i);
-				//System.out.println("Done for list "+i);
+			//For each observation in the list sample customer assignments (for each venue in a city)				
+			for(int j=0;j<list.size();j++) //Concern: No of observation in a list should not cross the size of integers
+			{				
+				//sample customer link for this observation
+				//if(venue_ids.get(j)==null) //if it is not a part of the test sample.
+					//sampleLink(j,i,l,venue_ids); //sending the list (city) and the index so that the observation can be accessed
+				sampleLink(j,i,l);
+			}
+			LOGGER.log(Level.FINE, "Done for list "+i);
+			//System.out.println("Done for list "+i);
 		}
+
+		if (sampleTopics) {
+			//Sampling for tables in each list (city/document)
+			ArrayList<HashMap<Integer, HashSet<Integer>>> customersAtTableList = s.getCustomersAtTableList();
+			for(int i=0; i<all_observations.size(); i++) {
+				HashMap<Integer, HashSet<Integer>> customersAtTable = customersAtTableList.get(i);
+				Set<Integer> tables = customersAtTable.keySet();
+				for (Integer table : tables) {
+					if (customersAtTable.get(table) != null && customersAtTable.get(table).size() > 0) {
+						CRPGibbsSampler.sampleTopic(l, table, i, false);
+					}
+				}
+			}	
+		}
+
 	}
 	
 	/**
@@ -298,6 +313,9 @@ public class GibbsSampler {
 		int customer_assignment_index = indexes.get(sample); //this is the customer assignment in this iteration, phew!		
 		LOGGER.log(Level.FINE, "The sampled link for customer indexed "+index +" of list "+list_index+" is "+customer_assignment_index);
 		
+		// add to the prior component to sum of log priors
+		s.setSumOfLogPriors( s.getSumOfLogPriors() + Math.log(priors.get(customer_assignment_index)) );
+
 		int assigned_table = s.get_t(customer_assignment_index, list_index);
 		s.setC(customer_assignment_index, index, list_index); //setting the customer assignment
 		if(assigned_table!=table_id) //this is a join of two tables 
@@ -310,6 +328,15 @@ public class GibbsSampler {
 
 			//First, update the new assigned table to include the table members of the customer's table
 			HashSet<Integer> hs_orig_members_in_new_table = new HashSet<Integer>(s.getCustomersAtTable(assigned_table, list_index));
+			
+			// A simple heuristic to avoid sampling a topic if the tables are too small
+			int sampleNewTopic = 0; // this will be zero if we sampleNewTopic, 1 if we retain original topic, and 2 if we pick new table's topic
+			if (hs_orig_members_in_new_table.size() <= 2) 
+ 				sampleNewTopic = 1;
+ 			if (orig_table_members.size() <= 2)
+ 				sampleNewTopic = 2;
+			
+			// now add the old members to the new table
 			for(int i=0;i<orig_table_members.size();i++)
 				hs_orig_members_in_new_table.add(orig_table_members.get(i));
 
@@ -331,7 +358,8 @@ public class GibbsSampler {
 			emptyTables.get(list_index).add(table_id);
 
 			//Now sample a new topic for the new table
-			CRPGibbsSampler.sampleTopic(ll, assigned_table, list_index);
+			if (sampleNewTopic == 0)
+				CRPGibbsSampler.sampleTopic(ll, assigned_table, list_index, true);
 		}		
 		LOGGER.log(Level.FINE, " DONE Sampling link for index "+index+" list_index "+list_index);
 	}

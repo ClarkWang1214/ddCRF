@@ -1,8 +1,10 @@
 package model;
 
+import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 import java.io.PrintStream;
 
@@ -16,18 +18,18 @@ public class Posterior {
   /**
    *  The number of observations of each state (after the burnin period)
    */
-  private ArrayList<Integer> counts;
+  private ArrayList<Integer> counts = new ArrayList<Integer>();
   
   /**
    *  The estimated probability (normalized counts) of each observed state 
    *  in the estimated joint distribution.
    */
-  private ArrayList<Double> probabilities;
+  private ArrayList<Double> probabilities = new ArrayList<Double>();
     
   /**
    *  The possible states. 
    */
-  private ArrayList<SamplerState> states;
+  private ArrayList<SamplerState> states = new ArrayList<SamplerState>();
 
   /**
    *  The burnin period (number of initial samples to ignore)
@@ -49,8 +51,9 @@ public class Posterior {
    */
   private HyperParameters hyperParameters;
 
-  public Posterior(HyperParemeters hyperparameters) {
-    this.hyperparameters = hyperparameters;
+  public Posterior(int burnInPeriod, HyperParameters hyperParameters) {
+    this.burnInPeriod = burnInPeriod;
+    this.hyperParameters = hyperParameters;
   }
 
 
@@ -104,13 +107,19 @@ public class Posterior {
    * for high dimensional problems we get the posterior density of each state,
    * and return the state that maximizes this.
    */
-  public SamplerState getMapEstimateDensity() {
-    ArrayList<SamplerState> states = SamplerStateTracker.samplerStates;
-    double maxLogLik = -10000000000000000000.0;
-    for (SamplerState s : states) {
-      Theta t = new Theta(s, );
-    }
-  }
+  // public SamplerState getMapEstimateDensity() {
+  //   ArrayList<SamplerState> states = SamplerStateTracker.samplerStates;
+  //   double maxLogDensity = -10000000000000000000.0;
+  //   SamplerState maxLogDensityState = null;
+  //   for (SamplerState s : states) {
+  //     double logDensity = s.getLogPosteriorDensity();
+  //     if (logDensity > maxLogDensity) {
+  //       maxLogDensity = logDensity;
+  //       maxLogDensityState = s;
+  //     }
+  //   }
+  //   return maxLogDensityState;
+  // }
   
   /**
    * Prints the object state

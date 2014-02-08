@@ -20,9 +20,10 @@ public class CRPGibbsSampler {
 	 * @param l
 	 * @param table_index
 	 * @param list_index
+	 * @param inDDCRPRun is true if the call to sampleTopic is made from within ddCRP
 	 * @return
 	 */
-	public static int sampleTopic(Likelihood l,int tableId,int listIndex)
+	public static int sampleTopic(Likelihood l,int tableId,int listIndex, boolean inDDCRPRun)
 	{
 		SamplerState currentState = SamplerStateTracker.returnCurrentSamplerState();
 		ArrayList<Double> observationsAtTable = currentState.getObservationAtTable(tableId, listIndex); //observations of customers sitting at the table. 
@@ -74,8 +75,14 @@ public class CRPGibbsSampler {
 
 		//Now finally sample for a topic
 		int sampledTopicIndex = Util.sample(posterior);
-		
 		int sampledTopicId = indexes.get(sampledTopicIndex); //actual topic id
+		
+		// add to the prior component to sum of log priors
+		if (sampledTopicId == maxTopicId+1)
+			currentState.setSumOfLogPriors( currentState.getSumOfLogPriors() + logBeta );
+		else
+			currentState.setSumOfLogPriors( currentState.getSumOfLogPriors() + Math.log(numTablesPerTopic.get(sampledTopicId)) );
+
 		if(sampledTopicId == maxTopicId+1) //The table sat chose to sit in a new topic table ie new topic sampled
 		{
 			currentState.setMaxTopicId(maxTopicId+1); //increase the maxTopicId

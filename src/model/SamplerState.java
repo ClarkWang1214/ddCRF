@@ -10,6 +10,8 @@ import org.la4j.matrix.sparse.CRSMatrix;
 
 import data.Data;
 
+import Likelihood.Likelihood;
+
 
 /**
  * This class is for storing the state of the sampler for an iteration.
@@ -85,10 +87,24 @@ public class SamplerState {
 	private HashMap<Integer, HashSet<CityTable>> tablesAssignedToTopic = new HashMap<Integer, HashSet<CityTable>>();
 
 	/**
+	 * For each sampled latent variable of this state, sum up the prior component
+	 * of the variable 
+	 */
+	private double sumOfLogPriors = 0.0;
+
+	/**
 	 * 
 	 * Getters and Setters
 	 * 
 	 */
+
+	public double getSumOfLogPriors() {
+		return sumOfLogPriors;
+	}
+
+	public void setSumOfLogPriors(double sumOfLogPriors) {
+		this.sumOfLogPriors = sumOfLogPriors;
+	}
 	
 	public HashMap<CityTable, Integer> getTopicAtTable() {
 		return topicAtTable;
@@ -656,4 +672,14 @@ public class SamplerState {
 		return observationsForTopic;
 	}
 
+	/**
+	 * Returns the log posterior density of the sampler state at the observed data points
+	 * @param liklihood
+	 */
+	public double getLogPosteriorDensity(Likelihood l) {
+		double lik = l.computeFullLogLikelihood(this);
+		System.out.println("  --FullLogLikelihood: " + lik);
+		System.out.println("  --sumOfLogPriors: " + sumOfLogPriors);
+		return sumOfLogPriors + l.computeFullLogLikelihood(this);
+	} 
 }

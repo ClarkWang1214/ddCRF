@@ -6,6 +6,7 @@ import model.HyperParameters;
 import model.SamplerStateTracker;
 import model.SamplerState;
 import model.Theta;
+import model.Posterior;
 import sampler.GibbsSampler;
 import util.Util;
 import Likelihood.DirichletLikelihood;
@@ -54,11 +55,14 @@ public class Driver {
 			for(int i=1;i<=SamplerStateTracker.max_iter;i++)
 			{
 				long init_time_iter = System.currentTimeMillis();
-				GibbsSampler.doSampling(l);
+				GibbsSampler.doSampling(l, i>1);
 				System.out.println("----------------------");
 				System.out.println("Iteration "+i+" done");
 				System.out.println("Took "+(System.currentTimeMillis() - init_time_iter)/(double)1000+" seconds");
 				SamplerStateTracker.returnCurrentSamplerState().prettyPrint(System.out);
+				double posteriorLogPrior = SamplerStateTracker.returnCurrentSamplerState().getLogPosteriorDensity(l);
+				System.out.println("Posterior log prior: " + posteriorLogPrior);
+
 				double logLik = l.computeFullLogLikelihood(SamplerStateTracker.returnCurrentSamplerState());
 				System.out.println("Log likelihood: " + logLik);
 				System.out.println("----------------------");
@@ -75,6 +79,8 @@ public class Driver {
 			// TEMP: just a quick test of theta estimate on the last state
 
 			SamplerState s = SamplerStateTracker.returnCurrentSamplerState();
+			// Posterior p = new Posterior(0, h);
+			// SamplerState sMAP = p.getMapEstimateDensity();
 			Theta t = new Theta(s, h);
 			t.estimateThetas();
 			Util.outputTopKWordsPerTopic(t, 15);
