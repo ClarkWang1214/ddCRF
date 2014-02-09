@@ -140,7 +140,8 @@ public class GibbsSampler {
 		//get the table id where this observation is sitting
 		SamplerState s = SamplerStateTracker.samplerStates.get(SamplerStateTracker.current_iter);
 		int table_id = s.get_t(index, list_index); //the table id where the observation is sitting
-		
+		s.setSumOfLogPriors(0.0);
+
 		// TO CHANGE /////////////////////////////////
 
 		//get all the customers who are sitting in the table.

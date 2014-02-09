@@ -91,7 +91,7 @@ public class SamplerState {
 	 * For each sampled latent variable of this state, sum up the prior component
 	 * of the variable 
 	 */
-	private double sumOfLogPriors = 0.0;
+	private double sumOfLogPriors = -1000000000000000000000.0;
 
 	/**
 	 * 
@@ -348,7 +348,17 @@ public class SamplerState {
 		}
 		for(int i=0; i<customersAtTableList.size(); i++)
 		{
-			HashMap<Integer,HashSet<Integer>> customersAtTableCopy = new HashMap<Integer,HashSet<Integer>>(customersAtTableList.get(i));
+			HashMap<Integer,HashSet<Integer>> customersAtTableOld = customersAtTableList.get(i);
+			HashMap<Integer,HashSet<Integer>> customersAtTableCopy = new HashMap<Integer,HashSet<Integer>>();
+			for (Entry<Integer, HashSet<Integer>> entry : customersAtTableOld.entrySet()) {
+	    	Integer key = new Integer(entry.getKey());
+	    	HashSet<Integer> oldValue = entry.getValue();
+	    	HashSet<Integer> newValue = null;
+	    	if (oldValue != null)
+		    	newValue = new HashSet<Integer>(oldValue);
+
+	    	customersAtTableCopy.put(key, newValue);
+			}
 			newCustomersAtTableList.add(customersAtTableCopy);
 		}
 		s.c = new_c;
@@ -378,8 +388,8 @@ public class SamplerState {
 
  		HashMap<Integer, HashSet<CityTable>> newTablesAssignedToTopic = new HashMap<Integer, HashSet<CityTable>>();
  		for (Entry<Integer, HashSet<CityTable>> entry : tablesAssignedToTopic.entrySet()) {
-	    CityTable key = new Integer(entry.getKey());
-	    HashSet<CityTable> oldValue = new Integer(entry.getValue());
+	    Integer key = new Integer(entry.getKey());
+	    HashSet<CityTable> oldValue = new HashSet<CityTable>(entry.getValue());
 	    HashSet<CityTable> newValue = new HashSet<CityTable>();
 	    for (CityTable ct : oldValue) {
 	    	newValue.add(new CityTable(ct));
