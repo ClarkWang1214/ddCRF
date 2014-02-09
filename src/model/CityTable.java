@@ -16,6 +16,12 @@ public class CityTable {
 		this.cityId = cityId;
 		this.tableId = tableId;
 	}
+
+	public CityTable(CityTable ct) {
+		this.cityId = new Integer(ct.getCityId());
+		this.tableId = new Integer(ct.getTableId());
+	}
+
 	public CityTable(){}
 	
 	public int getCityId() {

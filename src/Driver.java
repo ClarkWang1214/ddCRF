@@ -61,7 +61,7 @@ public class Driver {
 				System.out.println("Took "+(System.currentTimeMillis() - init_time_iter)/(double)1000+" seconds");
 				SamplerStateTracker.returnCurrentSamplerState().prettyPrint(System.out);
 				double posteriorLogPrior = SamplerStateTracker.returnCurrentSamplerState().getLogPosteriorDensity(l);
-				System.out.println("Posterior log prior: " + posteriorLogPrior);
+				System.out.println("Posterior log density: " + posteriorLogPrior);
 
 				double logLik = l.computeFullLogLikelihood(SamplerStateTracker.returnCurrentSamplerState());
 				System.out.println("Log likelihood: " + logLik);
@@ -78,10 +78,10 @@ public class Driver {
 	
 			// TEMP: just a quick test of theta estimate on the last state
 
-			SamplerState s = SamplerStateTracker.returnCurrentSamplerState();
-			// Posterior p = new Posterior(0, h);
-			// SamplerState sMAP = p.getMapEstimateDensity();
-			Theta t = new Theta(s, h);
+			// SamplerState s = SamplerStateTracker.returnCurrentSamplerState();
+			Posterior p = new Posterior(0, h);
+			SamplerState sMAP = p.getMapEstimateDensity(l);
+			Theta t = new Theta(sMAP, h);
 			t.estimateThetas();
 			Util.outputTopKWordsPerTopic(t, 15);
 

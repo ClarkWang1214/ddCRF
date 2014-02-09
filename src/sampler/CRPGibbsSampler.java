@@ -27,6 +27,7 @@ public class CRPGibbsSampler {
 	{
 		SamplerState currentState = SamplerStateTracker.returnCurrentSamplerState();
 		ArrayList<Double> observationsAtTable = currentState.getObservationAtTable(tableId, listIndex); //observations of customers sitting at the table. 
+		
 		//For this table (which we are sampling for), they presently do not belong to any topic, since we are sampling for one
 		//hence, removing the entries from all datastructures
 		CityTable ct = new CityTable(listIndex, tableId);
@@ -37,12 +38,13 @@ public class CRPGibbsSampler {
 			currentState.removeTableFromTopic(k_old, ct); //removing the table from the corresponding topic
 			currentState.decreaseTableCountsForTopic(k_old); //decrementing the table count for k_old
 		}
-		
+
 		//Now setup the log-posterior for sampling
 		HashMap<Integer,Integer> numTablesPerTopic = currentState.getM();
 		Set<Entry<Integer,Integer>> allTopicsToNumTablesMapping = numTablesPerTopic.entrySet();
 		Iterator<Entry<Integer,Integer>> iter = allTopicsToNumTablesMapping.iterator();
 		ArrayList<Double> posterior = new ArrayList<Double>(); //this will hold all the posterior probabilities
+		ArrayList<Double> prior = new ArrayList<Double>();
 		ArrayList<Integer> indexes = new ArrayList<Integer>();
 		Double maxLogPosterior = new Double(-1000000000.0);
 		while(iter.hasNext()) //iterating over all topics
@@ -50,38 +52,49 @@ public class CRPGibbsSampler {
 			Entry<Integer,Integer> mapEntry = iter.next();
 			int topicId = mapEntry.getKey();
 			int numTables = mapEntry.getValue(); //this is the prior for CRP
-			double logPrior = Math.log(numTables);
 			ArrayList<Double> allObservationFromTopic = currentState.getAllObservationsForTopic(topicId);
 			double logConditionalLikelihood = l.computeConditionalLogLikelihood(observationsAtTable, allObservationFromTopic);
-			double logPosteriorProb = logPrior + logConditionalLikelihood;
-			if (logPosteriorProb > maxLogPosterior)
-				maxLogPosterior = logPosteriorProb;
-			posterior.add(logPosteriorProb);
+			posterior.add(logConditionalLikelihood);
+			prior.add(new Double(numTables));
 			indexes.add(topicId); //to keep track of which topic_id got selected.
 		}
 		//now for self-linkage
-		double logBeta = Math.log(l.getHyperParameters().getSelfLinkProbCRP());
-		double logMarginalLikelihood = l.computeConditionalLogLikelihood(observationsAtTable, new ArrayList<Double>()); //this is marginal likelihood, instead of conditional
-		double logPosteriorProb = logBeta + logMarginalLikelihood;
-		if (logPosteriorProb > maxLogPosterior)
-			maxLogPosterior = logPosteriorProb;		
-		posterior.add(logPosteriorProb);
+		double beta = l.getHyperParameters().getSelfLinkProbCRP();
+		double logConditionalLikelihood = l.computeConditionalLogLikelihood(observationsAtTable, new ArrayList<Double>()); //this is marginal likelihood, instead of conditional	
+		posterior.add(logConditionalLikelihood);
 		int maxTopicId = currentState.getMaxTopicId();
 		indexes.add(maxTopicId+1); //incrementing maxTopicId to account for the new topic
-		
-		// Subtract the maxLogPosterior from each term of posterior (avoid overflows), then exponentiate
+		prior.add(new Double(beta));
+
+		// normalize the prior vector, and take the log of each term
+		double sum = 0.0;
+		for (Double p : prior) 
+			sum += p;
+		for (int i=0; i<prior.size(); i++) 
+			prior.set(i, Math.log(prior.get(i) / sum));
+
+		// add the prior vector to the posterior (which currently contains only the likeliehood)
+		// also find the maxLogPosterior 
+		for (int i=0; i<prior.size(); i++) {
+			double logPosteriorProb = posterior.get(i) + prior.get(i);
+			posterior.set(i, logPosteriorProb);
+			if (logPosteriorProb > maxLogPosterior)
+				maxLogPosterior = logPosteriorProb;
+		}
+
+		// Subtract the maxLogPosterior from each term of posterior (to avoid overflows), 
+		// and then exponentiate (basically rescaling everything by maxLogPosterior)
 		for (int i=0; i<posterior.size(); i++)
 			posterior.set(i, Math.exp(posterior.get(i) - maxLogPosterior));
 
 		//Now finally sample for a topic
 		int sampledTopicIndex = Util.sample(posterior);
 		int sampledTopicId = indexes.get(sampledTopicIndex); //actual topic id
-		
-		// add to the prior component to sum of log priors
-		if (sampledTopicId == maxTopicId+1)
-			currentState.setSumOfLogPriors( currentState.getSumOfLogPriors() + logBeta );
-		else
-			currentState.setSumOfLogPriors( currentState.getSumOfLogPriors() + Math.log(numTablesPerTopic.get(sampledTopicId)) );
+		double sampledLogPrior = prior.get(sampledTopicIndex);
+
+		// add to the prior component to sum of log priors (if we're not being called from sampleLink)
+		if (!inDDCRPRun) 
+			currentState.setSumOfLogPriors( currentState.getSumOfLogPriors() + sampledLogPrior );
 
 		if(sampledTopicId == maxTopicId+1) //The table sat chose to sit in a new topic table ie new topic sampled
 		{
@@ -93,7 +106,6 @@ public class CRPGibbsSampler {
 		currentState.addTableCountsForTopic(sampledTopicId);
 		
 		return sampledTopicId;
-		
 	}
 	
 	/**

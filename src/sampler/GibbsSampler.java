@@ -329,12 +329,18 @@ public class GibbsSampler {
 			//First, update the new assigned table to include the table members of the customer's table
 			HashSet<Integer> hs_orig_members_in_new_table = new HashSet<Integer>(s.getCustomersAtTable(assigned_table, list_index));
 			
-			// A simple heuristic to avoid sampling a topic if the tables are too small
-			int sampleNewTopic = 0; // this will be zero if we sampleNewTopic, 1 if we retain original topic, and 2 if we pick new table's topic
-			if (hs_orig_members_in_new_table.size() <= 2) 
- 				sampleNewTopic = 1;
- 			if (orig_table_members.size() <= 2)
- 				sampleNewTopic = 2;
+			/*
+			 * A simple heuristic to avoid sampling topics too frequently in the ddCRP round.
+			 * We implement the following policy. If both joining tables are large (have greater
+			 * than a fixed threshold of customers seated at them), then we sample a new
+			 * topic for the joined table. Otherwise the joined table will retain the topic
+			 * of the table being joined to but the currently sampled link. 
+			 * The policy of retaining the topic of the joined-to table is consistent
+			 * from the posterior sampling computation that we've implement. Sampling a new
+			 * topic if both tables are large, let's future sampled links in the ddCRP round
+			 * benefit from knew information about the topic structure.
+			 */
+			boolean sampleNewTopicFlag = (hs_orig_members_in_new_table.size() >= 8 && orig_table_members.size() >= 8);
 			
 			// now add the old members to the new table
 			for(int i=0;i<orig_table_members.size();i++)
@@ -358,8 +364,9 @@ public class GibbsSampler {
 			emptyTables.get(list_index).add(table_id);
 
 			//Now sample a new topic for the new table
-			if (sampleNewTopic == 0)
+			if (sampleNewTopicFlag)
 				CRPGibbsSampler.sampleTopic(ll, assigned_table, list_index, true);
+
 		}		
 		LOGGER.log(Level.FINE, " DONE Sampling link for index "+index+" list_index "+list_index);
 	}

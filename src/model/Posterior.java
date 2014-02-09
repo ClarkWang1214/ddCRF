@@ -1,5 +1,7 @@
 package model;
 
+import Likelihood.Likelihood;
+
 import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Map;
@@ -7,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 import java.io.PrintStream;
+
 
 /**
  * This class will store the estimated posterior from the finished Gibbs samples.
@@ -107,19 +110,19 @@ public class Posterior {
    * for high dimensional problems we get the posterior density of each state,
    * and return the state that maximizes this.
    */
-  // public SamplerState getMapEstimateDensity() {
-  //   ArrayList<SamplerState> states = SamplerStateTracker.samplerStates;
-  //   double maxLogDensity = -10000000000000000000.0;
-  //   SamplerState maxLogDensityState = null;
-  //   for (SamplerState s : states) {
-  //     double logDensity = s.getLogPosteriorDensity();
-  //     if (logDensity > maxLogDensity) {
-  //       maxLogDensity = logDensity;
-  //       maxLogDensityState = s;
-  //     }
-  //   }
-  //   return maxLogDensityState;
-  // }
+  public SamplerState getMapEstimateDensity(Likelihood l) {
+    ArrayList<SamplerState> states = SamplerStateTracker.samplerStates;
+    double maxLogDensity = -10000000000000000000.0;
+    SamplerState maxLogDensityState = null;
+    for (SamplerState s : states) {
+      double logDensity = s.getLogPosteriorDensity(l);
+      if (logDensity > maxLogDensity) {
+        maxLogDensity = logDensity;
+        maxLogDensityState = s;
+      }
+    }
+    return maxLogDensityState;
+  }
   
   /**
    * Prints the object state

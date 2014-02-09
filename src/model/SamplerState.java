@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.la4j.matrix.sparse.CRSMatrix;
 
@@ -365,12 +366,27 @@ public class SamplerState {
 		s.K = new Long(K);
 		s.m = newM;
 		s.maxTopicId = maxTopicId;
-		// s.tablesAssignedToTopic = newTablesAssignedToTopic;
-		// s.topicAtTable = newTopicAtTable;
 
-		// Just copy reference for now to see if it is working
-		s.topicAtTable = topicAtTable;
-  	s.tablesAssignedToTopic = tablesAssignedToTopic;
+		// copy the topic at table structure
+		HashMap<CityTable, Integer> newTopicAtTable = new HashMap<CityTable, Integer>();
+		for (Entry<CityTable, Integer> entry : topicAtTable.entrySet()) {
+	    CityTable key = new CityTable(entry.getKey());
+	    Integer value = new Integer(entry.getValue());
+	    newTopicAtTable.put(key, value);
+		}
+		s.topicAtTable = newTopicAtTable;
+
+ 		HashMap<Integer, HashSet<CityTable>> newTablesAssignedToTopic = new HashMap<Integer, HashSet<CityTable>>();
+ 		for (Entry<Integer, HashSet<CityTable>> entry : tablesAssignedToTopic.entrySet()) {
+	    CityTable key = new Integer(entry.getKey());
+	    HashSet<CityTable> oldValue = new Integer(entry.getValue());
+	    HashSet<CityTable> newValue = new HashSet<CityTable>();
+	    for (CityTable ct : oldValue) {
+	    	newValue.add(new CityTable(ct));
+	    }
+	    newTablesAssignedToTopic.put(key, newValue);
+ 		}
+  	s.tablesAssignedToTopic = newTablesAssignedToTopic;
 
 		return s;
 	}
