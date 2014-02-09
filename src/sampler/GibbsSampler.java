@@ -341,7 +341,7 @@ public class GibbsSampler {
 			 * topic if both tables are large, let's future sampled links in the ddCRP round
 			 * benefit from knew information about the topic structure.
 			 */
-			boolean sampleNewTopicFlag = (hs_orig_members_in_new_table.size() >= 8 && orig_table_members.size() >= 8);
+			boolean sampleNewTopicFlag = (hs_orig_members_in_new_table.size() >= 10 && orig_table_members.size() >= 10);
 			
 			// now add the old members to the new table
 			for(int i=0;i<orig_table_members.size();i++)

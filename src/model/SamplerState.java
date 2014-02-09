@@ -704,8 +704,6 @@ public class SamplerState {
 	 */
 	public double getLogPosteriorDensity(Likelihood l) {
 		double lik = l.computeFullLogLikelihood(this);
-		System.out.println("  --FullLogLikelihood: " + lik);
-		System.out.println("  --sumOfLogPriors: " + sumOfLogPriors);
 		return sumOfLogPriors + l.computeFullLogLikelihood(this);
 	} 
 }

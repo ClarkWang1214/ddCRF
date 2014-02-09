@@ -113,14 +113,18 @@ public class Posterior {
   public SamplerState getMapEstimateDensity(Likelihood l) {
     ArrayList<SamplerState> states = SamplerStateTracker.samplerStates;
     double maxLogDensity = -10000000000000000000.0;
+    int maxLogDensityIndex = -1;
     SamplerState maxLogDensityState = null;
-    for (SamplerState s : states) {
+    for (int i=0; i<states.size(); i++) {
+      SamplerState s = states.get(i);
       double logDensity = s.getLogPosteriorDensity(l);
       if (logDensity > maxLogDensity) {
         maxLogDensity = logDensity;
         maxLogDensityState = s;
+        maxLogDensityIndex = i;
       }
     }
+    System.out.println("MAP Estimate choosing state at iteration " + maxLogDensityIndex+1);
     return maxLogDensityState;
   }
   
