@@ -351,6 +351,7 @@ public class GibbsSampler {
 			//Then, update the orig_table to null
 			s.setCustomersAtTable(null,table_id, list_index);
 
+
 			//And remove the topic at the old table
 			CityTable ct = new CityTable(list_index, table_id);
 			Integer oldTopic = s.getTopicForCityTable(ct); //old topic for the table
