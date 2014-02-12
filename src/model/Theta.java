@@ -263,4 +263,8 @@ public class Theta {
 
     } 
   }
+
+  public double observationProbabilityInTopic(Integer observation, Integer topic) {
+    return topicToThetaMap.get(topic).get(observation);
+  }
 }

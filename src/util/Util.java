@@ -132,15 +132,16 @@ public class Util {
 		{
 			BufferedReader reader = new BufferedReader(new FileReader(cityNamesFile));			
 			String line;
-			 while((line = reader.readLine())!=null)
-			 {
-				 if(line!=null)
-				 {
-					 String [] splits = line.split(",");
-					 cityNames.add(splits[1]);
-				 }
-			 }
-			 reader.close();
+			while((line = reader.readLine())!=null) {
+				if(line!=null) {
+					String [] splits = line.split(",");
+					if (splits[1] == "\"Washington")
+						cityNames.add("\"Washington, D.C.\"");
+					else
+						cityNames.add(splits[1]);
+				}
+			}
+			reader.close();
 		}catch(FileNotFoundException ex){
 			ex.printStackTrace();
 		}catch(IOException ex){

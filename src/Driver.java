@@ -12,7 +12,9 @@ import util.Util;
 import Likelihood.DirichletLikelihood;
 import Likelihood.Likelihood;
 import data.Data;
-
+import test.TestUniform;
+import test.Predictor;
+import test.TestSample;
 
 public class Driver {
 	
@@ -84,6 +86,18 @@ public class Driver {
 			Theta t = new Theta(sMAP, h);
 			t.estimateThetas();
 			Util.outputTopKWordsPerTopic(t, 15);
+
+			// Run a test
+			System.out.println("Running a test");
+			TestUniform test = new TestUniform(10);
+			test.generateTestSamples();
+			ArrayList<ArrayList<TestSample>> testSamples = test.getTestSamples();
+			for (ArrayList<TestSample> citySamples : testSamples) {
+				for (TestSample sample : citySamples) {
+					Predictor predictor = new Predictor(p, l, sample);
+					System.out.println("  predicted probability of true observation: " + predictor.computeProbabilityForSample());
+				}
+			}
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

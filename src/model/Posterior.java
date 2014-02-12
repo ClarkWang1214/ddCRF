@@ -59,7 +59,6 @@ public class Posterior {
     this.hyperParameters = hyperParameters;
   }
 
-
   /**
    * Estimates the probabilities over states discovered by the sampler
    */
@@ -124,7 +123,7 @@ public class Posterior {
         maxLogDensityIndex = i;
       }
     }
-    System.out.println("MAP Estimate choosing state at iteration " + maxLogDensityIndex+1);
+    System.out.println("MAP Estimate choosing state at iteration " + maxLogDensityIndex);
     return maxLogDensityState;
   }
   
