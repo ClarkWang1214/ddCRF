@@ -1,6 +1,8 @@
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashSet;
+
 
 import model.HyperParameters;
 import model.SamplerStateTracker;
@@ -42,10 +44,17 @@ public class Driver {
 			System.out.println("Self Linkage Prob is "+alpha);
 			HyperParameters h = new HyperParameters(vocab_size, dirichlet, alpha,crp_alpha);
 			
+			// generate some test samples
+			TestUniform test = new TestUniform(10);
+			test.generateTestSamples();
+			ArrayList<ArrayList<TestSample>> testSamples = test.getTestSamples();
+
 			ArrayList<ArrayList<Double>> list_observations = Data.getObservations();	
 			SamplerStateTracker.initializeSamplerState(list_observations);
 			Likelihood l = new DirichletLikelihood(h);
-			
+			// TODO FIX THIS!!!!!!!
+			// l.setTestSamples(new HashSet<TestSample>(testSamples));		
+
 			SamplerStateTracker.max_iter = Integer.parseInt(args[0]);
 			System.out.println("Gibbs Sampler will run for "+SamplerStateTracker.max_iter+" iterations.");
 			
@@ -89,9 +98,6 @@ public class Driver {
 
 			// Run a test
 			System.out.println("Running a test");
-			TestUniform test = new TestUniform(10);
-			test.generateTestSamples();
-			ArrayList<ArrayList<TestSample>> testSamples = test.getTestSamples();
 			for (ArrayList<TestSample> citySamples : testSamples) {
 				for (TestSample sample : citySamples) {
 					Predictor predictor = new Predictor(p, l, sample);

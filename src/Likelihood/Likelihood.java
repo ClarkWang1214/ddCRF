@@ -1,6 +1,8 @@
 package Likelihood;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import test.TestSample;
 
 import model.HyperParameters;
 import model.SamplerState;
@@ -15,6 +17,19 @@ import model.SamplerState;
 abstract public class Likelihood {
 	
   protected HyperParameters hyperParameters;  // Need to abstract the notion of Hyperparameters.  Currently its for Dir.
+
+  protected HashSet<TestSample> testSamples = new HashSet<TestSample>();
+
+  public HashSet<TestSample> getTestSamples() {
+    return testSamples;
+  }
+
+  // NOTE: THIS ACTUALLY DOESN'T MAKE ANY SENSE. THE LIKELIHOOD CLASS ISN'T ACTUALLY GETTING THE OBSERVATIONS TOGETHER
+  // WE SHOULD PUT THE TESTSAMPLES HASHSET INSIDE THE SAMPLER STATE
+
+  public void setTestSamples(HashSet<TestSample> testSamples) {
+    this.testSamples = testSamples;
+  }
 
   public HyperParameters getHyperParameters() {
     return(hyperParameters);

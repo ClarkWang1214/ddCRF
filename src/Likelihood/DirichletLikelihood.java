@@ -23,7 +23,7 @@ import data.Data;
 public class DirichletLikelihood extends Likelihood {
 
 	private static HashMap<Double,Double> cached_gamma_values = new HashMap<Double,Double>();
-	
+
 	public DirichletLikelihood(HyperParameters h) {
 		hyperParameters = h;
 	}
