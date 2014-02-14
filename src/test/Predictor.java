@@ -146,8 +146,7 @@ public class Predictor {
     // Get the priors for the current sample
     ArrayList<CRSMatrix> distanceMatrices = Data.getDistanceMatrices();
     CRSMatrix distance_matrix = distanceMatrices.get(listIndex); // getting the correct distance matrix 
-    CRSFactory factory = new CRSFactory();
-    SparseVector sparsePriors = (SparseVector) distance_matrix.getRow(cityIndex, factory);
+    SparseVector sparsePriors = (SparseVector) distance_matrix.getRow(cityIndex);
     
     // Get the non-zero entries of the prior
     GetNonZeroPriorProcedure proc = new GetNonZeroPriorProcedure();
@@ -201,10 +200,10 @@ public class Predictor {
         // get the CRP prior based on the linkedToTopic
         Integer numTablesAtTopic = s.getM().get(linkedToTopic);
         double cRPPrior = 0.0;
-        double cRPSelfLinkProp = likelihood.getHyperParameters().getSelfLinkProbCRP();
-        double cRPPriorNormConst = s.getT() + cRPSelfLinkProp; // the normalizing constant for the CRP prior is the total number of ddCRP tables plus the self link prob
+        double cRPSelfLinkProb = likelihood.getHyperParameters().getSelfLinkProbCRP();
+        double cRPPriorNormConst = s.getT() + cRPSelfLinkProb; // the normalizing constant for the CRP prior is the total number of ddCRP tables plus the self link prob
         if (numTablesAtTopic == 1)
-          cRPPrior = cRPSelfLinkProp;
+          cRPPrior = cRPSelfLinkProb;
         else
           cRPPrior = numTablesAtTopic;
         cRPPrior = cRPPrior / cRPPriorNormConst; // normalize the prior

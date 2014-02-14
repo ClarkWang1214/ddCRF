@@ -12,7 +12,7 @@ import org.la4j.matrix.sparse.CRSMatrix;
 import data.Data;
 
 import Likelihood.Likelihood;
-
+import test.TestSample;
 
 /**
  * This class is for storing the state of the sampler for an iteration.
@@ -91,13 +91,27 @@ public class SamplerState {
 	 * For each sampled latent variable of this state, sum up the prior component
 	 * of the variable 
 	 */
-	private double sumOfLogPriors = -1000000000000000000000.0;
+	private double sumOfLogPriors = Double.NEGATIVE_INFINITY;
+
+	/**
+	 * A HashSet of test samples 
+	 */
+  protected HashSet<TestSample> testSamples = new HashSet<TestSample>();
+
 
 	/**
 	 * 
 	 * Getters and Setters
 	 * 
 	 */
+
+  public HashSet<TestSample> getTestSamples() {
+    return testSamples;
+  }
+
+  public void setTestSamples(HashSet<TestSample> testSamples) {
+    this.testSamples = testSamples;
+  }
 
 	public double getSumOfLogPriors() {
 		return sumOfLogPriors;

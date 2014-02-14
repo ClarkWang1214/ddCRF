@@ -6,7 +6,6 @@ package sampler;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.LinkedList;
@@ -31,10 +30,6 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.traverse.DepthFirstIterator;
 import org.la4j.matrix.sparse.CRSMatrix;
 import org.la4j.vector.Vector;
-import org.la4j.vector.sparse.CompressedVector;
-import org.la4j.factory.CRSFactory;
-import org.la4j.vector.functor.VectorProcedure;
-import org.la4j.vector.sparse.SparseVector;
 
 import util.Util;
 
@@ -49,28 +44,15 @@ import data.Data;
  *
  */
 public class GibbsSampler {
-	
-  private static class GetNonZeroPriorProcedure implements VectorProcedure {
-    public GetNonZeroPriorProcedure() {
-    	this.nonZeroIndices = new HashMap<Integer, Double>();
-    }
-
-    public HashMap<Integer, Double> nonZeroIndices;
-
-    @Override
-    public void apply(int i, double value) {
-      this.nonZeroIndices.put(i, value);
-    }
-  }
 
 	/**
 	 * A list of queues, each queue for maintaining a list of empty tables, which can be assigned when split of tables happen.
 	 */
 	private static List<Queue<Integer>> emptyTables = new ArrayList<Queue<Integer>>();
-	
+
 	private final static Logger LOGGER = Logger.getLogger(GibbsSampler.class
 		      .getName());
-	
+
 	static{
 		try {		
 			LOGGER.setLevel(Level.INFO);
@@ -86,7 +68,7 @@ public class GibbsSampler {
 			e.printStackTrace();
 		}
 	}
-		
+
 	/**
 	 * 
 	 * @param l
@@ -98,19 +80,19 @@ public class GibbsSampler {
 		SamplerStateTracker.samplerStates.add(s);
 		//increase the number of iteration of sampling by 1
 		SamplerStateTracker.current_iter = SamplerStateTracker.current_iter + 1;		
-		
+
 		//if queue already not initialized, then initialize a list of empty queues
 		ArrayList<ArrayList<Double>> all_observations = Data.getObservations();
 		if(emptyTables.size()!=all_observations.size())		
 			for(int i=0;i<all_observations.size();i++)
 				emptyTables.add(new LinkedList<Integer>());
-		
+
 		//Sampling for each list (city/document)
 		for(int i=0;i<all_observations.size();i++)
 		{
 			LOGGER.log(Level.FINE, "Starting to sample for list "+i);			
 			ArrayList<Double> list = all_observations.get(i); //each city in our case
-			
+
 			//Get the set of test indices, those which we should ignore while sampling
 			//HashMap<Integer,Integer> venue_ids = Test.getTest_venue_ids(i);
 			//HashMap<Integer,Integer> venue_ids = t.getTestVenueIdsForCity(i);
@@ -142,7 +124,7 @@ public class GibbsSampler {
 		}
 
 	}
-	
+
 	/**
 	 * This method samples a link for each observation. The parameters are index of the sample
 	 * and the index of the list it belongs to.
@@ -153,7 +135,7 @@ public class GibbsSampler {
 	private static void sampleLink(Integer index, int list_index, Likelihood ll)
 	{
 		LOGGER.log(Level.FINE, "Sampling link for index "+index+" list_index "+list_index);
-		
+
 		//check to see if the table has circle or not
 		//get the table id where this observation is sitting
 		SamplerState s = SamplerStateTracker.samplerStates.get(SamplerStateTracker.current_iter);
@@ -167,9 +149,9 @@ public class GibbsSampler {
 
 		//String customers_in_table = s.getCustomers_in_table(table_id, list_index);
 		//String customer_indexes[] = customers_in_table.split(",");
-		
+
 		ArrayList<Integer> orig_table_members = new ArrayList<Integer>(); //this will hold the table members of the customer, if there is a split, we will update it to point to the members of the new table
-		
+
 		//Create a graph with customers_in_table as the vertices
 		DirectedGraph<Integer, DefaultEdge> g =
 	            new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
@@ -182,7 +164,7 @@ public class GibbsSampler {
 			{
 				g.addVertex(i);								
 			}		
-			
+
 			//now create an edge with its customer assignment
 			Integer j = s.getC(i, list_index);
 
@@ -195,7 +177,7 @@ public class GibbsSampler {
 			//adding the edge
 			g.addEdge(i, j);   //1st arg, the current customer, 2nd arg, its assignment
 		} //the graph should be ready
-		
+
 		//If the 'obs_to_sample' is a part of a cycle then removing its customer assignment cannot split the table. 
 		//Check if there is a cycle containing obs_to_sample
 		CycleDetector<Integer,DefaultEdge> cycleDetector = new CycleDetector<Integer,DefaultEdge>(g);
@@ -206,7 +188,7 @@ public class GibbsSampler {
 		if(!isCyclePresent) 
 		{
 			LOGGER.log(Level.FINE, index+" doesnot have a cycle and hence the table "+table_id+" will split");
-			
+
 			//Now collecting the table members of the observation we are sampling for
 			//I will first create a undirected graph, without the outgoing edge from the observation, Then I will do a 
 			//depth first traversal starting from the observation to be sampled and get all the other nodes of the components reachable from it
@@ -214,7 +196,7 @@ public class GibbsSampler {
 					new AsUndirectedGraph<Integer, DefaultEdge>(g); //creating the undirected graph from the directed graph
 			//now removing the edge (obs_to_sample -> its customer assignment)
 			u_g.removeEdge(index, s.getC(index, list_index));
-			
+
 			//Lets do a depth first traversal now and get all the table members
 			DepthFirstIterator<Integer,DefaultEdge> iter = new DepthFirstIterator<Integer,DefaultEdge>(u_g,index);
 			ArrayList<Integer> new_table_members = new ArrayList<Integer>();
@@ -257,32 +239,25 @@ public class GibbsSampler {
 			}
 		}
 
-    // Get the priors for the current sample
-    ArrayList<CRSMatrix> distanceMatrices = Data.getDistanceMatrices();
-    CRSMatrix distance_matrix = distanceMatrices.get(list_index); // getting the correct distance matrix 
-    // CRSFactory factory = new CRSFactory();
-    CompressedVector sparsePriors = (CompressedVector) distance_matrix.getRow(index);
-    
-    // Get the non-zero entries of the prior
-    GetNonZeroPriorProcedure proc = new GetNonZeroPriorProcedure();
-    sparsePriors.eachNonZero(proc);
-    HashMap<Integer, Double> nonZeroPrior = proc.nonZeroIndices;
-
-    // Set the prior for self linkage, and normalize the prior
-    nonZeroPrior.put(list_index, ll.getHyperParameters().getSelfLinkProb()); 
-    double sum = 0.0;
-    for (Double priorValue : nonZeroPrior.values()) 
-      sum += priorValue;  
-    for (Entry<Integer, Double> entry : nonZeroPrior.entrySet()) {
-      Integer priorIndex = entry.getKey();
-      Double priorValue = entry.getValue();
-      nonZeroPrior.put(priorIndex, priorValue / sum);
-    }
-
+		//Now, will sample a new link for the customer
+		//get the distance matrix for Prior computation
+		ArrayList<CRSMatrix> distanceMatrices = Data.getDistanceMatrices();
+		CRSMatrix distance_matrix = distanceMatrices.get(list_index); // getting the correct distance matrix 
+		Vector priors = distance_matrix.getRow(index);
+		//Iterate throught the Test indices, and zero out the prior for any test data, removing the possibility of linking to testing data
+		/*for (Integer id : venue_ids.keySet()) {
+    	priors.set(id,0);
+		}*/
+		//Set the prior for self linkage
+		priors.set(index, ll.getHyperParameters().getSelfLinkProb()); //since according to the ddcrp prior, the prob of a customer forming a link to itself is given by \alpha
+		double sum = 0;
+		for(int i=0;i<priors.length();i++)
+			sum = sum + priors.get(i);
+		priors = priors.divide(sum);	
 		//Now for each possible 'new' customer assignment, ie for those whose priors != 0
 		//we calculate the posterior probability of forming the link with that customer.
 		//For that we calculate the change in likelihood if there are joins of tables
-		
+
 		// Compute components of the change in likelihood that don't varry across the posterior for a proposed link
 		CityTable currentCT = new CityTable(list_index, table_id);
 		Integer currentTopic = s.getTopicForCityTable(currentCT);
@@ -291,42 +266,42 @@ public class GibbsSampler {
 
 		ArrayList<Double> posterior = new ArrayList<Double>(); //this will hold the posterior probabilities for all possible customer assignment and we will sample according to these probabilities
 		ArrayList<Integer> indexes = new ArrayList<Integer>(); // for storing the indexes of the customers who could be possible assignments
-		Double maxLogPosterior = Double.NEGATIVE_INFINITY;
-
-    for (Entry<Integer, Double> entry : nonZeroPrior.entrySet()) {
-      Integer priorIndex = entry.getKey();
-      Double prior = entry.getValue();
-
-			indexes.add(priorIndex); //adding the index of this possible customer assignment.
-			//get the table id of this table				
-			int table_proposed = s.get_t(priorIndex, list_index); //table_proposed is the proposed table to be joined
-			if(table_proposed == table_id) //since the proposed table is the same, hence there will be no change in the likelihood if this is the customer assignment				
-			{ 
-				double logPosterior = Math.log(prior);
-				if (logPosterior > maxLogPosterior)
-					maxLogPosterior = logPosterior;
-				posterior.add(logPosterior); //since the posterior will be determined only by the prior probability
-			}
-			else //will have to compute the change in likelihood
-			{					
-
-				CityTable proposedCT = new CityTable(list_index, table_proposed);
-				Integer proposedTopic = s.getTopicForCityTable(proposedCT);
-
-				if (currentTopic == null) {
-					System.out.println("There is a null in the current Topic");
-					System.out.println(currentCT.getCityId() + ":" + currentCT.getTableId());
-					System.out.println(s.getObservationAtTable(currentCT.getTableId(),currentCT.getCityId()));
+		Double maxLogPosterior = new Double(-1000000000.0);
+		for(int i=0;i<priors.length();i++)
+		{
+			if(priors.get(i)!=0)
+			{
+				indexes.add(i); //adding the index of this possible customer assignment.
+				//get the table id of this table				
+				int table_proposed = s.get_t(i, list_index); //table_proposed is the proposed table to be joined
+				if(table_proposed == table_id) //since the proposed table is the same, hence there will be no change in the likelihood if this is the customer assignment				
+				{ 
+					double logPosterior = Math.log(priors.get(i));
+					if (logPosterior > maxLogPosterior)
+						maxLogPosterior = logPosterior;
+					posterior.add(logPosterior); //since the posterior will be determined only by the prior probability
 				}
+				else //will have to compute the change in likelihood
+				{					
 
-				double changeInLogLik = computeCachedTopicChangeInLikelihood(s, ll, table_id, list_index, currentTopic, proposedTopic, currentTopicLogLik, currentTopicMinusTableLogLik);
-				double logPosterior = Math.log(prior) + changeInLogLik;
+					CityTable proposedCT = new CityTable(list_index, table_proposed);
+					Integer proposedTopic = s.getTopicForCityTable(proposedCT);
 
-				if (logPosterior > maxLogPosterior)
-					maxLogPosterior = logPosterior;
+					if (currentTopic == null) {
+						System.out.println("There is a null in the current Topic");
+						System.out.println(currentCT.getCityId() + ":" + currentCT.getTableId());
+						System.out.println(s.getObservationAtTable(currentCT.getTableId(),currentCT.getCityId()));
+					}
 
-				// //Now compute the change in likelihood
-				posterior.add(logPosterior); //adding the prior and likelihood
+					double changeInLogLik = computeCachedTopicChangeInLikelihood(s, ll, table_id, list_index, currentTopic, proposedTopic, currentTopicLogLik, currentTopicMinusTableLogLik);
+					double logPosterior = Math.log(priors.get(i)) + changeInLogLik;
+
+					if (logPosterior > maxLogPosterior)
+						maxLogPosterior = logPosterior;
+
+					// //Now compute the change in likelihood
+					posterior.add(logPosterior); //adding the prior and likelihood
+				}
 			}
 		}
 		// Subtract the maxLogPosterior from each term of posterior (avoid overflows), then exponentiate
@@ -335,12 +310,12 @@ public class GibbsSampler {
 
 		//the posterior probabilities are computed for each possible customer assignment, Now lets sample from it.
 		int sample = Util.sample(posterior);		
-		
+
 		int customer_assignment_index = indexes.get(sample); //this is the customer assignment in this iteration, phew!		
 		LOGGER.log(Level.FINE, "The sampled link for customer indexed "+index +" of list "+list_index+" is "+customer_assignment_index);
-		
+
 		// add to the prior component to sum of log priors
-		s.setSumOfLogPriors( s.getSumOfLogPriors() + Math.log(nonZeroPrior.get(customer_assignment_index)) );
+		s.setSumOfLogPriors( s.getSumOfLogPriors() + Math.log(priors.get(customer_assignment_index)) );
 
 		int assigned_table = s.get_t(customer_assignment_index, list_index);
 		s.setC(customer_assignment_index, index, list_index); //setting the customer assignment
@@ -354,7 +329,7 @@ public class GibbsSampler {
 
 			//First, update the new assigned table to include the table members of the customer's table
 			HashSet<Integer> hs_orig_members_in_new_table = new HashSet<Integer>(s.getCustomersAtTable(assigned_table, list_index));
-			
+
 			/*
 			 * A simple heuristic to avoid sampling topics too frequently in the ddCRP round.
 			 * We implement the following policy. If both joining tables are large (have greater
@@ -367,7 +342,7 @@ public class GibbsSampler {
 			 * benefit from knew information about the topic structure.
 			 */
 			boolean sampleNewTopicFlag = (hs_orig_members_in_new_table.size() >= 10 && orig_table_members.size() >= 10);
-			
+
 			// now add the old members to the new table
 			for(int i=0;i<orig_table_members.size();i++)
 				hs_orig_members_in_new_table.add(orig_table_members.get(i));
