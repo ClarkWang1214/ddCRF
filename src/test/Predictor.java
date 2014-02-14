@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.la4j.matrix.sparse.CRSMatrix;
 import org.la4j.vector.Vector;
@@ -29,6 +32,19 @@ import org.la4j.vector.sparse.SparseVector;
  * @author jcransh
  */
 public class Predictor {
+
+  private class ProbObservationThread implements Runnable {
+    int index;
+
+    ProbObservationThread(int index) {
+      this.index = index;
+    }
+
+    @Override
+    public void run() { 
+      probabilityForObservation.set(this.index, computeLogProbabilityForSampleAtValue(this.index));
+    }
+  }
 
   private static class GetNonZeroPriorProcedure implements VectorProcedure {
     public GetNonZeroPriorProcedure() {
@@ -79,15 +95,32 @@ public class Predictor {
 
   public double computeProbabilityForSample() {
     computeProbabilityOfAllOutcomes();
-    return probabilityForObservation.get(sample.getVenueCategory().intValue() - 1);
+    return probabilityForObservation.get(sample.getVenueCategory().intValue() - 1);   
   }
 
   public void computeProbabilityOfAllOutcomes() {
     probabilityForObservation = new ArrayList<Double>();
+    for (int i=0; i<likelihood.getHyperParameters().getVocabSize(); i++)
+      probabilityForObservation.add(Double.NEGATIVE_INFINITY);
+
+    // Make this threaded
+    ExecutorService exec = Executors.newFixedThreadPool(20);
+    for (int i=0; i<likelihood.getHyperParameters().getVocabSize(); i++) { 
+      exec.execute(new ProbObservationThread(i));
+    }
+    exec.shutdown();
+    try {
+      exec.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+    } catch (InterruptedException e) {
+      System.out.println("Error in thread");
+    }
+
+    // System.out.println("Just outside of threaded loop: " + probabilityForObservation);
+
+    // Handle underflow problems
     Double maxLogProb = Double.NEGATIVE_INFINITY;
-    for (int i=0; i<likelihood.getHyperParameters().getVocabSize(); i++) {
-      double logProb = computeLogProbabilityForSampleAtValue(i);
-      probabilityForObservation.add(logProb);
+    for (int i=0; i<probabilityForObservation.size(); i++) {
+      double logProb = probabilityForObservation.get(i);
       if (logProb > maxLogProb)
         maxLogProb = logProb;
     }
@@ -103,7 +136,7 @@ public class Predictor {
     for (int i=0; i<probabilityForObservation.size(); i++)
       probabilityForObservation.set(i, probabilityForObservation.get(i) / normConst);    
   }
-  
+ 
   public Double computeLogProbabilityForSampleAtValue(Integer observation) {
     double probability = 0.0;
 

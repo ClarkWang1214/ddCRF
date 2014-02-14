@@ -270,12 +270,9 @@ public class GibbsSampler {
 
     // Set the prior for self linkage, and normalize the prior
     nonZeroPrior.put(list_index, ll.getHyperParameters().getSelfLinkProb()); 
-    double sum = 0;
-    for (Entry<Integer, Double> entry : nonZeroPrior.entrySet()) {
-      Integer priorIndex = entry.getKey();
-      Double priorValue = entry.getValue();
-      sum += priorValue;
-    }
+    double sum = 0.0;
+    for (Double priorValue : nonZeroPrior.values()) 
+      sum += priorValue;  
     for (Entry<Integer, Double> entry : nonZeroPrior.entrySet()) {
       Integer priorIndex = entry.getKey();
       Double priorValue = entry.getValue();
