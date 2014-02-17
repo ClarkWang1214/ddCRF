@@ -117,12 +117,33 @@ public class GibbsSampler {
 				Set<Integer> tables = customersAtTable.keySet();
 				for (Integer table : tables) {
 					if (customersAtTable.get(table) != null && customersAtTable.get(table).size() > 0) {
-						CRPGibbsSampler.sampleTopic(l, table, i, false);
+						CRPGibbsSampler.sampleTopic(l, table, i, false, true);
 					}
 				}
 			}	
 		}
 
+	}
+
+	public static void resampleTopicsWithFewTables(SamplerState s, Likelihood l, int threshold) {
+		ArrayList<ArrayList<Double>> all_observations = Data.getObservations();
+		ArrayList<HashMap<Integer, HashSet<Integer>>> customersAtTableList = s.getCustomersAtTableList();
+
+		// Experimental: Disallow topics with only one table assigned to them
+		for(int i=0; i<all_observations.size(); i++) {
+			HashMap<Integer, HashSet<Integer>> customersAtTable = customersAtTableList.get(i);
+			Set<Integer> tables = customersAtTable.keySet();
+			for (Integer table : tables) {
+				if (customersAtTable.get(table) != null && customersAtTable.get(table).size() > 0) {
+					// Get the topic at the table
+					CityTable ct = new CityTable(i, table);
+					Integer topic = s.getTopicForCityTable(ct); //old topic for the table
+					int numTablesAtTopic = s.getM().get(topic);
+					if (numTablesAtTopic <= threshold) 
+						CRPGibbsSampler.sampleTopic(l, table, i, false, false);			
+				}	
+			}
+		}	
 	}
 
 	/**
@@ -367,7 +388,7 @@ public class GibbsSampler {
 
 			//Now sample a new topic for the new table
 			if (sampleNewTopicFlag)
-				CRPGibbsSampler.sampleTopic(ll, assigned_table, list_index, true);
+				CRPGibbsSampler.sampleTopic(ll, assigned_table, list_index, true, true);
 
 		}		
 		LOGGER.log(Level.FINE, " DONE Sampling link for index "+index+" list_index "+list_index);

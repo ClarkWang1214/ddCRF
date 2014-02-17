@@ -23,7 +23,7 @@ public class CRPGibbsSampler {
 	 * @param inDDCRPRun is true if the call to sampleTopic is made from within ddCRP
 	 * @return
 	 */
-	public static int sampleTopic(Likelihood l,int tableId,int listIndex, boolean inDDCRPRun)
+	public static int sampleTopic(Likelihood l,int tableId,int listIndex, boolean inDDCRPRun, boolean allowSelfLink)
 	{
 		SamplerState currentState = SamplerStateTracker.returnCurrentSamplerState();
 		ArrayList<Double> observationsAtTable = currentState.getObservationAtTable(tableId, listIndex); //observations of customers sitting at the table. 
@@ -46,7 +46,7 @@ public class CRPGibbsSampler {
 		ArrayList<Double> posterior = new ArrayList<Double>(); //this will hold all the posterior probabilities
 		ArrayList<Double> prior = new ArrayList<Double>();
 		ArrayList<Integer> indexes = new ArrayList<Integer>();
-		Double maxLogPosterior = new Double(-1000000000.0);
+		Double maxLogPosterior = Double.NEGATIVE_INFINITY;
 		while(iter.hasNext()) //iterating over all topics
 		{
 			Entry<Integer,Integer> mapEntry = iter.next();
@@ -58,13 +58,15 @@ public class CRPGibbsSampler {
 			prior.add(new Double(numTables));
 			indexes.add(topicId); //to keep track of which topic_id got selected.
 		}
-		//now for self-linkage
-		double beta = l.getHyperParameters().getSelfLinkProbCRP();
-		double logConditionalLikelihood = l.computeConditionalLogLikelihood(observationsAtTable, new ArrayList<Double>()); //this is marginal likelihood, instead of conditional	
-		posterior.add(logConditionalLikelihood);
 		int maxTopicId = currentState.getMaxTopicId();
-		indexes.add(maxTopicId+1); //incrementing maxTopicId to account for the new topic
-		prior.add(new Double(beta));
+		if (allowSelfLink) {
+			//now for self-linkage
+			double beta = l.getHyperParameters().getSelfLinkProbCRP();
+			double logConditionalLikelihood = l.computeConditionalLogLikelihood(observationsAtTable, new ArrayList<Double>()); //this is marginal likelihood, instead of conditional	
+			posterior.add(logConditionalLikelihood);
+			indexes.add(maxTopicId+1); //incrementing maxTopicId to account for the new topic
+			prior.add(new Double(beta));
+		}
 
 		// normalize the prior vector, and take the log of each term
 		double sum = 0.0;

@@ -89,21 +89,28 @@ public class Driver {
 	
 			// TEMP: just a quick test of theta estimate on the last state
 
-			// SamplerState s = SamplerStateTracker.returnCurrentSamplerState();
 			Posterior p = new Posterior(0, h);
-			SamplerState sMAP = p.getMapEstimateDensity(l);
+			// SamplerState sMAP = p.getMapEstimateDensity(l);
+			SamplerState sMAP = SamplerStateTracker.returnCurrentSamplerState();
+			GibbsSampler.resampleTopicsWithFewTables(sMAP, l, 1);
+			System.out.println("----------------------");
+			System.out.println("FINAL STATE");
+			System.out.println("----------------------");		
+			sMAP.prettyPrint(System.out);
+
+
 			Theta t = new Theta(sMAP, h);
 			t.estimateThetas();
 			Util.outputTopKWordsPerTopic(t, 15);
 
-			// Run a test
-			System.out.println("Running a test");
-			for (ArrayList<TestSample> citySamples : testSamples) {
-				for (TestSample sample : citySamples) {
-					Predictor predictor = new Predictor(p, l, sample);
-					System.out.println("  predicted probability of true observation: " + predictor.computeProbabilityForSample());
-				}
-			}
+			// // Run a test
+			// System.out.println("Running a test");
+			// for (ArrayList<TestSample> citySamples : testSamples) {
+			// 	for (TestSample sample : citySamples) {
+			// 		Predictor predictor = new Predictor(p, l, sample);
+			// 		System.out.println("  predicted probability of true observation: " + predictor.computeProbabilityForSample());
+			// 	}
+			// }
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
