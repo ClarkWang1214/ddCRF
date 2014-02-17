@@ -124,7 +124,7 @@ public class Util {
 	/**
 	 * Utility method for generating the csv file for cities.
 	 */
-	public static void outputCSVforMap()
+	public static void outputCSVforMap(SamplerState s)
 	{
 		//read the list of city names
 		ArrayList<String> cityNames = new ArrayList<String>();
@@ -195,7 +195,6 @@ public class Util {
 		
 		ArrayList<ArrayList<Double>> allObservations = Data.getObservations(); // all observations
 		
-		SamplerState s = SamplerStateTracker.returnCurrentSamplerState();
 		HashSet<Integer> allTopicIds = s.getAllTopics();
 		Iterator<Integer> iter = allTopicIds.iterator();
 		PrintStream p = null;

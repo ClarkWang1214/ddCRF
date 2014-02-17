@@ -83,21 +83,20 @@ public class Driver {
 			System.out.println("Time taken for Sampling "+(double)diff/1000+" seconds");		
 			/*for(int i=0;i<list_observations.size();i++)
 				Util.printTableConfiguration(i, new PrintStream("tables/table_configuration"+i+".txt"));*/
-			
-			//Printing the output csv file
-			Util.outputCSVforMap();
-	
+				
 			// TEMP: just a quick test of theta estimate on the last state
 
 			Posterior p = new Posterior(0, h);
-			// SamplerState sMAP = p.getMapEstimateDensity(l);
-			SamplerState sMAP = SamplerStateTracker.returnCurrentSamplerState();
+			SamplerState sMAP = p.getMapEstimateDensity(l);
+			// SamplerState sMAP = SamplerStateTracker.returnCurrentSamplerState();
 			GibbsSampler.resampleTopicsWithFewTables(sMAP, l, 1);
 			System.out.println("----------------------");
 			System.out.println("FINAL STATE");
 			System.out.println("----------------------");		
 			sMAP.prettyPrint(System.out);
 
+			//Printing the output csv file
+			Util.outputCSVforMap(sMAP);
 
 			Theta t = new Theta(sMAP, h);
 			t.estimateThetas();
