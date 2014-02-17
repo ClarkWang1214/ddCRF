@@ -88,8 +88,6 @@ public class Driver {
 
 			Posterior p = new Posterior(0, h);
 			SamplerState sMAP = p.getMapEstimateDensity(l);
-			// SamplerState sMAP = SamplerStateTracker.returnCurrentSamplerState();
-			GibbsSampler.resampleTopicsWithFewTables(sMAP, l, 1);
 			System.out.println("----------------------");
 			System.out.println("FINAL STATE");
 			System.out.println("----------------------");		
