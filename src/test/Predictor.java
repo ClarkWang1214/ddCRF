@@ -236,7 +236,7 @@ public class Predictor {
     // now add the max back in 
     logSumProb = Math.log(logSumProb) + maxLogProbability;
 
-    return Math.exp(logSumProb);
+    return logSumProb;
   }
 
   
