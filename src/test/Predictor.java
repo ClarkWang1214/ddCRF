@@ -70,25 +70,18 @@ public class Predictor {
   ArrayList<Double> probabilityForObservation;
 
   // store the values of the SamplerState densities for future use
-  HashMap<SamplerState, Double> samplerStatePosteriorDensities = new HashMap<SamplerState, Double>();
+  HashMap<SamplerState, Double> samplerStatePosteriorDensities;
 
   // store the values of the SamplerState theta for future use
-  HashMap<SamplerState, Theta> samplerStateThetas = new HashMap<SamplerState, Theta>();
+  HashMap<SamplerState, Theta> samplerStateThetas;
 
-  public Predictor(Posterior posterior, Likelihood likelihood, TestSample sample) {
+  public Predictor(Posterior posterior, Likelihood likelihood, TestSample sample, HashMap<SamplerState, Double> samplerStatePosteriorDensities, HashMap<SamplerState, Theta> samplerStateThetas) {
     this.test = test;
     this.posterior = posterior;
     this.sample = sample;
     this.likelihood = likelihood;
-
-    ArrayList<SamplerState> states = SamplerStateTracker.samplerStates;
-    for (SamplerState s : states) {
-      double logPosteriorDensity = s.getLogPosteriorDensity(likelihood);
-      samplerStatePosteriorDensities.put(s, logPosteriorDensity);
-      Theta theta = new Theta(s, likelihood.getHyperParameters());
-      theta.estimateThetas();
-      samplerStateThetas.put(s, theta);
-    }
+    this.samplerStatePosteriorDensities = samplerStatePosteriorDensities;
+    this.samplerStateThetas = samplerStateThetas;
   }
 
   public Predictor() {}
@@ -181,7 +174,6 @@ public class Predictor {
       // have to do some more underflow magic to handle the probabilities
       double logSumProbOverStates = 0.0;
       ArrayList<Double> logStateProbability = new ArrayList<Double>();
-      double maxLogStateProbability = Double.NEGATIVE_INFINITY;
 
       // sum over each sampler state ( discounting the first two iterations as burnin )
       for (int index=2; index<states.size(); index++) {
@@ -213,6 +205,8 @@ public class Predictor {
         logStateProbability.add( Math.log(dDCRPPrior) + Math.log(cRPPrior) + Math.log(probObservation) + logPosteriorDensity );
       }
 
+      double maxLogStateProbability = Double.NEGATIVE_INFINITY;
+
       // for underflow, get the max of logStateProbability
       for (Double p : logStateProbability) {
         if (p > maxLogStateProbability)
@@ -222,7 +216,7 @@ public class Predictor {
       for (Double p : logStateProbability)
         logSumProbOverStates += Math.exp(p - maxLogStateProbability);
       // now add the max back in 
-      logSumProbOverStates += maxLogStateProbability;
+      logSumProbOverStates = Math.log(logSumProbOverStates) + maxLogStateProbability;
 
       // add this to the outer sum array
       logProbability.add(logSumProbOverStates);
@@ -240,9 +234,9 @@ public class Predictor {
     for (Double p : logProbability)
       logSumProb += Math.exp(p - maxLogProbability);
     // now add the max back in 
-    logSumProb += maxLogProbability;
+    logSumProb = Math.log(logSumProb) + maxLogProbability;
 
-    return logSumProb;
+    return Math.exp(logSumProb);
   }
 
   
